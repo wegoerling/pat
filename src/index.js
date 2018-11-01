@@ -7,6 +7,7 @@ let _ = require('lodash');
 const ver = require('./app/helpers/version');
 const doc = require('./app/helpers/genericEvaTask');
 const actor = require('./app/helpers/actor');
+const path = require('path');
 
 const DEFAULT_FILE = `${__dirname}/main.yml`;
 program
@@ -26,12 +27,14 @@ if (program.input) {
         actors: actors
     };
     _.forEach(_.get(yml, 'tasks'), (task) => {
-        let path = _.get(task, 'file');
-        if (!!path) {
-            let fileTask = doc.genericEvaTask(`${__dirname}/${path}`);
+
+        let taskFile = `${path.dirname(program.input)}/${_.get(task, 'file')}`;
+        console.log('serializing task', `${__dirname}/${taskFile}`);
+        if (!!taskFile) {
+            let fileTask = doc.genericEvaTask(`${__dirname}/${taskFile}`);
 
             if (fileTask !== null) {
-                evaTaskList[_.split(path, '.')[0]] = fileTask;
+                evaTaskList[_.split(taskFile, '.')[0]] = fileTask;
             }
         }
     });

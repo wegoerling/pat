@@ -1,6 +1,3 @@
----
-
-# Title and expected duration of the task
 title: EGRESS/SETUP
 duration: 25
 
@@ -11,10 +8,6 @@ steps:
     - step: Record PET start time ____:____ (Pwr to Batt)
     - step: Start WVS Recorders
 
-  # FIXME: how to handle the "initial configuration" heading. Do we even do that
-  #        in procedures anymore?
-
-  # Steps in EV1 column (second column)
   - simo:
     EV1:
     - step: "{{CHECK}} All gates closed & hooks locked"
@@ -74,10 +67,10 @@ steps:
         - BRT tab up
         - tether configs
     - step: Verify SAFER config
-      checkboxes:
-        - {{CHECKMARK}}L handle down (MAN ISOL Vlv - Open)
-        - {{CHECKMARK}}R handle down (HCM - Closed)
-    - step: {{CHECKMARK}}WVS - Green LED
+    - checkboxes:
+        - "{{CHECKMARK}}L handle down (MAN ISOL Vlv - Open)"
+        - "{{CHECKMARK}}R handle down (HCM - Closed)"
+    - step: "{{CHECKMARK}}WVS - Green LED"
 
 
   - simo:
@@ -97,9 +90,9 @@ steps:
         - tether configs
     - step: Verify SAFER config
       checkboxes:
-        - {{CHECKMARK}}L handle down (MAN ISOL Vlv - Open)
-        - {{CHECKMARK}}R handle down (HCM - Closed)
-    - step: {{CHECKMARK}}WVS - Green LED
+        - "{{CHECKMARK}}L handle down (MAN ISOL Vlv - Open)"
+        - "{{CHECKMARK}}R handle down (HCM - Closed)"
+    - step: "{{CHECKMARK}}WVS - Green LED"
     # EV2's steps are a copy/paste of EV1.
     EV2:
     - step: Perform buddy checks
@@ -109,33 +102,19 @@ steps:
         - tether configs
     - step: Verify SAFER config
       checkboxes:
-        - {{CHECKMARK}}L handle down (MAN ISOL Vlv - Open)
-        - {{CHECKMARK}}R handle down (HCM - Closed)
-    - step: {{CHECKMARK}}WVS - Green LED
-
-
-
-  # FIXME: Add alternate view to EV1 + EV2 above?
-
-
-  # SIMO steps
-  #
-  # Minimal formatting: Below I do '''BLANK''' to bold the words. This is
-  # MediaWiki (e.g. Wikipedia) syntax for bolding. People are generally familiar
-  # with this syntax in our organization, so it's preferable. It's also probably
-  # a lot harder to find an existing library that does this, whereas finding one
-  # that does Markdown formatting is probably easy. So: do MediaWiki if you can,
-  # but Markdown is fine as long as you make it fairly easy to drop in a
+        - "{{CHECKMARK}}L handle down (MAN ISOL Vlv - Open)"
+        - "{{CHECKMARK}}R handle down (HCM - Closed)"
+    - step: "{{CHECKMARK}}WVS - Green LED"
   # MediaWiki formatter in place later.
   - Simo:
     EV1:
     - step: Translate to S0 Port Struts
     - step: Attach EV1 '''BLANK''' hook to port-outboard strut
       checkboxes:
-      - {{CHECKMARK}} Gat closed, hook locked, reels unlocked, release RET
+      - "{{CHECKMARK}} Gat closed, hook locked, reels unlocked, release RET"
     - step: Attach EV2 '''BLANK''' hook to port-inboard strut
       checkboxes:
-      - {{CHECKMARK}} Gate closed, hook locked
+      - "{{CHECKMARK}} Gate closed, hook locked"
     - step: Release EV1 R Waist Tether from EV2 '''BLANK''' hook
     EV2:
     - step: Retrieve CETA ORU bag, stow on BRT with RET

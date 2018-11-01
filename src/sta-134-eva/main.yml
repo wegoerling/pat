@@ -1,67 +1,5 @@
----
-# This EVA procedure is an example of a posssible new method of authoring
-# procedures in YAML and having them rendered into an HTML/PDF file. These YAML
-# procedures aim to closely resemble the STS-134 EVA 1 procedures found starting
-# on page 7-20 of this file:
-#
-# https://www.nasa.gov/centers/johnson/pdf/539922main_EVA_134_F_A.pdf
-#
-# General considerations:
-# - The official procedures have EV1 and EV3 as the EVA crewmembers. The YAML
-#   procedures have converted all EV3's to EV2's, since that is more in line
-#   with what is done in 2018, and hopefully will reduce confusion. Idealy it
-#   should be possible to name the columns whatever we want, e.g. first column
-#   just "IV" or "IV/SSRMS", second column "EV1" or "EV4" and third column "EV2"
-#   or "EV3".
-# - MediaWiki vs Markdown formatting
-# - Adding color formatting (is that possible with Markdown?)
-# - Templates like {{CHECKMARK}}. Or ensure support for unicode characters and
-#   come up with convenient way to supply those unicode characters to people. In
-#   order to add this ✓ I googled "unicode checkmark" which isn't a great UI.
-# - MediaWiki linking... if we could do [[Waist Tether]]...
-#   - Ref: info on ISS/EVA Wiki
-# - Huge bonus points: think about building the HTML procedure in such a way
-#   that it'd be possible in the future to edit the HTML _and have that be able
-#   to alter the YAML_.
-# - PRINTED not electronic.
-# - Difference in the following:
-#      EV1:
-#      - step: This is a step
-#      - step: This is another step
-#   versus:
-#      EV1:
-#      - This is a step
-#      - This is another step
-# - Difference in the following:
-#      - EV1: Do something
-#      - EV1: Do something else
-#   versus:
-#      - EV1:
-#        - step: Do something
-#        - step: Do something else
-# - Should probably have aliases for "step", "Step", "STEP", etc.
-# - Step numbering: 1,2,3 by column (so step 1 column 1, step 1 column 2, etc)
-#   _and if possible also unique step numbers across the task/section.
-
-#
-#
-#
 procudure_name: STS-134 EVA 1
-
-# We could call this "columns" instead of "actors". For now the terms could be
-# used interchangeably. At some point we may want to make it so you can define
-# more than 3 actors, but still display it in 3 columns by putting two actors
-# in one column. Furthermore, we may at some point want to display the whole
-# procedure in one column, compressing all the actors into one serial procedure.
-# That's another benefit of this method of writing our procedures: we can take
-# the same input and fairly easily change how it's displayed.
 actors:
-  # The first column is often labelled "IV/SSRMS". This means these are steps
-  # performed by the Intravehicular (IV) crewmembers (people inside the vehicle)
-  # or by the SSRMS operator. The SSRMS is a 58-ft long robotic arm outside the
-  # Internations Space Station.
-  #
-  # ref: https://en.wikipedia.org/wiki/Mobile_Servicing_System
   - role: IV/SSRMS
   - role: EV1
     name: Drew
@@ -69,6 +7,5 @@ actors:
     name: Taz
 
 tasks:
-  # Include some tasks. EVAs start with egressing from the Airlock
   - file: egress.yml
   - file: misse7.yml
