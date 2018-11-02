@@ -2,17 +2,20 @@
 
 'use strict';
 const program = require('commander');
-let _ = require('lodash');
+const _ = require('lodash');
 
 const ver = require('./app/helpers/version');
 const doc = require('./app/helpers/genericEvaTask');
 const actor = require('./app/helpers/actor');
 const path = require('path');
+const html = require('./app/helpers/htmlHelper').generators;
 
 const DEFAULT_FILE = `${__dirname}/main.yml`;
+const DEFAULT_HTML = `${__dirname}/main.html`;
 program
     .version(ver.currentVersion)
     .option('-i, --input [.yml]', 'specify the yml file to use', DEFAULT_FILE)
+    .option('-o, --output [.html]', 'where do you want the result located', DEFAULT_HTML)
     .parse(process.argv);
 
 if (program.input) {
@@ -24,19 +27,20 @@ if (program.input) {
 
     //TODO: loop thru tasks and build the output
     let evaTaskList = {
+        procudure_name: yml.procudure_name,
         actors: actors
     };
     _.forEach(_.get(yml, 'tasks'), (task) => {
-
-        let taskFile = `${path.dirname(program.input)}/${_.get(task, 'file')}`;
+        const fileStr = _.get(task, 'file');
+        let taskFile = `${path.dirname(program.input)}/${fileStr}`;
         console.log('serializing task', `${__dirname}/${taskFile}`);
         if (!!taskFile) {
             let fileTask = doc.genericEvaTask(`${__dirname}/${taskFile}`);
 
             if (fileTask !== null) {
-                evaTaskList[_.split(taskFile, '.')[0]] = fileTask;
+                evaTaskList[_.split(fileStr, '.')[0]] = fileTask;
             }
         }
     });
-    console.log('result', evaTaskList);
+    console.log(html.create(evaTaskList, program.output));
 }
