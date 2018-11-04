@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+'use strict';
 const fs = require('fs');
 const _ = require('lodash');
 
@@ -18,7 +21,7 @@ function createHtml(evaTask, output) {
     return processHtml();
 
     function processHtml() {
-        htmlTemplate = _.replace(htmlTemplate, new RegExp(wildCards.title, 'g'), evaTask.procudure_name);
+        htmlTemplate = _.replace(htmlTemplate, new RegExp(wildCards.title, 'g'), evaTask.procudure_name || '');
         const actorsTable = buildColumns(evaTask.actors);
         htmlTemplate =
             _.replace(htmlTemplate, new RegExp(wildCards.content, 'g'), actorsTable);
@@ -41,7 +44,7 @@ function buildColumns(cols) {
 
     let output = '';
     _.forEach(cols, (col) => {
-        output = `${output} <td>${col.role}${col.name ? '(' +col.name + ')' : ''}</td>`;
+        output = `${output} <td>${col.role || ''}${col.name ? '(' +col.name + ')' : ''}</td>`;
     });
 
     return `${startTable}${startRow}${output}${endRow}${endTable}`;
