@@ -4,6 +4,7 @@
 const program = require('commander');
 const _ = require('lodash');
 
+const fs = require('fs');
 const ver = require('./app/helpers/version');
 const doc = require('./app/helpers/genericEvaTask');
 const actor = require('./app/helpers/actor');
@@ -19,6 +20,19 @@ program
     .parse(process.argv);
 
 if (program.input) {
+    try {      
+        if(getFileExtension(program.input) !== 'yml') {
+            throw "\n" + program.input + "\nInvalid file extension\n";
+        }
+        if(!fs.existsSync(program.input)) {
+            throw "\n" + program.input + "\nFile Does Not Exist\n";
+        }
+    }
+    catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+     
     const yml = doc.genericEvaTask(program.input);
     console.log(`converted the YAML file [${program.input}]`);
 
@@ -43,4 +57,10 @@ if (program.input) {
         }
     });
     console.log(html.create(evaTaskList, program.output));
+    console.log('result', evaTaskList);
+}
+
+function getFileExtension(fileName) {
+    let fileExtension = path.extname(fileName||'').split('.');
+    return fileExtension[fileExtension.length - 1];
 }

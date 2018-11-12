@@ -16,6 +16,7 @@ const wildCards = {
 function createHtml(evaTask, output) {
     let htmlTemplate = "";
     console.log('TODO: build HTML page here');
+    console.log(evaTask);
 
     htmlTemplate = fs.readFileSync('./templates/template.html', 'utf8');
     return processHtml();
@@ -28,6 +29,7 @@ function createHtml(evaTask, output) {
 
         fs.writeFile(output, htmlTemplate, (err) => {
             if (!!err) {
+                console.log("Unable to save file:");
                 console.log(err);
             }
         });
