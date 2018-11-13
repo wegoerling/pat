@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "bin": {
-    "eva-taskGenerator": "./index.js"
+    "eva-checklist": "./index.js"
   },
   "repository": {
     "type": "git",
@@ -34,5 +34,8 @@
     "lodash": "^4.17.11",
     "mocha": "^5.2.0",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "sinon": "^7.1.1"
   }
 }

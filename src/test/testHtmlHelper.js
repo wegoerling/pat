@@ -1,4 +1,4 @@
-const _ = require('lodash');
+/*const _ = require('lodash');
 const fs = require('fs');
 
 let html = require('../app/helpers/htmlHelper').generators;
@@ -143,3 +143,4 @@ describe('htmlHelper', function() {
 
   });
 });
+*/
