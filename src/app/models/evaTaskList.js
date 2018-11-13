@@ -31,6 +31,7 @@ function readEVATaskMainYaml(fileLocation, fs, yaml, _, path) {
     );
 
     tasklist.evaTasks = tasklist.tasks.map(t => {
+        //TODO: change this with sequential file read
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;
         let task = fs.readFileSync(taskFile, 'utf8');
         let evaSteps = yaml.safeLoad(task);
