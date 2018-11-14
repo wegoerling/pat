@@ -5,12 +5,10 @@ let evaTaskList = require('../app/models/evaTaskList'),
   expect = require('chai').expect,
   sinon = require('sinon');
 
-
 //test genericEVATask
-describe('evaTaskList', function () {
+describe('evaTaskList', function() {
   let sut; //system under test
-  let fsStub,
-    yamlStub;
+  let fsStub, yamlStub, lineReaderStub;
 
   before(() => {
     sinon.spy(_, 'get');
@@ -18,8 +16,15 @@ describe('evaTaskList', function () {
   });
 
   beforeEach(() => {
+    lineReaderStub = {
+      createInterface: sinon.stub().returns({ on: sinon.stub() })
+    };
+  });
+
+  beforeEach(() => {
     fsStub = {
-      readFileSync: sinon.spy()
+      readFileSync: sinon.spy(),
+      createReadStream: sinon.stub().returns(fakeTasksText())
     };
   });
 
@@ -40,7 +45,14 @@ describe('evaTaskList', function () {
       fsStub.existsSync = sinon.stub().returns(false);
 
       // act
-      sut = evaTaskList.generateEVATasks('fakeLocation', fsStub, yamlStub, _, path);
+      sut = evaTaskList.generateEVATasks(
+        'fakeLocation',
+        fsStub,
+        yamlStub,
+        _,
+        path,
+        lineReaderStub
+      );
 
       // assert
       expect(sut).to.equal(null);
@@ -51,7 +63,14 @@ describe('evaTaskList', function () {
       fsStub.existsSync = sinon.stub().returns(true);
 
       // act
-      sut = evaTaskList.generateEVATasks('fakeLocation', fsStub, yamlStub, _, path);
+      sut = evaTaskList.generateEVATasks(
+        'fakeLocation',
+        fsStub,
+        yamlStub,
+        _,
+        path,
+        lineReaderStub
+      );
 
       // assert
       expect(fsStub.readFileSync.called).to.equal(true);
@@ -62,7 +81,14 @@ describe('evaTaskList', function () {
       fsStub.existsSync = sinon.stub().returns(true);
 
       // act
-      sut = evaTaskList.generateEVATasks('fakeLocation', fsStub, yamlStub, _, path);
+      sut = evaTaskList.generateEVATasks(
+        'fakeLocation',
+        fsStub,
+        yamlStub,
+        _,
+        path,
+        lineReaderStub
+      );
 
       // assert
       expect(yamlStub.safeLoad.called).to.equal(true);
@@ -73,12 +99,18 @@ describe('evaTaskList', function () {
       fsStub.existsSync = sinon.stub().returns(true);
 
       // act
-      sut = evaTaskList.generateEVATasks('fakeLocation', fsStub, yamlStub, _, path);
+      sut = evaTaskList.generateEVATasks(
+        'fakeLocation',
+        fsStub,
+        yamlStub,
+        _,
+        path,
+        lineReaderStub
+      );
 
       // assert
       expect(sut.evaTasks.length).to.equal(3);
     });
-
   });
 
   /*
@@ -202,3 +234,36 @@ describe('evaTaskList', function () {
     });
     */
 });
+
+function fakeTasksText() {
+  return `
+  title: EGRESS/SETUP
+  duration: 25
+  
+  steps:
+  
+    # First steps in IV column (first column)
+    - IV:
+      - step: Record PET start time ____:____ (Pwr to Batt)
+      - step: Start WVS Recorders
+  
+    - simo:
+      EV1:
+      - step: "{{CHECK}} All gates closed & hooks locked"
+        checkboxes:
+          - R Waist Tether to EV2 Blank hook
+          - Red hook on L D-ring ext
+          - Yellow hook on Green ERCM
+          - Green hook on Red ERCM
+          - Blank hook on MWS
+      EV2:
+      - step: "{{CHECKMARK}} All gates closed & hooks locked"
+        checkboxes:
+          - All gates closed & hooks locked
+          - R Waist Tether to A/L D-ring ext
+          - Red hook on L D-ring ext
+          - Yellow hook on Green ERCM
+          - Green hook on Red ERCM
+          - Blank hook to EV1 R Waist Tether 
+  `;
+}

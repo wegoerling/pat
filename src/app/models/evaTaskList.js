@@ -30,21 +30,10 @@ function readEVATaskMainYaml(fileLocation, fs, yaml, _, path) {
         tasks
     );
 
-    tasklist.evaTasks = tasklist.tasks.map(t => {
-        //TODO: change this with sequential file read
+    tasklist.evaTasks = [];
+    _.forEach(tasklist.tasks, t => {
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;
-        let task = fs.readFileSync(taskFile, 'utf8');
-        let evaSteps = yaml.safeLoad(task);
-        return new evaTask.create(
-            evaSteps.title,
-            evaSteps.duration,
-            evaSteps.actor,
-            evaSteps.warning,
-            evaSteps.caution,
-            evaSteps.checkboxes,
-            evaSteps.steps,
-            evaSteps.step
-        );
+        tasklist.evaTasks = tasklist.evaTasks.concat(evaTask.create(taskFile));
     });
 
     return tasklist;

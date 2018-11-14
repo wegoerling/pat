@@ -34,8 +34,6 @@ if (program.input) {
 
     const evaTaskList = doc.generateEVATasks(program.input, fs, yaml, _, path);
     console.log(html.create(evaTaskList, program.output));
-
-    console.log('result', evaTaskList);
 }
 
 function getFileExtension(fileName) {
