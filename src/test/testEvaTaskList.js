@@ -1,23 +1,27 @@
 let _ = require('lodash');
 let path = require('path');
+let evaTask = require('../app/models/evaTask');
 let evaTaskList = require('../app/models/evaTaskList'),
   assert = require('chai').assert,
   expect = require('chai').expect,
   sinon = require('sinon');
 
 //test genericEVATask
-describe('evaTaskList', function() {
+describe('evaTaskList', function () {
   let sut; //system under test
   let fsStub, yamlStub, lineReaderStub;
 
   before(() => {
     sinon.spy(_, 'get');
     sinon.spy(path, 'dirname');
+    sinon.spy(evaTask, 'create');
   });
 
   beforeEach(() => {
     lineReaderStub = {
-      createInterface: sinon.stub().returns({ on: sinon.stub() })
+      createInterface: sinon.stub().returns({
+        on: sinon.stub()
+      })
     };
   });
 
