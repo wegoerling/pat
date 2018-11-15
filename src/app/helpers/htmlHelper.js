@@ -15,17 +15,27 @@ const wildCards = {
 
 function createHtml(evaTask, output) {
     let htmlTemplate = "";
-    console.log('TODO: build HTML page here');
-    console.log(evaTask);
-
     htmlTemplate = fs.readFileSync('./templates/template.html', 'utf8');
     return processHtml();
 
     function processHtml() {
         htmlTemplate = _.replace(htmlTemplate, new RegExp(wildCards.title, 'g'), evaTask.procudure_name || '');
-        const actorsTable = buildColumns(evaTask.actors);
+
+
+        let $content = "";
+        _.forEach(evaTask.tasks, (t) => {
+            let $hgroup = `
+            <h2>${t.title}</h2>
+            <h4>Duration: ${t.duration}</h4>
+            `;
+            $content += $hgroup;
+
+            const actorsTable = buildColumns(evaTask, t);
+            $content += actorsTable;
+        });
+
         htmlTemplate =
-            _.replace(htmlTemplate, new RegExp(wildCards.content, 'g'), actorsTable);
+            _.replace(htmlTemplate, new RegExp(wildCards.content, 'g'), $content);
 
         fs.writeFile(output, htmlTemplate, (err) => {
             if (!!err) {
@@ -38,16 +48,33 @@ function createHtml(evaTask, output) {
     }
 }
 
-function buildColumns(cols) {
+
+
+function buildColumns(taskList, task) {
     const startTable = '<table class="gridtable">';
     const endTable = '</table>';
     const startRow = '<tr>';
     const endRow = '</tr>';
 
     let output = '';
-    _.forEach(cols, (col) => {
+
+    _.forEach(taskList.actors, (col) => {
         output = `${output} <td>${col.role || ''}${col.name ? '(' +col.name + ')' : ''}</td>`;
     });
+    output = `${startRow}${output}${endRow}`;
 
-    return `${startTable}${startRow}${output}${endRow}${endTable}`;
+    // let evatasks = taskList.evaTasks.select(eva => eva.title === t.title && eva.steps.length > 0);
+    // let currentActor;
+    // _.forEach(evatasks, (eva) => {
+    //     let steps = eva.steps.join('<br />');
+    //     output = `${output}<td>${steps}</td>`;
+
+    //     //let colNumber = _.findIndex(taskList.actors, (a) => a.role === eva.actor.role);
+    //     if (currentActor !== eva.actor.role) {
+    //         currentActor = eva.actor.role;
+    //         output = `${output}${endRow}`;
+    //     }
+    // });
+
+    return `${startTable}${output}${endTable}`;
 }

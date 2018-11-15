@@ -1,7 +1,7 @@
 exports.create = actor;
 
 
-function actor(role, name) {
+function actor(role, name, evatasks) {
     var vm = this;
 
     vm.role = role;

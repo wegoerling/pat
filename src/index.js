@@ -10,6 +10,7 @@ const path = require('path');
 const ver = require('./app/models/version');
 const doc = require('./app/models/evaTaskList');
 const html = require('./app/helpers/htmlHelper').generators;
+let evaTask = require('./app/models/evaTask');
 
 const DEFAULT_FILE = `${__dirname}/main.yml`;
 const DEFAULT_HTML = `${__dirname}/main.html`;
@@ -29,11 +30,15 @@ if (program.input) {
         }
     } catch (err) {
         console.log(err);
-        process.exit(1);
+        process.exit(-1);
     }
 
-    const evaTaskList = doc.generateEVATasks(program.input, fs, yaml, _, path);
-    console.log(html.create(evaTaskList, program.output));
+    doc.generateEVATasks(program.input, fs, yaml, _, path, evaTask, (evaTaskList) => {
+        console.log(JSON.stringify(evaTaskList));
+
+        html.create(evaTaskList, program.output);
+        console.log(`Completed! your file is located at ${program.output}`);
+    });
 }
 
 function getFileExtension(fileName) {

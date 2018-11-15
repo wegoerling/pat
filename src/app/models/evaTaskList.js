@@ -1,13 +1,11 @@
 'use strict';
 let actor = require('./actor');
-let evaTask = require('./evaTask');
-
 exports.generateEVATasks = readEVATaskMainYaml;
 exports.create = taskListObject;
 
 //////
 
-function readEVATaskMainYaml(fileLocation, fs, yaml, _, path) {
+function readEVATaskMainYaml(fileLocation, fs, yaml, _, path, evaTask, callBack) {
     if (!fs.existsSync(fileLocation)) {
         return null;
     }
@@ -31,12 +29,22 @@ function readEVATaskMainYaml(fileLocation, fs, yaml, _, path) {
     );
 
     tasklist.evaTasks = [];
-    _.forEach(tasklist.tasks, t => {
+    let counter = 0;
+    _.forEach(tasklist.tasks, function (t) {
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;
-        tasklist.evaTasks = tasklist.evaTasks.concat(evaTask.create(taskFile));
+        evaTask.create(taskFile, (evaTasks) => {
+            counter++;
+            tasklist.evaTasks = tasklist.evaTasks.concat(evaTasks);
+            t.title = evaTasks[0].title;
+            t.duration = evaTasks[0].duration;
+
+            if (counter === tasklist.tasks.length) {
+                callBack(tasklist);
+            }
+        });
     });
 
-    return tasklist;
+
 }
 
 function taskListObject(procedure_name, actors, tasks, evaTasks) {

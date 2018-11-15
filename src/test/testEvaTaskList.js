@@ -1,20 +1,16 @@
-let _ = require('lodash');
-let path = require('path');
-let evaTask = require('../app/models/evaTask');
 let evaTaskList = require('../app/models/evaTaskList'),
-  assert = require('chai').assert,
   expect = require('chai').expect,
-  sinon = require('sinon');
+  sinon = require('sinon'),
+  _ = require('lodash'),
+  path = require('path');
 
 //test genericEVATask
 describe('evaTaskList', function () {
-  let sut; //system under test
-  let fsStub, yamlStub, lineReaderStub;
+  let fsStub, yamlStub, lineReaderStub, evaTaskStub;
 
   before(() => {
     sinon.spy(_, 'get');
     sinon.spy(path, 'dirname');
-    sinon.spy(evaTask, 'create');
   });
 
   beforeEach(() => {
@@ -33,14 +29,24 @@ describe('evaTaskList', function () {
   });
 
   beforeEach(() => {
-    yamlStub = {
-      safeLoad: sinon.stub().returns({
-        procedure_name: 'fakeProcName',
-        actors: ['fakeActor1', 'fakeActor2'],
-        tasks: ['fakeFile1', 'fakeFile2', 'fakeFile3'],
-        evaTasks: []
-      })
-    };
+    evaTaskStub = {};
+    evaTaskStub.create = sinon.stub();
+
+  });
+
+  beforeEach(() => {
+    yamlStub = {};
+    yamlStub.safeLoad = sinon.stub().returns({
+      'procedure_name': 'fakeProcName',
+      'actors': ['fakeActor1', 'fakeActor2'],
+      'tasks': [{
+        file: 'fakeFile1.yml'
+      }, {
+        file: 'fakeFile2.yml'
+      }, {
+        file: 'fakeFile3.yml'
+      }]
+    });
   });
 
   describe('generateEVATasks', () => {
@@ -49,32 +55,39 @@ describe('evaTaskList', function () {
       fsStub.existsSync = sinon.stub().returns(false);
 
       // act
-      sut = evaTaskList.generateEVATasks(
+      evaTaskList.generateEVATasks(
         'fakeLocation',
         fsStub,
         yamlStub,
         _,
         path,
-        lineReaderStub
+        evaTaskStub,
+        (sut) => {
+          // assert
+          expect(sut).to.equal(null);
+        }
       );
 
-      // assert
-      expect(sut).to.equal(null);
+
     });
 
     it('should open the file content if the file exists', () => {
       // arrange
       fsStub.existsSync = sinon.stub().returns(true);
+      fsStub.readFileSync = sinon.stub().returns(fakeTasksText());
+
 
       // act
-      sut = evaTaskList.generateEVATasks(
+      evaTaskList.generateEVATasks(
         'fakeLocation',
         fsStub,
         yamlStub,
         _,
         path,
-        lineReaderStub
-      );
+        evaTaskStub,
+        (sut) => {
+
+        });
 
       // assert
       expect(fsStub.readFileSync.called).to.equal(true);
@@ -85,13 +98,16 @@ describe('evaTaskList', function () {
       fsStub.existsSync = sinon.stub().returns(true);
 
       // act
-      sut = evaTaskList.generateEVATasks(
+      evaTaskList.generateEVATasks(
         'fakeLocation',
         fsStub,
         yamlStub,
         _,
         path,
-        lineReaderStub
+        evaTaskStub,
+        (sut) => {
+          //Nothing to do here
+        }
       );
 
       // assert
@@ -103,37 +119,23 @@ describe('evaTaskList', function () {
       fsStub.existsSync = sinon.stub().returns(true);
 
       // act
-      sut = evaTaskList.generateEVATasks(
+      evaTaskList.generateEVATasks(
         'fakeLocation',
         fsStub,
         yamlStub,
         _,
         path,
-        lineReaderStub
+        evaTaskStub,
+        (sut) => {
+          // assert
+          expect(sut.tasks.length).to.equal(3);
+        }
       );
-
-      // assert
-      expect(sut.evaTasks.length).to.equal(3);
     });
   });
 
   /*
 
-
-    //Function returns null for invalid file locations
-    describe('#invalidFileLocation', function() {
-      it('should return null when a file does not exist', function() {
-        assert.equal(null, doc.genericEvaTask(`./fileDoesNotExist.yml`));
-      });
-    });
-
-    //Function should load a file
-    describe('#validFileLocation', function() { 
-      //Test if the file exists
-      it('should return that target exists', function() {
-        let testyml = doc.genericEvaTask(fileLocation);
-        assert.exists({testyml});
-      });
 
       //Test file is not null
       it('should pass that target is not null', function() {
