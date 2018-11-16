@@ -56,12 +56,41 @@ function buildColumns(taskList, task) {
     const startRow = '<tr>';
     const endRow = '</tr>';
 
-    let output = '';
-
+    let output = startRow;
+    let colStr = '';
+    let ols = [];
     _.forEach(taskList.actors, (col) => {
         output = `${output} <td>${col.role || ''}${col.name ? '(' +col.name + ')' : ''}</td>`;
+        colStr += `<td><ol>[[colStr${col.role}]]</ol></td>`;
+        ols.push({
+            wildcard: `[[colStr${col.role}]]`
+        });
     });
-    output = `${startRow}${output}${endRow}`;
+    output += endRow;
+
+
+    _.forEach(task.evaTasks, (eva) => {
+        if (eva.step && eva.step.length > 0) {
+            let wildcard = `[[colStr${eva.actor.role}]]`;
+            let stepStr = ''
+            _.forEach(eva.step, (step) => {
+                stepStr += `<li>${step}</li>`
+            });
+
+            let exists = _.findIndex(ols, (wc) => wc.wildcard === wildcard);
+            if (exists >= 0) {
+                ols[exists].rows += stepStr;
+            }
+        }
+    });
+
+    let colHtml = startRow;
+    _.forEach(ols, (li) => {
+        colHtml += colStr.replace(li.wildcard, li.rows);
+    });
+    colHtml += endRow;
+    console.log(colHtml, ols.length);
+    //output += colHtml;
 
     // let evatasks = taskList.evaTasks.select(eva => eva.title === t.title && eva.steps.length > 0);
     // let currentActor;
@@ -69,7 +98,7 @@ function buildColumns(taskList, task) {
     //     let steps = eva.steps.join('<br />');
     //     output = `${output}<td>${steps}</td>`;
 
-    //     //let colNumber = _.findIndex(taskList.actors, (a) => a.role === eva.actor.role);
+    //     //
     //     if (currentActor !== eva.actor.role) {
     //         currentActor = eva.actor.role;
     //         output = `${output}${endRow}`;

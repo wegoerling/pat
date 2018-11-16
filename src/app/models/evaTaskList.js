@@ -28,15 +28,17 @@ function readEVATaskMainYaml(fileLocation, fs, yaml, _, path, evaTask, callBack)
         tasks
     );
 
-    tasklist.evaTasks = [];
     let counter = 0;
     _.forEach(tasklist.tasks, function (t) {
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;
-        evaTask.create(taskFile, (evaTasks) => {
+        evaTask.create(taskFile, (evaTasks, title, duration) => {
             counter++;
-            tasklist.evaTasks = tasklist.evaTasks.concat(evaTasks);
-            t.title = evaTasks[0].title;
-            t.duration = evaTasks[0].duration;
+
+            if (evaTasks && evaTasks.length > 0) {
+                t.title = title;
+                t.duration = duration;
+                t.evaTasks = evaTasks;
+            }
 
             if (counter === tasklist.tasks.length) {
                 callBack(tasklist);

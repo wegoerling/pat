@@ -37,7 +37,8 @@ if (program.input) {
         console.log(JSON.stringify(evaTaskList));
 
         html.create(evaTaskList, program.output);
-        console.log(`Completed! your file is located at ${program.output}`);
+        const outputFile = program.output.replace('\\', '/');
+        console.log(`Completed! your file is located at file://${outputFile}`);
     });
 }
 

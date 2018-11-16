@@ -20,7 +20,7 @@ function DeserializeEvaTaskWithYaml(taskFile, callback) {
 
     _.forEach(yamlFile.steps, (step) => {
         _.forEach(Object.keys(step), (actor) => {
-            let task = new evaTask(yamlFile.title, yamlFile.duration);
+            let task = new evaTask();
             task.actor = {
                 role: actor
             };
@@ -32,14 +32,22 @@ function DeserializeEvaTaskWithYaml(taskFile, callback) {
                 if (prop.warning) task.warning = prop.warning;
                 if (prop.caution) task.caution = prop.caution;
                 if (prop.checkboxes) task.checkboxes = prop.checkboxes;
-                if (prop.step) task.step.push(prop.step);
+                if (prop.step) {
+                    if (typeof prop.step !== 'array') {
+                        task.step.push(prop.step);
+                    } else {
+                        _.forEach(prop.step, (s) => {
+                            task.step.push(s);
+                        });
+                    }
+                }
             });
             output.push(task);
         });
     });
 
 
-    callback(output);
+    callback(output, yamlFile.title, yamlFile.duration);
 }
 
 function DeserializeEvaTask(taskFile, callback) {

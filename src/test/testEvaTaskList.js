@@ -6,7 +6,7 @@ let evaTaskList = require('../app/models/evaTaskList'),
 
 //test genericEVATask
 describe('evaTaskList', function () {
-  let fsStub, yamlStub, lineReaderStub, evaTaskStub;
+  let fsStub, yamlStub, evaTaskStub;
 
   before(() => {
     sinon.spy(_, 'get');
