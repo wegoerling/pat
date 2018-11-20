@@ -3,6 +3,7 @@
 'use strict';
 const fs = require('fs');
 const _ = require('lodash');
+const showdown = require('./markdownHelper');
 
 exports.generators = {
     create: createHtml
@@ -29,19 +30,13 @@ function createHtml(evaTask, output) {
         _.forEach(evaTask.actors, (actor) => {
             html += '<td><ol>';
             _.forEach(actor.actorTasks, (actorTask) => {
-                html += `<li>${actorTask.step}`;
-                if (actorTask.checkboxes) {
-                    html += '<ul>';
-                    if (typeof actorTask.checkboxes === 'string') {
-                        html += `<li><input type="checkbox" /> ${actorTask.checkboxes}</li>`;
-                    } else {
-                        _.forEach(actorTask.checkboxes, (checkbox) => {
-                            html += `<li><input type="checkbox" />${checkbox}</li>`;
-                        });
-                    }
-                    html += '</ul>';
+                if (typeof actorTask.step === 'string') {
+                    html += writeStepToHtml(actorTask.step, actorTask.checkboxes);
+                } else {
+                    _.forEach(actorTask.step, (step) => {
+                        html += writeStepToHtml(step, actorTask.checkboxes);
+                    });
                 }
-                html += '</li>';
             });
             html += '</ol></td>';
         });
@@ -51,6 +46,24 @@ function createHtml(evaTask, output) {
     });
 
     writeHtmlToFile(output, evaTask.procedure_name, html);
+}
+
+function writeStepToHtml(step, checkboxes) {
+    let html = `<li>${showdown.convert(step)}`;
+    if (checkboxes) {
+        html += '<ul>';
+        if (typeof checkboxes === 'string') {
+            html += `<li>${showdown.convert(checkboxes)}</li>`;
+        } else {
+            _.forEach(checkboxes, (checkbox) => {
+                html += `<li>${showdown.convert(checkbox)}</li>`;
+            });
+        }
+        html += '</ul>';
+    }
+    html += '</li>';
+
+    return html;
 }
 
 function writeHtmlToFile(output, $title, $content) {

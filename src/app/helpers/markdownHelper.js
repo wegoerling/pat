@@ -1,6 +1,11 @@
 const showdown = require('showdown');
+var wiky = require('wiky');
 
 exports.convert = function (html) {
+    html = html.replace('{{CHECKMARK}}', '&#10063;');
+    html = html.replace('{{CHECK MARK}}', '&#10063;');
+    html = html.replace('{{CHECK}}', '&#10003;');
+    let text = wiky.toHtml(html);
     return new showdown.Converter().makeHtml(html);
 }
 
