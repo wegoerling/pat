@@ -36,7 +36,7 @@ describe('evaTaskList', function () {
 
   beforeEach(() => {
     yamlStub = {};
-    yamlStub.safeLoad = sinon.stub().returns({
+    yamlStub.load = sinon.stub().returns({
       'procedure_name': 'fakeProcName',
       'actors': ['fakeActor1', 'fakeActor2'],
       'tasks': [{
@@ -90,7 +90,7 @@ describe('evaTaskList', function () {
         });
 
       // assert
-      expect(fsStub.readFileSync.called).to.equal(true);
+      expect(yamlStub.load.called).to.equal(true);
     });
 
     it('should use the YAML library to deserialize the file content', () => {
@@ -111,7 +111,7 @@ describe('evaTaskList', function () {
       );
 
       // assert
-      expect(yamlStub.safeLoad.called).to.equal(true);
+      expect(yamlStub.load.called).to.equal(true);
     });
 
     it('should generate the evaTasks from the task files', () => {

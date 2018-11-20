@@ -5,15 +5,14 @@ exports.create = taskListObject;
 
 //////
 
-function readEVATaskMainYaml(fileLocation, fs, yaml, _, path, evaTask, callBack) {
+function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack) {
     if (!fs.existsSync(fileLocation)) {
         return null;
     }
 
-    let file = fs.readFileSync(fileLocation, 'utf8');
-    let yml = yaml.safeLoad(file);
-    let actors = _.get(yml, 'actors');
-    let tasks = _.get(yml, 'tasks');
+    let yml = YAML.load(fileLocation);
+    let actors = yml.actors;
+    let tasks = yml.tasks;
 
     if (!actors || actors.length === 0) {
         throw 'no actors found in the file or incorrect yaml file';

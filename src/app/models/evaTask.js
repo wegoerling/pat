@@ -13,6 +13,11 @@ const regx = {
 };
 
 function DeserializeEvaTaskWithYaml(taskFile, callback) {
+    if (!fs.existsSync(taskFile)) {
+        console.log("\n" + taskFile + "\nFile Does Not Exist\n");
+        callback([]);
+    }
+
     let yamlFile = YAML.load(taskFile);
     let output = [];
 

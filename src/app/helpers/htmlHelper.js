@@ -3,107 +3,92 @@
 'use strict';
 const fs = require('fs');
 const _ = require('lodash');
+const showdown = require('./markdownHelper');
 
 exports.generators = {
     create: createHtml
 }
 
-const wildCards = {
-    title: '{{title}}',
-    content: '{{content}}'
-};
-
 function createHtml(evaTask, output) {
-    let htmlTemplate = "";
-    htmlTemplate = fs.readFileSync('./templates/template.html', 'utf8');
-    return processHtml();
+    let html = '';
+    _.forEach(evaTask.tasks, (checklist) => {
+        // draw the checklist title
+        html += `<h2>${checklist.title} (00:${checklist.duration})</h2>`
+        html += '<table class="gridtable">';
 
-    function processHtml() {
-        htmlTemplate = _.replace(htmlTemplate, new RegExp(wildCards.title, 'g'), evaTask.procudure_name || '');
+        html += '<tr>';
+        let actorTasks = [];
+        _.forEach(evaTask.actors, (actor) => {
+            html += createActorHeading(actor);
 
-
-        let $content = "";
-        _.forEach(evaTask.tasks, (t) => {
-            let $hgroup = `
-            <h2>${t.title}</h2>
-            <h4>Duration: ${t.duration}</h4>
-            `;
-            $content += $hgroup;
-
-            const actorsTable = buildColumns(evaTask, t);
-            $content += actorsTable;
-        });
-
-        htmlTemplate =
-            _.replace(htmlTemplate, new RegExp(wildCards.content, 'g'), $content);
-
-        fs.writeFile(output, htmlTemplate, (err) => {
-            if (!!err) {
-                console.log("Unable to save file:");
-                console.log(err);
-            }
-        });
-
-        return evaTask;
-    }
-}
-
-
-
-function buildColumns(taskList, task) {
-    const startTable = '<table class="gridtable">';
-    const endTable = '</table>';
-    const startRow = '<tr>';
-    const endRow = '</tr>';
-
-    let output = startRow;
-    let colStr = '';
-    let ols = [];
-    _.forEach(taskList.actors, (col) => {
-        output = `${output} <td>${col.role || ''}${col.name ? '(' +col.name + ')' : ''}</td>`;
-        colStr += `<td><ol>[[colStr${col.role}]]</ol></td>`;
-        ols.push({
-            wildcard: `[[colStr${col.role}]]`
-        });
-    });
-    output += endRow;
-
-
-    _.forEach(task.evaTasks, (eva) => {
-        if (eva.step && eva.step.length > 0) {
-            let wildcard = `[[colStr${eva.actor.role}]]`;
-            let stepStr = ''
-            _.forEach(eva.step, (step) => {
-                stepStr += `<li>${step}</li>`
+            actorTasks = checklist.evaTasks.filter((task) => {
+                return task.actor.role === actor.role;
             });
 
-            let exists = _.findIndex(ols, (wc) => wc.wildcard === wildcard);
-            if (exists >= 0) {
-                ols[exists].rows += stepStr;
-            }
+            actor.actorTasks = actorTasks;
+        });
+        html += '</tr>';
+
+        html += '<tr>';
+        _.forEach(evaTask.actors, (actor) => {
+            html += '<td><ol>';
+            _.forEach(actor.actorTasks, (actorTask) => {
+                if (typeof actorTask.step === 'string') {
+                    html += writeStepToHtml(actorTask.step, actorTask.checkboxes);
+                } else {
+                    _.forEach(actorTask.step, (step) => {
+                        html += writeStepToHtml(step, actorTask.checkboxes);
+                    });
+                }
+            });
+            html += '</ol></td>';
+        });
+        html += '</tr>';
+
+        html += '</table>';
+    });
+
+    writeHtmlToFile(output, evaTask.procedure_name, html);
+}
+
+function createActorHeading(actor) {
+    let html = `<td>${actor.role}`;
+    if (actor.name) {
+        html += `(${actor.name})`;
+    }
+    html += `</td>`;
+    return html;
+}
+
+function writeStepToHtml(step, checkboxes) {
+    let html = `<li>${showdown.convert(step)}`;
+    if (checkboxes) {
+        html += '<ul>';
+        if (typeof checkboxes === 'string') {
+            html += `<li>${showdown.convert(checkboxes)}</li>`;
+        } else {
+            _.forEach(checkboxes, (checkbox) => {
+                html += `<li>${showdown.convert(checkbox)}</li>`;
+            });
+        }
+        html += '</ul>';
+    }
+    html += '</li>';
+
+    return html;
+}
+
+function writeHtmlToFile(output, $title, $content) {
+    let htmlTemplate = fs.readFileSync('./templates/htmlHelper-template.html', 'utf8');
+    htmlTemplate =
+        _.replace(htmlTemplate, new RegExp('{{content}}', 'g'), $content);
+    htmlTemplate =
+        _.replace(htmlTemplate, new RegExp('{{title}}', 'g'), $title);
+
+    fs.writeFile(output, htmlTemplate, (err) => {
+        if (!!err) {
+            console.log("Unable to save file:");
+            console.log(err);
         }
     });
-
-    let colHtml = startRow;
-    _.forEach(ols, (li) => {
-        colHtml += colStr.replace(li.wildcard, li.rows);
-    });
-    colHtml += endRow;
-    console.log(colHtml, ols.length);
-    //output += colHtml;
-
-    // let evatasks = taskList.evaTasks.select(eva => eva.title === t.title && eva.steps.length > 0);
-    // let currentActor;
-    // _.forEach(evatasks, (eva) => {
-    //     let steps = eva.steps.join('<br />');
-    //     output = `${output}<td>${steps}</td>`;
-
-    //     //
-    //     if (currentActor !== eva.actor.role) {
-    //         currentActor = eva.actor.role;
-    //         output = `${output}${endRow}`;
-    //     }
-    // });
-
-    return `${startTable}${output}${endTable}`;
 }

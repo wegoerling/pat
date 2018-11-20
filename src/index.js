@@ -4,8 +4,8 @@
 const program = require('commander');
 const _ = require('lodash');
 const fs = require('fs');
-let yaml = require('js-yaml');
 const path = require('path');
+const YAML = require('yamljs');
 
 const ver = require('./app/models/version');
 const doc = require('./app/models/evaTaskList');
@@ -33,8 +33,8 @@ if (program.input) {
         process.exit(-1);
     }
 
-    doc.generateEVATasks(program.input, fs, yaml, _, path, evaTask, (evaTaskList) => {
-        console.log(JSON.stringify(evaTaskList));
+    doc.generateEVATasks(program.input, fs, YAML, _, path, evaTask, (evaTaskList) => {
+        // console.log(JSON.stringify(evaTaskList));
 
         html.create(evaTaskList, program.output);
         const outputFile = program.output.replace('\\', '/');
