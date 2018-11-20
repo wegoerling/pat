@@ -2,13 +2,15 @@
 
 'use strict';
 const program = require('commander');
-let _ = require('lodash');
-let path = require('path');
-
+const _ = require('lodash');
 const fs = require('fs');
-const ver = require('./app/helpers/version');
-const doc = require('./app/helpers/genericEvaTask');
-const actor = require('./app/helpers/actor');
+let yaml = require('js-yaml');
+const path = require('path');
+
+const ver = require('./app/models/version');
+const doc = require('./app/models/evaTaskList');
+const html = require('./app/helpers/htmlHelper').generators;
+let evaTask = require('./app/models/evaTask');
 
 const DEFAULT_FILE = `${__dirname}/main.yml`;
 const DEFAULT_HTML = `${__dirname}/main.html`;
@@ -19,43 +21,28 @@ program
     .parse(process.argv);
 
 if (program.input) {
-    try {      
-        if(getFileExtension(program.input) !== 'yml') {
+    try {
+        if (getFileExtension(program.input) !== 'yml') {
             throw "\n" + program.input + "\nInvalid file extension\n";
         }
-        if(!fs.existsSync(program.input)) {
+        if (!fs.existsSync(program.input)) {
             throw "\n" + program.input + "\nFile Does Not Exist\n";
         }
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err);
-        process.exit(1);
+        process.exit(-1);
     }
-     
-    const yml = doc.genericEvaTask(program.input);
-    console.log(`converted the YAML file [${program.input}]`);
 
-    const actors = actor.actors(yml);
-    console.log(`Getting actors array...`);
+    doc.generateEVATasks(program.input, fs, yaml, _, path, evaTask, (evaTaskList) => {
+        console.log(JSON.stringify(evaTaskList));
 
-    //TODO: loop thru tasks and build the output
-    let evaTaskList = {
-        actors: actors
-    };
-    _.forEach(_.get(yml, 'tasks'), (task) => {
-        let path = _.get(task, 'file');
-        if (!!path) {
-            let fileTask = doc.genericEvaTask(`${__dirname}/${path}`);
-
-            if (fileTask !== null) {
-                evaTaskList[_.split(path, '.')[0]] = fileTask;
-            }
-        }
+        html.create(evaTaskList, program.output);
+        const outputFile = program.output.replace('\\', '/');
+        console.log(`Completed! your file is located at file://${outputFile}`);
     });
-    console.log('result', evaTaskList);
 }
 
 function getFileExtension(fileName) {
-    let fileExtension = path.extname(fileName||'').split('.');
+    let fileExtension = path.extname(fileName || '').split('.');
     return fileExtension[fileExtension.length - 1];
 }
