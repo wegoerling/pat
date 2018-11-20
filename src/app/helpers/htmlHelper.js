@@ -12,6 +12,7 @@ exports.generators = {
 function createHtml(evaTask, output) {
     let html = '';
     _.forEach(evaTask.tasks, (checklist) => {
+        // draw the checklist title
         html += `<h2>${checklist.title} (00:${checklist.duration})</h2>`
         html += '<table class="gridtable">';
 
