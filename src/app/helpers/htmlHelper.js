@@ -19,10 +19,12 @@ function createHtml(evaTask, output) {
         html += '<tr>';
         let actorTasks = [];
         _.forEach(evaTask.actors, (actor) => {
-            html += `<td>${actor.role} (${actor.name})</td>`;
+            html += createActorHeading(actor);
+
             actorTasks = checklist.evaTasks.filter((task) => {
                 return task.actor.role === actor.role;
             });
+
             actor.actorTasks = actorTasks;
         });
         html += '</tr>';
@@ -47,6 +49,15 @@ function createHtml(evaTask, output) {
     });
 
     writeHtmlToFile(output, evaTask.procedure_name, html);
+}
+
+function createActorHeading(actor) {
+    let html = `<td>${actor.role}`;
+    if (actor.name) {
+        html += `(${actor.name})`;
+    }
+    html += `</td>`;
+    return html;
 }
 
 function writeStepToHtml(step, checkboxes) {
