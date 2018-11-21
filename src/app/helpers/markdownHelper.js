@@ -7,9 +7,10 @@ exports.convert = function (html) {
     html = html.replace('{{CHECK MARK}}', '&#10063;');
     html = html.replace('{{CHECK}}', '&#10003;');
     if (html.includes("'''")) {
-        let regex = /[^A-Za-z0-9]+[\']/gi;
+        console.log(html);
+        let regex = /([\'])+/gi;
         // Need to place a space around ** on both sides.
-        html = html.replace(regex,'**');
+        html = html.replace(regex, "**");
     }
     let text = wiky.toHtml(html);
     return new showdown.Converter().makeHtml(html);
