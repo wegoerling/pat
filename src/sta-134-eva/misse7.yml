@@ -155,5 +155,6 @@ steps:
       - step: Translate aft to Bay 9 - MISSE 8 Retrieve
 
     EV2:
-      - step: Glove and Gauntlet check
-      - step: Translate aft to S3 Face 1 - S3 CETA Light Install
+      # Making changes to test the <strong> conversion with wiki or md
+      - step: "**Glove and Gauntlet check**"
+      - step: "'''Translate aft to S3 Face 1 - S3 CETA Light Install'''"
