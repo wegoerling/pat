@@ -18,7 +18,7 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack)
         throw 'no actors found in the file or incorrect yaml file';
     }
 
-    let tasklist = new taskListObject(
+    let evaCheckList = new taskListObject(
         yml.procedure_name,
         actors.map(a => {
             let obj = new actor.create(a.role, a.name);
@@ -28,7 +28,7 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack)
     );
 
     let counter = 0;
-    _.forEach(tasklist.tasks, function (t) {
+    _.forEach(evaCheckList.tasks, function (t) {
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;
         evaTask.create(taskFile, (evaTasks, title, duration) => {
             counter++;
@@ -37,10 +37,11 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack)
                 t.title = title;
                 t.duration = duration;
                 t.evaTasks = evaTasks;
+
             }
 
-            if (counter === tasklist.tasks.length) {
-                callBack(tasklist);
+            if (counter === evaCheckList.tasks.length) {
+                callBack(evaCheckList);
             }
         });
     });

@@ -23,36 +23,36 @@ function DeserializeEvaTaskWithYaml(taskFile, callback) {
 
     // console.log(JSON.stringify(yamlFile));
 
-    _.forEach(yamlFile.steps, (step) => {
-        _.forEach(Object.keys(step), (actor) => {
-            let task = new evaTask();
-            task.actor = {
-                role: actor
-            };
-            if (typeof step[actor] !== 'object') {
-                task.step.push(step[actor]);
-            }
+    // _.forEach(yamlFile.steps, (step) => {
+    //     _.forEach(Object.keys(step), (actor) => {
+    //         let task = new evaTask();
+    //         task.actor = {
+    //             role: actor
+    //         };
+    //         if (typeof step[actor] !== 'object') {
+    //             task.step.push(step[actor]);
+    //         }
 
-            _.forEach(step[actor], (prop) => {
-                if (prop.warning) task.warning = prop.warning;
-                if (prop.caution) task.caution = prop.caution;
-                if (prop.checkboxes) task.checkboxes = prop.checkboxes;
-                if (prop.step) {
-                    if (typeof prop.step !== 'array') {
-                        task.step.push(prop.step);
-                    } else {
-                        _.forEach(prop.step, (s) => {
-                            task.step.push(s);
-                        });
-                    }
-                }
-            });
-            output.push(task);
-        });
-    });
+    //         _.forEach(step[actor], (prop) => {
+    //             if (prop.warning) task.warning = prop.warning;
+    //             if (prop.caution) task.caution = prop.caution;
+    //             if (prop.checkboxes) task.checkboxes = prop.checkboxes;
+    //             if (prop.step) {
+    //                 if (typeof prop.step !== 'array') {
+    //                     task.step.push(prop.step);
+    //                 } else {
+    //                     _.forEach(prop.step, (s) => {
+    //                         task.step.push(s);
+    //                     });
+    //                 }
+    //             }
+    //         });
+    //         output.push(task);
+    //     });
+    // });
 
 
-    callback(output, yamlFile.title, yamlFile.duration);
+    callback(yamlFile.steps, yamlFile.title, yamlFile.duration);
 }
 
 function DeserializeEvaTask(taskFile, callback) {

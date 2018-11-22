@@ -9,7 +9,7 @@ const YAML = require('yamljs');
 
 const ver = require('./app/models/version');
 const doc = require('./app/models/evaTaskList');
-const html = require('./app/helpers/htmlHelper').generators;
+const html = require('./app/helpers/htmlHelper2').generators;
 let evaTask = require('./app/models/evaTask');
 
 const DEFAULT_FILE = `${__dirname}/main.yml`;

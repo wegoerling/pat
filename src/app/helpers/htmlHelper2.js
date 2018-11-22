@@ -16,40 +16,49 @@ function createHtml(evaTask, output) {
         html += `<h2>${checklist.title} (00:${checklist.duration})</h2>`;
         html += '<table class="gridtable">';
 
-        html += '<tr>';
-        let actorTasks = [];
-        _.forEach(evaTask.actors, actor => {
-            html += createActorHeading(actor);
+        const rowWidth = 100 / (evaTask.actors.length);
 
-            actorTasks = checklist.evaTasks.filter(task => {
-                return Object.keys(task)[0] === actor.role;
-            });
+        _.forEach(checklist.evaTasks, task => {
+            let actor = Object.keys(task)[0];
+            if (actor.toLowerCase() !== 'simo') {
+                html += `<tr>`;
+                let idx = _.findIndex(evaTask.actors, (a) => a.role === actor);
+                if (idx > 0) {
+                    for (let $td = 0; $td < idx; $td++) {
+                        html += `<td style="width: ${rowWidth}%;"></td>`;
+                    }
+                }
 
-            actor.actorTasks = actorTasks;
-        });
-        html += '</tr>';
+                html += `<td style="width: ${rowWidth}%;"><ol>`;
+                if (typeof task[actor] !== 'string') {
+                    _.forEach(task[actor], steps => {
+                        console.log('htmlHelper.createHtml', steps);
+                        const stepData = !!steps.step ? steps.step : '';
+                        const checkboxes = steps.checkboxes ? steps.checkboxes : null;
+                        const substeps = steps.substeps ? steps.substeps : null;
+                        const images = steps.images ? steps.images : null;
 
-        html += '<tr>';
-        _.forEach(evaTask.actors, actor => {
-            html += '<td><ol>';
-            _.forEach(actor.actorTasks, actorTask => {
-                if (typeof actorTask.step === 'string') {
-                    html += writeStepToHtml(
-                        actorTask.step,
-                        actorTask.checkboxes,
-                        actorTask.substeps,
-                        actorTask.images
-                    );
-                } else {
-                    _.forEach(actorTask.step, step => {
-                        html += writeStepToHtml(step, actorTask.checkboxes,
-                            actorTask.substeps, actorTask.images);
+                        html += `${writeStepToHtml(
+                        stepData, 
+                        checkboxes, 
+                        substeps, 
+                        images)}`;
                     });
                 }
-            });
-            html += '</ol></td>';
+                html += '</ol></td>';
+
+                if (idx < (evaTask.actors.length - 1)) {
+                    for (let $td = idx; $td < (evaTask.actors.length - 1); $td++) {
+                        html += `<td style="width: ${rowWidth}%;"></td>`;
+                    }
+                }
+
+                html += '</tr>'
+
+            } else {
+                console.log('is simo task');
+            }
         });
-        html += '</tr>';
 
         html += '</table>';
     });
