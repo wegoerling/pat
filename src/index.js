@@ -16,7 +16,7 @@ const DEFAULT_FILE = `${__dirname}/main.yml`;
 const DEFAULT_HTML = `${__dirname}/main.html`;
 const DEFAULT_TEMPLATE = `${__dirname}/templates/htmlHelper-template.thtml`;
 program
-    .version(ver.currentVersion)
+    .version(ver.currentVersion, '-v, --version')
     .option('-i, --input [.yml]', 'specify the yml file to use', DEFAULT_FILE)
     .option('-o, --output [.html]', 'where do you want the result located', DEFAULT_HTML)
     .option('-t, --template [.html]', 'specify a template to generate', DEFAULT_TEMPLATE)
