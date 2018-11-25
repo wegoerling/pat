@@ -50,10 +50,14 @@ if (program.input) {
     }
 
     doc.generateEVATasks(program.input, fs, YAML, _, path, evaTask, (evaTaskList) => {
-        // console.log(JSON.stringify(evaTaskList));
+        let outputFile = program.output;
+        if (!path.isAbsolute(outputFile)) {
+            outputFile = path.normalize(`${__dirname}/${program.output}`);
+        } else {
+            outputFile = path.normalize(program.output)
+        }
 
-        html.create(evaTaskList, program.output, program.template);
-        const outputFile = program.output.replace('\\', '/').replace('.', __dirname);
+        html.create(evaTaskList, outputFile, program.template);
         console.log(`Completed! your file is located at file://${outputFile}`);
     });
 }
