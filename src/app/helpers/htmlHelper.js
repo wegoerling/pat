@@ -127,9 +127,16 @@ function writeStepToHtml(step, checkboxes, substeps, images) {
     if (checkboxes) {
         html += "<ul>";
         if (typeof checkboxes === "string") {
+            if (checkboxes.indexOf('{{CHECKMARK}}') < 0) {
+                checkboxes = `{{CHECKMARK}} ${checkboxes}`;
+            }
             html += `<li>${showdown.convert(checkboxes)}</li>`;
         } else {
             _.forEach(checkboxes, checkbox => {
+                if (checkbox.indexOf('{{CHECKMARK}}') < 0) {
+                    checkbox = `{{CHECKMARK}} ${checkbox}`;
+                }
+
                 html += `<li>${showdown.convert(checkbox)}</li>`;
             });
         }
