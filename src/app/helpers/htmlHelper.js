@@ -3,7 +3,7 @@
 "use strict";
 const fs = require("fs");
 const _ = require("lodash");
-const showdown = require("./markdownHelper");
+const formatter = require("./markdownHelper");
 
 exports.generators = {
     create: createHtml
@@ -100,7 +100,7 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
             const title = steps.title ? steps.title : null;
 
             if (title !== null) {
-                html += `${showdown.convert(title)}`;
+                html += `${formatter.convert(title)}`;
             }
 
             if (isFirst) {
@@ -123,21 +123,21 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
 function writeStepToHtml(step, checkboxes, substeps, images) {
     // console.log("=>", step, checkboxes, substeps, images);
 
-    let html = `<li>${showdown.convert(step)}`;
+    let html = `<li>${formatter.convert(step)}`;
     if (checkboxes) {
         html += "<ul>";
         if (typeof checkboxes === "string") {
             if (checkboxes.indexOf('{{CHECKMARK}}') < 0) {
                 checkboxes = `{{CHECKMARK}} ${checkboxes}`;
             }
-            html += `<li>${showdown.convert(checkboxes)}</li>`;
+            html += `<li>${formatter.convert(checkboxes)}</li>`;
         } else {
             _.forEach(checkboxes, checkbox => {
                 if (checkbox.indexOf('{{CHECKMARK}}') < 0) {
                     checkbox = `{{CHECKMARK}} ${checkbox}`;
                 }
 
-                html += `<li>${showdown.convert(checkbox)}</li>`;
+                html += `<li>${formatter.convert(checkbox)}</li>`;
             });
         }
         html += "</ul>";
