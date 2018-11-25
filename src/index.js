@@ -30,6 +30,10 @@ if (program.input) {
         if (!fs.existsSync(program.input)) {
             throw "\n" + program.input + "\nFile Does Not Exist\n";
         }
+        if (!fs.existsSync(program.template)) {
+            throw "\n" + program.template + "\nTemplate file does not Exist\n";
+        }
+
     } catch (err) {
         console.log(err);
         process.exit(-1);
