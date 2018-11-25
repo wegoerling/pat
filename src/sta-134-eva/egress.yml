@@ -6,7 +6,7 @@ steps:
   - IV:
       - step: Record PET start time ____:____ (Pwr to Batt)
       - step: Start WVS Recorders
-      - images: file://c:/src/spacewalk/src/sta-134-eva/WVSRecorders.png
+        images: ./WVSRecorders.png
 
   - simo:
       EV1:
@@ -85,7 +85,7 @@ steps:
             # I'm not sure about the indenting on this one in the real procedure. We
             # don't do all these steps anymore.
             - step: S-Band Level (two) - Max
-
+  - simo:
       EV1:
         - step: Perform buddy checks
           checkboxes:
@@ -126,9 +126,9 @@ steps:
   # This corresponds to page 7-20, EV1 step 12 and EV2 step 8. I've re-written
   # it to be one step in a shared (merged) column.
   - simo:
-    - EV1:
+      EV1:
         - step: Give **EV3 GO** to release Waist Tether
-    - EV2:
+      EV2:
         - step: On **EV1 GO**, EV2 release right Waist Tether from Airlock internal D-Ring
 
   - simo:
