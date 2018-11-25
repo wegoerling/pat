@@ -3,36 +3,40 @@ duration: 25
 
 steps:
   # First steps in IV column (first column)
-  - IV:
-      - step: Record PET start time ____:____ (Pwr to Batt)
-      - step: Start WVS Recorders
-        images: ./WVSRecorders.png
-
   - simo:
+      IV:
+        - step: Record PET start time ____:____ (Pwr to Batt)
+        - step: Start WVS Recorders
+          images: ./WVSRecorders.png
       EV1:
         - step: '{{CHECK}} All gates closed & hooks locked'
+          title: '**Initial Configuration**'
           checkboxes:
-            - R Waist Tether to EV2 Blank hook
-            - Red hook on L D-ring ext
-            - Yellow hook on Green ERCM
-            - Green hook on Red ERCM
-            - Blank hook on MWS
+            - '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
+            - '{{CHECKMARK}} Red hook on L D-ring ext'
+            - '{{CHECKMARK}} Yellow hook on Green ERCM'
+            - '{{CHECKMARK}} Green hook on Red ERCM'
+            - '{{CHECKMARK}} Blank hook on MWS'
       EV2:
-        - step: '{{CHECKMARK}} All gates closed & hooks locked'
+        - step: '{{CHECK}} All gates closed & hooks locked'
+          title: '*Initial Configuration*'
           checkboxes:
-            - All gates closed & hooks locked
-            - R Waist Tether to A/L D-ring ext
-            - Red hook on L D-ring ext
-            - Yellow hook on Green ERCM
-            - Green hook on Red ERCM
-            - Blank hook to EV1 R Waist Tether
+            - '{{CHECKMARK}} All gates closed & hooks locked'
+            - '{{CHECKMARK}} R Waist Tether to A/L D-ring ext'
+            - '{{CHECKMARK}} Red hook on L D-ring ext'
+            - '{{CHECKMARK}} Yellow hook on Green ERCM'
+            - '{{CHECKMARK}} Green hook on Red ERCM'
+            - '{{CHECKMARK}} Blank hook to EV1 R Waist Tether'
 
   # FIXME: How to handle "EGRESS/SETUP" header after initial configuration.
 
   # EV1's step "open thermal cover" should really drive the IV's step to start a
   # clock. The steps below show the YAML equivalent to the STS-134 procedure.
   - simo:
-      EV1: Open hatch thermal cover
+      EV1: 
+        - step: Open hatch thermal cover
+          title: EGRESS/SETUP (00:25)
+        - step: Egress A/L
       IV: 'Start Hatch thermal cover clock PET (30 min) ____:____'
 
   # # The next step is an ALTERNATE to the EV1 and IV steps above that merges
@@ -48,9 +52,6 @@ steps:
   #    - IV: 'Start Hatch Thermal Cover clock PET (30 min) ____:____'
 
   # # # End of alternate methods # # #
-
-  - EV1: Egress A/L
-
   - simo:
       EV1:
         - step: Receive EWC ORU bag from EV3, stow on BRT w/RET

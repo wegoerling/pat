@@ -21,6 +21,7 @@ function createHtml(evaTask, output) {
         html += "<tr>";
         _.forEach(evaTask.actors, actor => {
             html += createActorHeading(actor);
+            actor.counter = 1;
         });
         html += "</tr>";
 
@@ -34,7 +35,7 @@ function createHtml(evaTask, output) {
                         html += `<td style="width: ${rowWidth}%;"></td>`;
                     }
                 }
-                html += writeRowToHtml(task, actor, rowWidth);
+                html += writeRowToHtml(task, actor, rowWidth, evaTask.actors);
 
                 if (idx < evaTask.actors.length - 1) {
                     for (let $td = idx; $td < evaTask.actors.length - 1; $td++) {
@@ -52,7 +53,7 @@ function createHtml(evaTask, output) {
                     let actorCols = new Array(evaTask.actors.length);
                     _.forEach(simoActors, simoActor => {
                         let idx = _.findIndex(evaTask.actors, a => a.role === simoActor);
-                        actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth);
+                        actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth, evaTask.actors);
                     });
 
                     for (let $td = 0; $td < actorCols.length; $td++) {
@@ -85,21 +86,37 @@ function createActorHeading(actor) {
     return html;
 }
 
-function writeRowToHtml(task, actor, rowWidth) {
-    let html = `<td style="width: ${rowWidth}%;"><ol>`;
+function writeRowToHtml(task, actor, rowWidth, allActors) {
+    let html = `<td style="width: ${rowWidth}%;">`;
+    let actorIdx = _.findIndex(allActors, (a) => a.role === actor);
+
     if (typeof task[actor] !== "string") {
+        let isFirst = true;
         _.forEach(task[actor], steps => {
             const stepData = !!steps.step ? steps.step : "";
             const checkboxes = steps.checkboxes ? steps.checkboxes : null;
             const substeps = steps.substeps ? steps.substeps : null;
             const images = steps.images ? steps.images : null;
+            const title = steps.title ? steps.title : null;
 
+            if (title !== null) {
+                html += `${showdown.convert(title)}`;
+            }
+
+            if (isFirst) {
+                html += `<ol start=${allActors[actorIdx].counter}>`;
+                isFirst = false;
+            }
             html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
+            allActors[actorIdx].counter += 1;
         });
     } else {
+        html += `<ol start=${allActors[actorIdx].counter}>`;
         html += `${writeStepToHtml(task[actor])}`;
+        allActors[actorIdx].counter += 1;
     }
     html += "</ol></td>";
+
     return html;
 }
 
