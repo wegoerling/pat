@@ -53,7 +53,7 @@ if (program.input) {
         // console.log(JSON.stringify(evaTaskList));
 
         html.create(evaTaskList, program.output, program.template);
-        const outputFile = program.output.replace('\\', '/');
+        const outputFile = program.output.replace('\\', '/').replace('.', __dirname);
         console.log(`Completed! your file is located at file://${outputFile}`);
     });
 }

@@ -37,7 +37,6 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack)
                 t.title = title;
                 t.duration = duration;
                 t.evaTasks = evaTasks;
-
             }
 
             if (counter === evaCheckList.tasks.length) {
