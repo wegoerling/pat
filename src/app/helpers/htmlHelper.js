@@ -14,7 +14,7 @@ function createHtml(evaTask, output, htmlFileTemplate) {
 
     _.forEach(evaTask.tasks, checklist => {
         // draw the checklist title
-        html += `<h2>${checklist.title} (00:${checklist.duration})</h2>`;
+        html += `<h2>${checklist.title} (${checklist.duration})</h2>`;
         html += '<table class="gridtable">';
 
         const rowWidth = 100 / evaTask.actors.length;
