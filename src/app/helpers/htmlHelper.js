@@ -174,7 +174,7 @@ function writeImageToHtml(image) {
 
 function writeHtmlToFile(output, $title, $content) {
     let htmlTemplate = fs.readFileSync(
-        "./templates/htmlHelper-template.html",
+        "./templates/htmlHelper-template.thtml",
         "utf8"
     );
     htmlTemplate = _.replace(
