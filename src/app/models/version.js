@@ -1,3 +1,4 @@
 'use strict';
+var pjson = require('../../package.json');
 
-exports.currentVersion = '0.0.2';
+exports.currentVersion = pjson.version;
