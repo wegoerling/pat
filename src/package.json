@@ -1,6 +1,6 @@
 {
   "name": "evachecklist",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Spacewalk EVA Checklist",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,10 @@
   "keywords": [
     "spacewalk",
     "eva",
-    "checklist"
+    "checklist",
+    "UMUC",
+    "SWEN670",
+    "group project"
   ],
   "author": "Fall 2018 SWEN 670 Group 3",
   "license": "MIT",
