@@ -18,11 +18,7 @@ exports.convert = function (html) {
         console.log(html);
         let regex = /([\'])+/gi;
         // Need to place a space around ** on both sides.
-<<<<<<< HEAD
-        html = html.replace(regex, "**");
-=======
         html = html.replace(regex, '**');
->>>>>>> jose_simoBranch
     }
     let text = wiky.toHtml(html);
     return new showdown.Converter().makeHtml(text);
