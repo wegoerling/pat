@@ -53,7 +53,11 @@ function createHtml(evaTask, output, htmlFileTemplate) {
                     let actorCols = new Array(evaTask.actors.length);
                     _.forEach(simoActors, simoActor => {
                         let idx = _.findIndex(evaTask.actors, a => a.role === simoActor);
-                        actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth, evaTask.actors);
+                        if (idx < 0) {
+                            console.log(`Found invalid actor: ${simoActor}`);
+                        } else {
+                            actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth, evaTask.actors);
+                        }
                     });
 
                     for (let $td = 0; $td < actorCols.length; $td++) {
@@ -87,37 +91,41 @@ function createActorHeading(actor) {
 }
 
 function writeRowToHtml(task, actor, rowWidth, allActors) {
-    let html = `<td style="width: ${rowWidth}%;">`;
     let actorIdx = _.findIndex(allActors, (a) => a.role === actor);
-
-    if (typeof task[actor] !== "string") {
-        let isFirst = true;
-        _.forEach(task[actor], steps => {
-            const stepData = !!steps.step ? steps.step : "";
-            const checkboxes = steps.checkboxes ? steps.checkboxes : null;
-            const substeps = steps.substeps ? steps.substeps : null;
-            const images = steps.images ? steps.images : null;
-            const title = steps.title ? steps.title : null;
-
-            if (title !== null) {
-                html += `${formatter.convert(title)}`;
-            }
-
-            if (isFirst) {
-                html += `<ol start=${allActors[actorIdx].counter}>`;
-                isFirst = false;
-            }
-            html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
-            allActors[actorIdx].counter += 1;
-        });
+    if (actorIdx < 0) {
+        console.log(`Found invalid actor: ${actor}`);
     } else {
-        html += `<ol start=${allActors[actorIdx].counter}>`;
-        html += `${writeStepToHtml(task[actor])}`;
-        allActors[actorIdx].counter += 1;
-    }
-    html += "</ol></td>";
+        let html = `<td style="width: ${rowWidth}%;">`;
+        if (typeof task[actor] !== "string") {
+            let isFirst = true;
+            _.forEach(task[actor], steps => {
+                const stepData = !!steps.step ? steps.step : "";
+                const checkboxes = steps.checkboxes ? steps.checkboxes : null;
+                const substeps = steps.substeps ? steps.substeps : null;
+                const images = steps.images ? steps.images : null;
+                const title = steps.title ? steps.title : null;
 
-    return html;
+                if (title !== null) {
+                    html += `${formatter.convert(title)}`;
+                }
+
+                if (isFirst) {
+                    html += `<ol start=${allActors[actorIdx].counter}>`;
+                    isFirst = false;
+                }
+                html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
+                allActors[actorIdx].counter += 1;
+            });
+        } else {
+            html += `<ol start=${allActors[actorIdx].counter}>`;
+            html += `${writeStepToHtml(task[actor])}`;
+            allActors[actorIdx].counter += 1;
+        }
+        html += "</ol></td>";
+        return html;
+    }
+
+    return '';
 }
 
 function writeStepToHtml(step, checkboxes, substeps, images) {

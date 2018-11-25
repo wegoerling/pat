@@ -10,3 +10,4 @@ actors:
     name: N/A
 tasks:
   - file: Two-Column Test - Based on OTP LDTD Tether Cinch.yml
+  - file: simo Two-Column Test - Based on OTP LDTD Tether Cinch.yml
