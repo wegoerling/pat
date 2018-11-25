@@ -162,7 +162,7 @@ function writeStepToHtml(step, checkboxes, substeps, images) {
 }
 
 function writeImageToHtml(image) {
-    return `<img src="${image}" alt="image" />`;
+    return `<img class="img-fluid" src="${image}" alt="image" />`;
 }
 
 function writeHtmlToFile(output, $title, $content) {

@@ -5,30 +5,28 @@ steps:
   # Skip the "planned PET" part
 
   - simo:
-    # FYI, "inhibits" basically mean "make sure stuff is turned off before we
-    # try to unplug it".
-    IV:
-      - step: Verify inhibits in place
-        substeps:
-          - "{{CHECKMARK}} Stbd SARJ locked"
-          - "{{CHECKMARK}} MISSE/ELC-2 inhibits"
-
+      # FYI, "inhibits" basically mean "make sure stuff is turned off before we
+      # try to unplug it".
+      IV:
+        - step: Verify inhibits in place
+          substeps:
+            - "{{CHECKMARK}} Stbd SARJ locked"
+            - "{{CHECKMARK}} MISSE/ELC-2 inhibits"
     # This is a simo block that also includes merged columns. Complicated...
   - simo:
-    EV1:
-      - warning: Do not touch the hinged side while closing the MISSE PECs (Pinch Point)
-      - caution:
-          - Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA
-          - There isn't a second caution in this block, but I wanted to add one here to show that there could be (also for "warning" and "note" blocks).
+      EV1:
+        - warning: Do not touch the hinged side while closing the MISSE PECs (Pinch Point)
+        - caution:
+            - Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA
+            - There isn't a second caution in this block, but I wanted to add one here to show that there could be (also for "warning" and "note" blocks).
 
-    EV2:
-      - warning: Do not touch the hinged side while closing the MISSE PECs (Pinch Point)
-      - caution:
-          - Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA
-          - There isn't a second caution in this block, but I wanted to add one here to show that there could be (also for "warning" and "note" blocks).
+      EV2:
+        - warning: Do not touch the hinged side while closing the MISSE PECs (Pinch Point)
+        - caution:
+            - Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA
+            - There isn't a second caution in this block, but I wanted to add one here to show that there could be (also for "warning" and "note" blocks).
 
-  # FIXME: There's an image here that I need to think about how to include
-
+    # FIXME: There's an image here that I need to think about how to include
   - simo:
 
     EV1:
@@ -70,19 +68,18 @@ steps:
           - Install cap onto PEC 7B
 
   - simo:
-
-    EV1:
-      - step: Close PEC 7A
-        checkboxes:
-          - "{{CHECKMARK}} All 4 PIP pins are re-installed"
-    EV2:
-      - step:
-      - step: Disconnect connector from PEC 7A
-        checkboxes:
-          - RET, remove cap from dummy connector J7A
-          - Demate connector from PEC
-          - "Mate connector to dummy connector J7A ({{CHECKMARK}} no FOD, pins)"
-          - Install cap onto PEC 7A
+      EV1:
+        - step: Close PEC 7A
+          checkboxes:
+            - "{{CHECKMARK}} All 4 PIP pins are re-installed"
+      EV2:
+        - step:
+        - step: Disconnect connector from PEC 7A
+          checkboxes:
+            - RET, remove cap from dummy connector J7A
+            - Demate connector from PEC
+            - "Mate connector to dummy connector J7A ({{CHECKMARK}} no FOD, pins)"
+            - Install cap onto PEC 7A
 
   # Here I haven't put a "step" under EV2, but there is the "checkboxes". If
   # this needs to be changed to the following, that's fine:
@@ -91,80 +88,76 @@ steps:
   #      checkboxes:
   #        - Text of the checkbox
   - EV2:
-      step: "Release PEC 7B (2 PIP pins), stow on BRT w/RET (nadir HR)"
-      checkboxes: Reinstall Socket PIP pins (2)
+      - step: "Release PEC 7B (2 PIP pins), stow on BRT w/RET (nadir HR)"
+        checkboxes: Reinstall Socket PIP pins (2)
 
   - EV2:
-      step:
-        - "Release PEC 7A (release 2 PIP pins), stow on BRT w/RET (RAM HR)"
-      checkboxes:
-        - Reinstall Socket PIP pins (2)
-
-  - simo:
-
-    EV1:
-      - caution: When translating around fwd edge of Node 2 and PMA2, avoid contact with Shuttle
-
-    EV2:
-      - caution: When translating around fwd edge of Node 2 and PMA2, avoid contact with Shuttle
-
-  # FIXME: Need to insert an image here.
-
-  - simo:
-
-    EV1:
-      - step: Retrieve GREEN hook from S1 HR 3208
-        checkboxes: Gate closed, hook locked, reels unlocked, release RET
-      - step: Translate to Node 2, along port/zenith
-      - step: Attach GREEN hook on Node 2 HR 0344
-        checkboxes: Gate closed, hook locked, reels unlocked, release RET
-
-      - header: STOW MISSE 7A IN PLB
-        time: 00:10
-
-      - step: Translate to Orbiter, port, bay 4
-      - step: Remove SWC latch PIP pins (2)
-      - step: Release latch (2) from stow position
-      - step: Stow PEC 7A in carrier (HRs out, Probe up)
-      - step: Lock fwd latch in landing config
-        checkboxes: Install PIP pin
-      - step: Retrieve RET
-      - step: Lock aft latch in landing config
-        checkboxes: Install PIP pin
-
-    EV2:
-      - step: Retrieve GREEN hook from S1 HR 3217 or Xo 5790
-        checkboxes: Gate closed, hook locked, reels unlocked, release RET
-      - step: Translate to Node 2, stbd/zenith route
+      - step:
+          - "Release PEC 7A (release 2 PIP pins), stow on BRT w/RET (RAM HR)"
         checkboxes:
-          - Fairlead on Lab HR 0247 with wrist Adj
-          - Fairlead on Node 2 HR 0314
-          - Face toward Col and Node 2
-      - warning: Stay  2 ft from exposed EFGF connector when OBSS berthed, powered, and EFGF not grappled
-
-      # It'd be better if there was a way to tie this time into the overall
-      # time for the whole task, so it wasn't possible to make sub-headings
-      # have times that don't add up to the whole task's time.
-      - heading: STOW MISSE 7B IN PLB
-        time: 00:15
-
-      - step: Translate to Orbiter, stbd, bay 4
-      - step: Remove SWC latch PIP pins (2)
-      - step: Release latch (2) from stow position
-      - step: Stow PEC 7B in carrier (HRs out, Probe up)
-      - step: Lock aft latch in landing config
-        checkboxes: Install PIP pin
-      - step: Retrieve RET
-      - step: Lock fwd latch in landing config
-        checkboxes: Install PIP pin
+          - Reinstall Socket PIP pins (2)
 
   - simo:
+      EV1:
+        - caution: When translating around fwd edge of Node 2 and PMA2, avoid contact with Shuttle
 
-    EV1:
-      - step: Glove and Gauntlet check
-      - step: Translate aft to Bay 9 - MISSE 8 Retrieve
+      EV2:
+        - caution: When translating around fwd edge of Node 2 and PMA2, avoid contact with Shuttle
 
-    EV2:
-      # Making changes to test the <strong> conversion with wiki or md
-      - step: "**Glove and Gauntlet check**"
-      - step: "'''Translate aft to S3 Face 1 - S3 CETA Light Install'''"
+    # FIXME: Need to insert an image here.
+  - simo:
+      EV1:
+        - step: Retrieve GREEN hook from S1 HR 3208
+          checkboxes: Gate closed, hook locked, reels unlocked, release RET
+        - step: Translate to Node 2, along port/zenith
+        - step: Attach GREEN hook on Node 2 HR 0344
+          checkboxes: Gate closed, hook locked, reels unlocked, release RET
+
+        - header: STOW MISSE 7A IN PLB
+          time: 00:10
+
+        - step: Translate to Orbiter, port, bay 4
+        - step: Remove SWC latch PIP pins (2)
+        - step: Release latch (2) from stow position
+        - step: Stow PEC 7A in carrier (HRs out, Probe up)
+        - step: Lock fwd latch in landing config
+          checkboxes: Install PIP pin
+        - step: Retrieve RET
+        - step: Lock aft latch in landing config
+          checkboxes: Install PIP pin
+
+      EV2:
+        - step: Retrieve GREEN hook from S1 HR 3217 or Xo 5790
+          checkboxes: Gate closed, hook locked, reels unlocked, release RET
+        - step: Translate to Node 2, stbd/zenith route
+          checkboxes:
+            - Fairlead on Lab HR 0247 with wrist Adj
+            - Fairlead on Node 2 HR 0314
+            - Face toward Col and Node 2
+        - warning: Stay  2 ft from exposed EFGF connector when OBSS berthed, powered, and EFGF not grappled
+
+        # It'd be better if there was a way to tie this time into the overall
+        # time for the whole task, so it wasn't possible to make sub-headings
+        # have times that don't add up to the whole task's time.
+        - heading: STOW MISSE 7B IN PLB
+          time: 00:15
+
+        - step: Translate to Orbiter, stbd, bay 4
+        - step: Remove SWC latch PIP pins (2)
+        - step: Release latch (2) from stow position
+        - step: Stow PEC 7B in carrier (HRs out, Probe up)
+        - step: Lock aft latch in landing config
+          checkboxes: Install PIP pin
+        - step: Retrieve RET
+        - step: Lock fwd latch in landing config
+          checkboxes: Install PIP pin
+
+  - simo:
+      EV1:
+        - step: Glove and Gauntlet check
+        - step: Translate aft to Bay 9 - MISSE 8 Retrieve
+
+      EV2:
+        # Making changes to test the <strong> conversion with wiki or md
+        - step: "**Glove and Gauntlet check**"
+        - step: "'''Translate aft to S3 Face 1 - S3 CETA Light Install'''"
