@@ -3,18 +3,18 @@
 "use strict";
 const fs = require("fs");
 const _ = require("lodash");
-const showdown = require("./markdownHelper");
+const formatter = require("./markdownHelper");
 
 exports.generators = {
     create: createHtml
 };
 
-function createHtml(evaTask, output) {
+function createHtml(evaTask, output, htmlFileTemplate) {
     let html = "";
 
     _.forEach(evaTask.tasks, checklist => {
         // draw the checklist title
-        html += `<h2>${checklist.title} (00:${checklist.duration})</h2>`;
+        html += `<h2>${checklist.title} (${checklist.duration})</h2>`;
         html += '<table class="gridtable">';
 
         const rowWidth = 100 / evaTask.actors.length;
@@ -53,7 +53,11 @@ function createHtml(evaTask, output) {
                     let actorCols = new Array(evaTask.actors.length);
                     _.forEach(simoActors, simoActor => {
                         let idx = _.findIndex(evaTask.actors, a => a.role === simoActor);
-                        actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth, evaTask.actors);
+                        if (idx < 0) {
+                            console.log(`Found invalid actor: ${simoActor}`);
+                        } else {
+                            actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth, evaTask.actors);
+                        }
                     });
 
                     for (let $td = 0; $td < actorCols.length; $td++) {
@@ -74,7 +78,7 @@ function createHtml(evaTask, output) {
         html += "</table>";
     });
 
-    writeHtmlToFile(output, evaTask.procedure_name, html);
+    writeHtmlToFile(output, evaTask.procedure_name, html, htmlFileTemplate);
 }
 
 function createActorHeading(actor) {
@@ -87,50 +91,61 @@ function createActorHeading(actor) {
 }
 
 function writeRowToHtml(task, actor, rowWidth, allActors) {
-    let html = `<td style="width: ${rowWidth}%;">`;
     let actorIdx = _.findIndex(allActors, (a) => a.role === actor);
-
-    if (typeof task[actor] !== "string") {
-        let isFirst = true;
-        _.forEach(task[actor], steps => {
-            const stepData = !!steps.step ? steps.step : "";
-            const checkboxes = steps.checkboxes ? steps.checkboxes : null;
-            const substeps = steps.substeps ? steps.substeps : null;
-            const images = steps.images ? steps.images : null;
-            const title = steps.title ? steps.title : null;
-
-            if (title !== null) {
-                html += `${showdown.convert(title)}`;
-            }
-
-            if (isFirst) {
-                html += `<ol start=${allActors[actorIdx].counter}>`;
-                isFirst = false;
-            }
-            html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
-            allActors[actorIdx].counter += 1;
-        });
+    if (actorIdx < 0) {
+        console.log(`Found invalid actor: ${actor}`);
     } else {
-        html += `<ol start=${allActors[actorIdx].counter}>`;
-        html += `${writeStepToHtml(task[actor])}`;
-        allActors[actorIdx].counter += 1;
-    }
-    html += "</ol></td>";
+        let html = `<td style="width: ${rowWidth}%;">`;
+        if (typeof task[actor] !== "string") {
+            let isFirst = true;
+            _.forEach(task[actor], steps => {
+                const stepData = !!steps.step ? steps.step : "";
+                const checkboxes = steps.checkboxes ? steps.checkboxes : null;
+                const substeps = steps.substeps ? steps.substeps : null;
+                const images = steps.images ? steps.images : null;
+                const title = steps.title ? steps.title : null;
 
-    return html;
+                if (title !== null) {
+                    html += `${formatter.convert(title)}`;
+                }
+
+                if (isFirst) {
+                    html += `<ol start=${allActors[actorIdx].counter}>`;
+                    isFirst = false;
+                }
+                html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
+                allActors[actorIdx].counter += 1;
+            });
+        } else {
+            html += `<ol start=${allActors[actorIdx].counter}>`;
+            html += `${writeStepToHtml(task[actor])}`;
+            allActors[actorIdx].counter += 1;
+        }
+        html += "</ol></td>";
+        return html;
+    }
+
+    return '';
 }
 
 function writeStepToHtml(step, checkboxes, substeps, images) {
     // console.log("=>", step, checkboxes, substeps, images);
 
-    let html = `<li>${showdown.convert(step)}`;
+    let html = `<li>${formatter.convert(step)}`;
     if (checkboxes) {
         html += "<ul>";
         if (typeof checkboxes === "string") {
-            html += `<li>${showdown.convert(checkboxes)}</li>`;
+            if (checkboxes.indexOf('{{CHECKMARK}}') < 0) {
+                checkboxes = `{{CHECKMARK}} ${checkboxes}`;
+            }
+            html += `<li>${formatter.convert(checkboxes)}</li>`;
         } else {
             _.forEach(checkboxes, checkbox => {
-                html += `<li>${showdown.convert(checkbox)}</li>`;
+                if (checkbox.indexOf('{{CHECKMARK}}') < 0) {
+                    checkbox = `{{CHECKMARK}} ${checkbox}`;
+                }
+
+                html += `<li>${formatter.convert(checkbox)}</li>`;
             });
         }
         html += "</ul>";
@@ -162,12 +177,12 @@ function writeStepToHtml(step, checkboxes, substeps, images) {
 }
 
 function writeImageToHtml(image) {
-    return `<img src="${image}" alt="image" />`;
+    return `<img class="img-fluid" src="${image}" alt="image" />`;
 }
 
-function writeHtmlToFile(output, $title, $content) {
+function writeHtmlToFile(output, $title, $content, htmlFileTemplate) {
     let htmlTemplate = fs.readFileSync(
-        "./templates/htmlHelper-template.html",
+        htmlFileTemplate,
         "utf8"
     );
     htmlTemplate = _.replace(

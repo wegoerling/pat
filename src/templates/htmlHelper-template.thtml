@@ -12,9 +12,9 @@
 
     <!-- CSS goes in the document HEAD or added to your external stylesheet -->
     <style type="text/css">
-        body {
+        /* body {
             font-size: 20px;
-        }
+        } */
 
         td {
             vertical-align: top;

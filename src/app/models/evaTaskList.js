@@ -30,20 +30,23 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack)
     let counter = 0;
     _.forEach(evaCheckList.tasks, function (t) {
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;
-        evaTask.create(taskFile, (evaTasks, title, duration) => {
-            counter++;
+        if (fs.existsSync(taskFile)) {
+            evaTask.create(taskFile, (evaTasks, title, duration) => {
+                counter++;
 
-            if (evaTasks && evaTasks.length > 0) {
-                t.title = title;
-                t.duration = duration;
-                t.evaTasks = evaTasks;
+                if (evaTasks && evaTasks.length > 0) {
+                    t.title = title;
+                    t.duration = duration;
+                    t.evaTasks = evaTasks;
+                }
 
-            }
-
-            if (counter === evaCheckList.tasks.length) {
-                callBack(evaCheckList);
-            }
-        });
+                if (counter === evaCheckList.tasks.length) {
+                    callBack(evaCheckList);
+                }
+            });
+        } else {
+            console.log(`Invalid data found, file not found: ${taskFile}`);
+        }
     });
 
 
