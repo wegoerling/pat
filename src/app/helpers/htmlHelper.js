@@ -34,7 +34,7 @@ function createHtml(evaTask, output) {
                         html += `<td style="width: ${rowWidth}%;"></td>`;
                     }
                 }
-                html += writeRowToHtml(task, actor, evaTask.actors, rowWidth);
+                html += writeRowToHtml(task, actor, rowWidth);
 
                 if (idx < evaTask.actors.length - 1) {
                     for (let $td = idx; $td < evaTask.actors.length - 1; $td++) {
@@ -94,9 +94,6 @@ function writeRowToHtml(task, actor, rowWidth) {
             const substeps = steps.substeps ? steps.substeps : null;
             const images = steps.images ? steps.images : null;
 
-            if (images || checkboxes) {
-                console.log('=>', stepData, checkboxes, substeps, images);
-            }
             html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
         });
     } else {
