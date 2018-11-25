@@ -73,7 +73,7 @@ steps:
             - BRT tab up
             - tether configs
         - step: Verify SAFER config
-        - checkboxes:
+          checkboxes:
             - '{{CHECKMARK}}L handle down (MAN ISOL Vlv - Open)'
             - '{{CHECKMARK}}R handle down (HCM - Closed)'
         - step: '{{CHECKMARK}}WVS - Green LED'
