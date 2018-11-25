@@ -12,15 +12,27 @@ const doc = require('./app/models/evaTaskList');
 const html = require('./app/helpers/htmlHelper').generators;
 let evaTask = require('./app/models/evaTask');
 
-const DEFAULT_FILE = `${__dirname}/main.yml`;
-const DEFAULT_HTML = `${__dirname}/main.html`;
+// const DEFAULT_FILE = `${__dirname}/main.yml`;
+// const DEFAULT_HTML = `${__dirname}/main.html`;
 const DEFAULT_TEMPLATE = `${__dirname}/templates/htmlHelper-template.thtml`;
 program
     .version(ver.currentVersion, '-v, --version')
     .name('eva-checklist')
     .description('Generate the spacewalk EVA checklist from YAML files')
-    .option('-i, --input [.yml]', 'specify the yml file to use', DEFAULT_FILE)
-    .option('-o, --output [.html]', 'where do you want the result located', DEFAULT_HTML)
+    .option('-i, --input [.yml]', 'specify the yml file to use')
+    .action((cmd) => {
+        if (!cmd.input || cmd.input === null) {
+            console.log(`missing --input or -i parameter: got: [${cmd.input}]`);
+            process.exit(-1);
+        }
+    })
+    .option('-o, --output [.html]', 'where do you want the result located')
+    .action((cmd) => {
+        if (!cmd.output || cmd.output === null) {
+            console.log(`missing --output or -o parameter: got: [${cmd.output}]`);
+            process.exit(-1);
+        }
+    })
     .option('-t, --template [.html]', 'specify a template to generate', DEFAULT_TEMPLATE);
 
 program.on('--help', function () {

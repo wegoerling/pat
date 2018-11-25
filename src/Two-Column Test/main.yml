@@ -1,0 +1,12 @@
+# Title and expected duration of the task
+# This test page is based on STS_EVA_134_F_A page FS 7-221
+procedure_name: OTP LDTD TETHER CINCH
+
+# The following are the actors listed in the pdf
+actors:
+  - role: IV/SSRMS
+    name: N/A
+  - role: EV
+    name: N/A
+tasks:
+  - file: Two-Column Test - Based on OTP LDTD Tether Cinch.yml
