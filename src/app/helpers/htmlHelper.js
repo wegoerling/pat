@@ -9,7 +9,7 @@ exports.generators = {
     create: createHtml
 };
 
-function createHtml(evaTask, output) {
+function createHtml(evaTask, output, htmlFileTemplate) {
     let html = "";
 
     _.forEach(evaTask.tasks, checklist => {
@@ -74,7 +74,7 @@ function createHtml(evaTask, output) {
         html += "</table>";
     });
 
-    writeHtmlToFile(output, evaTask.procedure_name, html);
+    writeHtmlToFile(output, evaTask.procedure_name, html, htmlFileTemplate);
 }
 
 function createActorHeading(actor) {
@@ -172,9 +172,9 @@ function writeImageToHtml(image) {
     return `<img class="img-fluid" src="${image}" alt="image" />`;
 }
 
-function writeHtmlToFile(output, $title, $content) {
+function writeHtmlToFile(output, $title, $content, htmlFileTemplate) {
     let htmlTemplate = fs.readFileSync(
-        "./templates/htmlHelper-template.thtml",
+        htmlFileTemplate,
         "utf8"
     );
     htmlTemplate = _.replace(
