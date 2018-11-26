@@ -11,9 +11,9 @@ exports.convert = function (html) {
         return html;
     }
 
-    html = html.replace('{{CHECKMARK}}', '&#10063;');
-    html = html.replace('{{CHECK MARK}}', '&#10063;');
-    html = html.replace('{{CHECK}}', '&#10003;');
+    html = html.replace(/{{CHECKMARK}}/gi, '&#10063;');
+    html = html.replace(/{{CHECK MARK}}/gi, '&#10063;');
+    html = html.replace(/{{CHECK}}/gi, '&#10003;');
     if (html.includes("'''")) {
         console.log(html);
         let regex = /([\'])+/gi;

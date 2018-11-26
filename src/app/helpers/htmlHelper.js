@@ -104,17 +104,27 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
                 const substeps = steps.substeps ? steps.substeps : null;
                 const images = steps.images ? steps.images : null;
                 const title = steps.title ? steps.title : null;
+                const warning = steps.warning ? steps.warning : undefined;
+                const caution = steps.caution ? steps.caution : undefined;
 
                 if (title !== null) {
                     html += `${formatter.convert(title)}`;
                 }
 
-                if (isFirst) {
-                    html += `<ol start=${allActors[actorIdx].counter}>`;
-                    isFirst = false;
+                if (warning || caution) {
+                    const css = warning ? "warning" : "caution";
+                    html += `<div class"alert alert-"${css}">
+                        <strong class="text-center" style="text-align: center;text-transform: uppercase;">${css}</strong>
+                        <p>${warning || caution}</p>
+                    </div>`;
+                } else {
+                    if (isFirst) {
+                        html += `<ol start=${allActors[actorIdx].counter}>`;
+                        isFirst = false;
+                    }
+                    html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
+                    allActors[actorIdx].counter += 1;
                 }
-                html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
-                allActors[actorIdx].counter += 1;
             });
         } else {
             html += `<ol start=${allActors[actorIdx].counter}>`;
