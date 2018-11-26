@@ -1,5 +1,35 @@
 # spacewalk
 
+## Production Environment Installation
+Install the current or LTS version of NodeJS.
+
+Run the following commands:
+```
+npm install -g evachecklist
+```
+
+to execute the tool:
+
+```
+evac-checklist <options>
+```
+
+options:
+
+| tag | description
+| --- | ---
+| -i, --input | input yaml path
+| -o, --output | output html path
+| -t, --template | optional html template to use for generating the output
+
+other options:
+
+| tag | description
+| --- | ---
+| -h, --help | help syntax
+| -v, --version | tool version
+
+## Dev Environment Installation
 Install node LTS version.
 Install Visual Studio Code
 Clone repository 'https://github.com/jamesmontalvo3/spacewalk.git'
