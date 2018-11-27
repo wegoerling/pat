@@ -32,6 +32,12 @@ program
             console.log(`missing --output or -o parameter: got: [${cmd.output}]`);
             process.exit(-1);
         }
+
+        const dir = path.dirname(cmd.output);
+        if (!fs.existsSync(dir)){
+            console.log(`directory has not been created: ${dir}`);
+            process.exit(-1);
+        }
     })
     .option('-t, --template [.html]', 'specify a template to generate', DEFAULT_TEMPLATE);
 
