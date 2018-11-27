@@ -4,10 +4,17 @@
 const fs = require("fs");
 const _ = require("lodash");
 const formatter = require("./markdownHelper");
+const path = require('path');
+let inputPath = '';
 
 exports.generators = {
-    create: createHtml
+    create: createHtml,
+    inputDirectory: setInputPath
 };
+
+function setInputPath(input) {
+    inputPath = input;
+}
 
 function createHtml(evaTask, output, htmlFileTemplate) {
     let html = "";
@@ -35,7 +42,7 @@ function createHtml(evaTask, output, htmlFileTemplate) {
                         html += `<td style="width: ${rowWidth}%;"></td>`;
                     }
                 }
-                html += writeRowToHtml(task, actor, rowWidth, evaTask.actors);
+                html += writeRowToHtml(task, actor, rowWidth, evaTask.actors, output);
 
                 if (idx < evaTask.actors.length - 1) {
                     for (let $td = idx; $td < evaTask.actors.length - 1; $td++) {
@@ -56,7 +63,7 @@ function createHtml(evaTask, output, htmlFileTemplate) {
                         if (idx < 0) {
                             console.log(`Found invalid actor: ${simoActor}`);
                         } else {
-                            actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth, evaTask.actors);
+                            actorCols[idx] = writeRowToHtml(simo, simoActor, rowWidth, evaTask.actors, output);
                         }
                     });
 
@@ -90,7 +97,7 @@ function createActorHeading(actor) {
     return html;
 }
 
-function writeRowToHtml(task, actor, rowWidth, allActors) {
+function writeRowToHtml(task, actor, rowWidth, allActors, outputPath) {
     let actorIdx = _.findIndex(allActors, (a) => a.role === actor);
     if (actorIdx < 0) {
         console.log(`Found invalid actor: ${actor}`);
@@ -122,7 +129,7 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
                         html += `<ol start=${allActors[actorIdx].counter}>`;
                         isFirst = false;
                     }
-                    html += `${writeStepToHtml(stepData, checkboxes, substeps, images)}`;
+                    html += `${writeStepToHtml(stepData, checkboxes, substeps, images, outputPath)}`;
                     allActors[actorIdx].counter += 1;
                 }
             });
@@ -138,9 +145,7 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
     return '';
 }
 
-function writeStepToHtml(step, checkboxes, substeps, images) {
-    // console.log("=>", step, checkboxes, substeps, images);
-
+function writeStepToHtml(step, checkboxes, substeps, images, outputPath) {
     let html = `<li>${formatter.convert(step)}`;
     if (checkboxes) {
         html += "<ul>";
@@ -174,10 +179,10 @@ function writeStepToHtml(step, checkboxes, substeps, images) {
     }
 
     if (typeof images === "string") {
-        html += writeImageToHtml(images);
+        html += writeImageToHtml(images, outputPath);
     } else if (images) {
         _.forEach(images, img => {
-            html += writeImageToHtml(img);
+            html += writeImageToHtml(img, outputPath);
         });
     }
 
@@ -186,8 +191,16 @@ function writeStepToHtml(step, checkboxes, substeps, images) {
     return html;
 }
 
-function writeImageToHtml(image) {
-    return `<img class="img-fluid" src="${image}" alt="image" />`;
+function writeImageToHtml(image, output) {
+    const dir = path.dirname(output);
+    let imageName = path.basename(image);
+    fs.copyFile(`${inputPath}/${imageName}`, `${dir}/${imageName}`, (err) => {
+        if (err) {
+            console.log('could not move an image from the source YAML file', err);
+        }
+    });
+
+    return `<img class="img-fluid" src="${dir}/${imageName}" alt="image" />`;
 }
 
 function writeHtmlToFile(output, $title, $content, htmlFileTemplate) {

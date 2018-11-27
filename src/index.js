@@ -34,7 +34,7 @@ program
         }
 
         const dir = path.dirname(cmd.output);
-        if (!fs.existsSync(dir)){
+        if (!fs.existsSync(dir)) {
             console.log(`directory has not been created: ${dir}`);
             process.exit(-1);
         }
@@ -75,6 +75,7 @@ if (program.input) {
             outputFile = path.normalize(program.output)
         }
 
+        html.inputDirectory(path.resolve(path.dirname(program.input)));
         html.create(evaTaskList, outputFile, program.template);
         console.log(`Completed! your file is located at file://${outputFile}`);
     });

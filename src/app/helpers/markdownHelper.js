@@ -15,7 +15,6 @@ exports.convert = function (html) {
     html = html.replace(/{{CHECK MARK}}/gi, '&#10063;');
     html = html.replace(/{{CHECK}}/gi, '&#10003;');
     if (html.includes("'''")) {
-        console.log(html);
         let regex = /([\'])+/gi;
         // Need to place a space around ** on both sides.
         html = html.replace(regex, '**');
