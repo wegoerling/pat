@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- if there's access to internet adding a reference to bootstrap cdn would be nice help with the styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+
+    <!-- CSS goes in the document HEAD or added to your external stylesheet -->
+    <style type="text/css">
+        /* body {
+            font-size: 20px;
+        } */
+
+        td {
+            vertical-align: top;
+        }
+
+        /* img {
+            width: 10em;
+        } */
+
+        table.gridtable {
+            /* font-family: verdana, arial, sans-serif; */
+            /* font-size: 16px; */
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+        table.gridtable th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #dedede;
+        }
+
+        table.gridtable td {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+        }
+
+        ul {
+            list-style: none;
+        }
+    </style>
+
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1>
+            {{title}}
+        </h1>
+
+        {{content}}
+    </div>
+</body>
+
+</html>
