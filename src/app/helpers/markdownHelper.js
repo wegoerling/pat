@@ -14,7 +14,6 @@ exports.convert = function (html) {
     html = html.replace(/{{CHECK MARK}}/gi, '&#10063;');
     html = html.replace(/{{CHECK}}/gi, '&#10003;');
     if (html.includes("'''") || html.includes('**')) {
-        console.log(html);
         let regex = html.includes("'''") ? /([\'])+/gi : /([\*])+/gi;
         html = html.replace(regex, '*');
     }
