@@ -1,11 +1,23 @@
+#!/usr/bin/env node
+
+"use strict";
+
 const showdown = require('showdown');
+const wiky = require('wiky');
 
 exports.convert = function (html) {
-    html = html.replace('{{CHECKMARK}}', '&#10063;');
-    html = html.replace('{{CHECK MARK}}', '&#10063;');
-    html = html.replace('{{CHECK}}', '&#10003;');
-    if (html.includes("'''")) {
-        html = html.replace(new RegExp(/([\'])+/gi), "**");
+    if (!html || html === null || (typeof html !== 'string')) {
+        return html;
     }
-    return new showdown.Converter().makeHtml(html);
+
+    html = html.replace(/{{CHECKMARK}}/gi, '&#10063;');
+    html = html.replace(/{{CHECK MARK}}/gi, '&#10063;');
+    html = html.replace(/{{CHECK}}/gi, '&#10003;');
+    if (html.includes("'''") || html.includes('**')) {
+        console.log(html);
+        let regex = html.includes("'''") ? /([\'])+/gi : /([\*])+/gi;
+        html = html.replace(regex, '*');
+    }
+    let text = wiky.toHtml(html);
+    return new showdown.Converter().makeHtml(text);
 }
