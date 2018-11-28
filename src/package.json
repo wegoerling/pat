@@ -1,6 +1,6 @@
 {
   "name": "evachecklist",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "description": "Spacewalk EVA Checklist",
   "main": "index.js",
   "scripts": {
