@@ -66,15 +66,9 @@ if (program.input) {
         console.log(err);
         process.exit(-1);
     }
-
-    doc.generateEVATasks(program.input, fs, YAML, _, path, evaTask, (evaTaskList) => {
-        let outputFile = program.output;
-        if (!path.isAbsolute(outputFile)) {
-            outputFile = path.normalize(`${__dirname}/${program.output}`);
-        } else {
-            outputFile = path.normalize(program.output)
-        }
-
+    
+    doc.generateEVATasks(program.input, fs, YAML, _, path, evaTask, (evaTaskList) => {        
+        let outputFile = path.resolve(program.output);       
         html.inputDirectory(path.resolve(path.dirname(program.input)));
         html.create(evaTaskList, outputFile, program.template);
         console.log(`Completed! your file is located at file://${outputFile}`);
