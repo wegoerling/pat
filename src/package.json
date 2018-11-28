@@ -15,6 +15,17 @@
     "type": "git",
     "url": "git+https://github.com/delacruzjl/spacewalk.git"
   },
+  "contributors": [
+    "James Montalvo",
+    "Jose De la Cruz",
+    "Jason Foley",
+    "Alexandra Kuntz",
+    "Engedawork Befekadu",
+    "Timothy Smith",
+    "Christopher Drury",
+    "Kevin Terry",
+    "John-Carlo Babin"
+],
   "keywords": [
     "spacewalk",
     "eva",
