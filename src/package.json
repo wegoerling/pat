@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/delacruzjl/spacewalk.git"
+    "url": "git+https://github.com/jamesmontalvo3/spacewalk.git"
   },
   "contributors": [
     "James Montalvo",
@@ -27,6 +27,7 @@
     "John-Carlo Babin"
   ],
   "keywords": [
+    "eva-checklist",
     "spacewalk",
     "eva",
     "checklist",
@@ -37,9 +38,9 @@
   "author": "Fall 2018 SWEN 670 Group 3",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/delacruzjl/spacewalk/issues"
+    "url": "https://github.com/jamesmontalvo3/spacewalk/issues"
   },
-  "homepage": "https://github.com/delacruzjl/spacewalk#readme",
+  "homepage": "https://github.com/jamesmontalvo3/spacewalk#readme",
   "dependencies": {
     "bootstrap": "^4.1.3",
     "commander": "^2.19.0",
