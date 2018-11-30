@@ -71,6 +71,34 @@ describe('evaTaskList', function () {
 
     });
 
+    it('should throw an exception if no actors are found', () => {
+      // arrange
+      fsStub.existsSync = sinon.stub().returns(true);
+
+      // act
+      yamlStub.load = sinon.stub().returns({
+        'procedure_name': 'fakeProcName',
+        'actors': null,
+        'tasks': [{
+          file: 'fakeFile1.yml'
+        }, {
+          file: 'fakeFile2.yml'
+        }]
+      });
+
+      // assert
+      expect(() => evaTaskList.generateEVATasks(
+        'fakeLocation',
+        fsStub,
+        yamlStub,
+        _,
+        path,
+        evaTaskStub,
+        (sut) => {
+          //Nothing to do here
+        })).to.throw('no actors found in the file or incorrect yaml file');
+    });
+
     it('should open the file content if the file exists', () => {
       // arrange
       fsStub.existsSync = sinon.stub().returns(true);
