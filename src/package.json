@@ -1,11 +1,12 @@
 {
   "name": "evachecklist",
-  "version": "1.0.0-beta.9",
+  "version": "1.0.0-beta.10",
   "description": "Spacewalk EVA Checklist",
   "main": "index.js",
   "scripts": {
     "pretest": "npm install",
-    "test": "nyc --reporter=text --reporter=html --reporter=cobertura mocha",
+    "test": "nyc --reporter=text --reporter=html mocha",
+    "test:prod": "nyc --reporter=cobertura mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./test/report.xml",
     "start": "node index.js"
   },
   "bin": {
@@ -56,6 +57,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.18.0",
     "nyc": "^13.1.0",
     "sinon": "^7.1.1"
   }
