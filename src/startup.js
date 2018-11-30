@@ -10,7 +10,7 @@ const html = require('./app/helpers/htmlHelper').generators;
 
 exports.startup = {
     buildProgramArguments: buildProgramArguments,
-    sampleExecutionHelp: sampleExecutionHelp,
+    additionalHelpArgument: additionalHelpArgument,
     validateArguments: validateArguments,
     getFileExtension: getFileExtension,
     generateHtmlChecklist: generateHtmlChecklist,
@@ -27,10 +27,10 @@ function buildProgramArguments() {
         .description('Generate the spacewalk EVA checklist from YAML files')
         .option('-i, --input [.yml]', 'specify the yml file to use')
         .option('-o, --output [.html]', 'where do you want the result located')
-        .action(validateArguments)
-        .option('-t, --template [.html]', 'specify a template to generate', DEFAULT_TEMPLATE);
+        .option('-t, --template [.html]', 'specify a template to generate', DEFAULT_TEMPLATE)
+        .action(validateArguments);
 
-    program.on('--help', sampleExecutionHelp);
+    program.on('--help', additionalHelpArgument);
 
     program.parse(process.argv);
     return program;
@@ -44,7 +44,7 @@ function validateArguments(program) {
         }
 
         if (getFileExtension(program.input) !== 'yml') {
-            throw new SyntaxError("\n" + program.input + "\nInvalid file extension\n");
+            throw new SyntaxError("\n" + program.input + "\nInvalid input file extension\n");
         }
         if (!fs.existsSync(program.input)) {
             throw new SyntaxError("\n" + program.input + "\nFile Does Not Exist\n");
@@ -57,6 +57,10 @@ function validateArguments(program) {
             throw new SyntaxError(`missing --output or -o parameter: got: [${program.output}]`);
         }
 
+        if (getFileExtension(program.output) !== 'html') {
+            throw new SyntaxError("\n" + program.output + "\nInvalid output file extension\n");
+        }
+
         const dir = path.dirname(program.output);
         if (!fs.existsSync(dir)) {
             throw new SyntaxError(`directory has not been created: ${dir}`);
@@ -67,7 +71,7 @@ function validateArguments(program) {
     }
 }
 
-function sampleExecutionHelp() {
+function additionalHelpArgument() {
     const textOutput = `\n\n
 Examples:
 $ eva-checklist --input file.yml --output file.html
@@ -82,8 +86,12 @@ function getFileExtension(fileName) {
 
 function generateHtmlChecklist(evaTaskList, program) {
     let outputFile = path.resolve(program.output);
-    html.inputDirectory(path.resolve(path.dirname(program.input)));
-    html.create(evaTaskList, outputFile, program.template, () => postHtmlFileToConsole(outputFile));
+
+    html.params.inputDir(path.resolve(path.dirname(program.input)));
+    html.params.outputDir(path.resolve(path.dirname(program.output)));
+    html.params.htmlFile(outputFile);
+
+    html.create(evaTaskList, program.template, () => postHtmlFileToConsole(outputFile));
 }
 
 function postHtmlFileToConsole(outputFile) {
