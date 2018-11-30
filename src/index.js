@@ -66,12 +66,19 @@ if (program.input) {
         console.log(err);
         process.exit(-1);
     }
-    
-    doc.generateEVATasks(program.input, fs, YAML, _, path, evaTask, (evaTaskList) => {        
-        let outputFile = path.resolve(program.output);       
+
+    doc.generateEVATasks(program.input, fs, YAML, _, path, evaTask, (evaTaskList) => {
+        let outputFile = path.resolve(program.output);
         html.inputDirectory(path.resolve(path.dirname(program.input)));
         html.create(evaTaskList, outputFile, program.template);
-        console.log(`Completed! your file is located at file://${outputFile}`);
+
+        if (fs.existsSync(outputFile)) {
+            console.log(`Completed! your file is located at file://${outputFile}`);
+        } else {
+            console.log('The HTML file was not created, please check your YAML file');
+            process.exit(-1);
+        }
+
     });
 }
 
