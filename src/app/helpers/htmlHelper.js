@@ -16,7 +16,7 @@ function setInputPath(input) {
     inputPath = input;
 }
 
-function createHtml(evaTask, output, htmlFileTemplate) {
+function createHtml(evaTask, output, htmlFileTemplate, callback) {
     let html = "";
 
     _.forEach(evaTask.tasks, checklist => {
@@ -85,7 +85,7 @@ function createHtml(evaTask, output, htmlFileTemplate) {
         html += "</table>";
     });
 
-    writeHtmlToFile(output, evaTask.procedure_name, html, htmlFileTemplate);
+    writeHtmlToFile(output, evaTask.procedure_name, html, htmlFileTemplate, callback);
 }
 
 function createActorHeading(actor) {
@@ -203,7 +203,7 @@ function writeImageToHtml(image, output) {
     return `<img class="img-fluid" src="${dir}/${imageName}" alt="image" />`;
 }
 
-function writeHtmlToFile(output, $title, $content, htmlFileTemplate) {
+function writeHtmlToFile(output, $title, $content, htmlFileTemplate, callback) {
     let htmlTemplate = fs.readFileSync(
         htmlFileTemplate,
         "utf8"
@@ -219,6 +219,8 @@ function writeHtmlToFile(output, $title, $content, htmlFileTemplate) {
         if (!!err) {
             console.log("Unable to save file:");
             console.log(err);
+        } else {
+            callback();
         }
     });
 }

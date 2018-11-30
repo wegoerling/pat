@@ -3,3 +3,4 @@
 **/*.orig
 **/.nyc_output/
 **/coverage/
+**/*.png
