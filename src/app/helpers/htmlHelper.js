@@ -209,7 +209,7 @@ function writeStepToHtml(step, checkboxes, substeps, images, comment) {
         } else {
             _.forEach(comment, (cm) => {
                 if (cm && cm !== null) {
-                    html += `<div style="border-style: solid;border: 1">${formatter.convert(cm)}</div>`;
+                    html += `<div style="text-align: center;border-style: solid;border: 1">${formatter.convert(cm)}</div>`;
                 }
             });
         }
