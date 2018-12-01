@@ -127,8 +127,9 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
                 const title = steps.title ? steps.title : null;
                 const warning = steps.warning ? steps.warning : undefined;
                 const caution = steps.caution ? steps.caution : undefined;
+                const comment = steps.comment ? steps.comment : undefined;
 
-                if (title !== null) {
+                if (title && title !== null) {
                     html += `${formatter.convert(title)}`;
                 }
 
@@ -143,9 +144,11 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
                         html += `<ol start=${allActors[actorIdx].counter}>`;
                         isFirst = false;
                     }
-                    html += `${writeStepToHtml(stepData, checkboxes, substeps, images, outputPath)}`;
+                    html += `${writeStepToHtml(stepData, checkboxes, substeps, images, comment)}`;
                     allActors[actorIdx].counter += 1;
                 }
+
+
             });
         } else {
             html += `<ol start=${allActors[actorIdx].counter}>`;
@@ -159,7 +162,7 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
     return '';
 }
 
-function writeStepToHtml(step, checkboxes, substeps, images) {
+function writeStepToHtml(step, checkboxes, substeps, images, comment) {
     let html = `<li>${formatter.convert(step)}`;
     if (checkboxes) {
         html += "<ul>";
@@ -198,6 +201,18 @@ function writeStepToHtml(step, checkboxes, substeps, images) {
         _.forEach(images, img => {
             html += writeImageToHtml(img);
         });
+    }
+
+    if (comment && comment !== null) {
+        if (typeof comment === 'string') {
+            html += `<p>${formatter.convert(comment)}</p>`;
+        } else {
+            _.forEach(comment, (cm) => {
+                if (cm && cm !== null) {
+                    html += `<div style="border-style: solid;border: 1">${formatter.convert(cm)}</div>`;
+                }
+            });
+        }
     }
 
     html += "</li>";
