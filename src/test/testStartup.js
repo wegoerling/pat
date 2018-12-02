@@ -7,13 +7,13 @@ describe('startup.js', () => {
         sinon.spy(process, "exit");
     });
 
-    describe('sampleExecutionHelp', () => {
+    describe('additionalHelpArgument', () => {
         it('should show samples on help', () => {
             // arrange
             let spy = sinon.spy(console, 'log');
 
             // act
-            sut.sampleExecutionHelp();
+            sut.additionalHelpArgument();
 
             // assert 
             expect(spy.calledOnce).to.equals(true);
