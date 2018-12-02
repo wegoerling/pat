@@ -128,16 +128,17 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
                 const warning = steps.warning ? steps.warning : undefined;
                 const caution = steps.caution ? steps.caution : undefined;
                 const comment = steps.comment ? steps.comment : undefined;
+                const note = steps.note ? steps.note : undefined;
 
                 if (title && title !== null) {
                     html += `${formatter.convert(title)}`;
                 }
 
-                if (warning || caution) {
-                    const css = warning ? "warning" : "caution";
+                if (warning || caution || note) {
+                    const css = warning ? "warning" : caution ? "caution" : "note";
                     html += `<div class"alert alert-"${css}">
                         <strong class="text-center" style="text-align: center;text-transform: uppercase;">${css}</strong>
-                        <p>${warning || caution}</p>
+                        <p>${warning || caution || note}</p>
                     </div>`;
                 } else {
                     if (isFirst) {

@@ -1,4 +1,3 @@
----
 procedure_name: NASA Tasks test with three actors
 
 actors:
@@ -15,28 +14,29 @@ title: NASA Tasks test with three actors
 duration: 20
 
 steps:
-# First steps in IV column (first column)
+  # First steps in IV column (first column)
   - simo:
       IV/SSRMS:
         - step: This is step 1 in the first column
         - step: This is step 2 in the first column
 
-    # Steps in EV1 column (second column)
+      # Steps in EV1 column (second column)
       EV1:
         - step: This is step 1 in the second column
           checkboxes:
-           - First check
-           - Second check
-           - Third check
+            - First check
+            - Second check
+            - Third check
 
-    # Steps in EV2 column (third column)
+      # Steps in EV2 column (third column)
       EV2:
+        - note: this is a test note
         - step: This is step 1 in the third column
           checkboxes:
             - First check
             - Second check
             - Third check
         - step: This is step 2 in the third column
-          comment: 
+          comment:
             - this is a comment
         - step: This is step 3 in the third column
