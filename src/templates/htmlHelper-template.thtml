@@ -12,6 +12,8 @@
 
     <!-- CSS goes in the document HEAD or added to your external stylesheet -->
     <style type="text/css">
+        @media print{@page {size: landscape}}
+
         /* body {
             font-size: 20px;
         } */
@@ -28,21 +30,24 @@
             /* font-family: verdana, arial, sans-serif; */
             /* font-size: 16px; */
             color: #333333;
-            border-width: 1px;
+            border-width: 2px;
             border-color: #666666;
             border-collapse: collapse;
+            margin-bottom: 10px;
+            page-break-after: always;
         }
 
         table.gridtable th {
-            border-width: 1px;
+            border-width: 2px;
             padding: 8px;
             border-style: solid;
             border-color: #666666;
-            background-color: #dedede;
+            background-color: #ffffff;
+            text-align: center;
         }
 
         table.gridtable td {
-            border-width: 1px;
+            border-width: 2px;
             padding: 8px;
             border-style: solid;
             border-color: #666666;
@@ -51,6 +56,26 @@
 
         ul {
             list-style: none;
+            margin: 0px;
+            padding: 5px 5px 5px 20px;
+        }
+
+        ol {
+            margin: 0px;
+            margin-left: 10px;
+            padding: 5px;
+            padding-left: 10px;
+        }
+
+        li {
+            margin: 1px 0px;
+            padding: 0px;
+            line-height: 110%;
+        }
+
+        li p {
+            margin: 2px 0px;
+            padding: 0px;
         }
     </style>
 
