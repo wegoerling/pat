@@ -1,11 +1,12 @@
 {
   "name": "evachecklist",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.12",
   "description": "Spacewalk EVA Checklist",
   "main": "index.js",
   "scripts": {
     "pretest": "npm install",
-    "test": "mocha",
+    "test": "nyc --reporter=text --reporter=html mocha",
+    "test:prod": "nyc --reporter=cobertura mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./test/report.xml",
     "start": "node index.js"
   },
   "bin": {
@@ -13,9 +14,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/delacruzjl/spacewalk.git"
+    "url": "git+https://github.com/jamesmontalvo3/spacewalk.git"
   },
+  "contributors": [
+    "James Montalvo",
+    "Jose De la Cruz",
+    "Jason Foley",
+    "Alexandra Kuntz",
+    "Engedawork Befekadu",
+    "Timothy Smith",
+    "Christopher Drury",
+    "Kevin Terry",
+    "John-Carlo Babin"
+  ],
   "keywords": [
+    "eva-checklist",
     "spacewalk",
     "eva",
     "checklist",
@@ -26,9 +39,9 @@
   "author": "Fall 2018 SWEN 670 Group 3",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/delacruzjl/spacewalk/issues"
+    "url": "https://github.com/jamesmontalvo3/spacewalk/issues"
   },
-  "homepage": "https://github.com/delacruzjl/spacewalk#readme",
+  "homepage": "https://github.com/jamesmontalvo3/spacewalk#readme",
   "dependencies": {
     "bootstrap": "^4.1.3",
     "commander": "^2.19.0",
@@ -42,8 +55,10 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
     "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.18.0",
+    "nyc": "^13.1.0",
     "sinon": "^7.1.1"
   }
 }

@@ -5,7 +5,7 @@ exports.create = taskListObject;
 
 //////
 
-function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack) {
+function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask) {
     if (!fs.existsSync(fileLocation)) {
         return null;
     }
@@ -27,29 +27,24 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask, callBack)
         tasks
     );
 
-    let counter = 0;
+
     _.forEach(evaCheckList.tasks, function (t) {
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;
         if (fs.existsSync(taskFile)) {
             evaTask.create(taskFile, (evaTasks, title, duration) => {
-                counter++;
 
                 if (evaTasks && evaTasks.length > 0) {
                     t.title = title;
                     t.duration = duration;
                     t.evaTasks = evaTasks;
                 }
-
-                if (counter === evaCheckList.tasks.length) {
-                    callBack(evaCheckList);
-                }
             });
         } else {
-            console.log(`Invalid data found, file not found: ${taskFile}`);
+            console.log(`file not found or no file task provided: ${taskFile}`);
         }
     });
 
-
+    return evaCheckList;
 }
 
 function taskListObject(procedure_name, actors, tasks, evaTasks) {
