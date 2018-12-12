@@ -7,16 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- if there's access to internet adding a reference to bootstrap cdn would be nice help with the styling -->
+    <!-- I'd be preferable not to use external scripts/css
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
+        crossorigin="anonymous"> -->
+
+    <!-- <link href="./style.css" rel="stylesheet" type="text/css" /> -->
 
     <!-- CSS goes in the document HEAD or added to your external stylesheet -->
     <style type="text/css">
         @media print{@page {size: landscape}}
 
-        /* body {
-            font-size: 20px;
-        } */
+        body {
+            font-family: Arial,sans-serif;
+        }
 
         td {
             vertical-align: top;
@@ -77,6 +80,39 @@
             margin: 2px 0px;
             padding: 0px;
         }
+
+        div.ncw {
+            border: solid black 1px;
+            padding: 0px;
+            margin: 5px 0px;
+        }
+
+        div.ncw div {
+            border: solid black 1px;
+            margin: 0px;
+        }
+
+        div.ncw-head {
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        div.ncw-warning div.ncw-head {
+            background-color: red;
+            color: white;
+        }
+
+        div.ncw-caution div.ncw-head {
+            background-color: yellow;
+            color: black;
+        }
+
+        div.ncw-body {
+            padding: 5px;
+        }
+
     </style>
 
     <title>{{title}}</title>

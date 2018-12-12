@@ -136,9 +136,9 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
 
                 if (warning || caution || note) {
                     const css = warning ? "warning" : caution ? "caution" : "note";
-                    html += `<div class"alert alert-"${css}">
-                        <strong class="text-center" style="text-align: center;text-transform: uppercase;">${css}</strong>
-                        <p>${warning || caution || note}</p>
+                    html += `<div class="ncw ncw-${css}">
+                        <div class="ncw-head">${css}</div>
+                        <div class="ncw-body">${warning || caution || note}</div>
                     </div>`;
                 } else {
                     if (isFirst) {
