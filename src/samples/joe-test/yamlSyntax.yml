@@ -1,0 +1,23 @@
+# comment is hash with space
+list: 
+  - item1
+  - item2
+  - item3
+dictionary:
+  key: value # colon must have space
+  key2: val2
+  dictionarieslist:
+    listkey: listvalue
+
+listwdict:
+  - itemlistdict:
+    keyitem: valueitem
+  - itemlistdict2:
+    list:
+      - dance
+      - prance:
+        high: low
+        pranceKey: pranceValue
+
+
+
