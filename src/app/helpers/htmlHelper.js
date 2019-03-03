@@ -30,6 +30,8 @@ function setOutputFilename(filename) {
     outputFilename = filename;
 }
 
+//TODO rework createHtml to use templates. file requires nunjucks statement
+
 function createHtml(evaTask, htmlFileTemplate, callback) {
     let html = "";
 

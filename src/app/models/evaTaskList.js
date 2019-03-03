@@ -10,15 +10,15 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask) {
         return null;
     }
 
-    let yml = YAML.load(fileLocation);
-    let actors = yml.actors;
-    let tasks = yml.tasks;
+    let yml = YAML.load(fileLocation);//load file into yml variable
+    let actors = yml.actors;// load actors into actors variable
+    let tasks = yml.tasks; // load tasks into tasks variable
 
     if (!actors || actors.length === 0) {
         throw 'no actors found in the file or incorrect yaml file';
     }
 
-    let evaCheckList = new taskListObject(
+    let evaCheckList = new taskListObject(// create evaCheckList collection variable loaded from fn taskListObject()
         yml.procedure_name,
         actors.map(a => {
             let obj = new actor.create(a.role, a.name);
