@@ -14,6 +14,6 @@ const app = require('./startup').startup;
 (function () {
     const args = app.buildProgramArguments();
     app.validateArguments(args);
-    const evaTaskList = doc.generateEVATasks(args.input, fs, YAML, _, path, evaTask);
+    const evaTaskList = doc.generateEVATasks(args.input, fs, YAML, _, path, evaTask);//evaTaskList.js fn readEVATaskMainYaml()
     app.generateHtmlChecklist(evaTaskList, args);
 })();
