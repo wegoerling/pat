@@ -25,7 +25,7 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask) {
             return obj;
         }),//end actors.map
         tasks//tasks are dictionary objects in the first fileLocation that contain the EVA mission yml file
-        // for example main.yml has task with items of key value paired file: filename.yml
+        // for example main.yml has tasks list item with key value paired as file: filename.yml
     );//end taskListObject()
 
 
@@ -34,7 +34,7 @@ function readEVATaskMainYaml(fileLocation, fs, YAML, _, path, evaTask) {
         let taskFile = `${path.dirname(fileLocation)}/${t.file}`;//creates tasks file path
         if (fs.existsSync(taskFile)) {
             evaTask.create(taskFile, (evaTasks, title, duration) => {// evaTask.create == evaTask.js fn DeserializeEvaTaskWithYaml()
-                    //
+                    //evaTasks is task file steps. Steps contain list of simo items
                 if (evaTasks && evaTasks.length > 0) {// builds the task construct of the Checklist task property
                     t.title = title; //set evaCheckList task property's title duration and evaTasks
                     t.duration = duration;
