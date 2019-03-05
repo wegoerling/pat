@@ -35,19 +35,19 @@ function setOutputFilename(filename) {
 function createHtml(evaTask, htmlFileTemplate, callback) {
     let html = "";
 
-    _.forEach(evaTask.tasks, checklist => {
+    _.forEach(evaTask.tasks, checklist => {//create heading with title and duration
         // draw the checklist title
         html += `<h2>${checklist.title} (${checklist.duration})</h2>`;
         html += '<table class="gridtable">';
 
-        html += "<tr>";
+        html += "<tr>";//new table row
         _.forEach(evaTask.actors, actor => {
-            html += createActorHeading(actor);
+            html += createActorHeading(actor);//creates theader for each actor
             actor.counter = 1;
-        });
-        html += "</tr>";
+        });// end forEach(evaTask.actors, actor)
+        html += "</tr>";//close header row
 
-        const tdTableWidth = 100 / evaTask.actors.length;
+        const tdTableWidth = 100 / evaTask.actors.length;//scale columns to equal size each
         _.forEach(checklist.evaTasks, task => {
             let actor = Object.keys(task)[0];
             if (actor.toLowerCase() !== "simo") {
@@ -56,8 +56,8 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
                 if (idx > 0) {
                     for (let $td = 0; $td < idx; $td++) {
                         html += `<td style="width: ${tdTableWidth}%;"></td>`;
-                    }
-                }
+                    }//end for let $td
+                }//end if idx>0
                 html += writeRowToHtml(task, actor, tdTableWidth, evaTask.actors, outputPath);
 
                 if (idx < evaTask.actors.length - 1) {

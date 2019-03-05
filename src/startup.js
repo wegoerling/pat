@@ -91,7 +91,7 @@ function generateHtmlChecklist(evaTaskList, program) {
     html.params.outputDir(path.resolve(path.dirname(program.output)));
     html.params.htmlFile(outputFile);
 
-    html.create(evaTaskList, program.template, () => postHtmlFileToConsole(outputFile));
+    html.create(evaTaskList, program.template, () => postHtmlFileToConsole(outputFile));// call to htmlHelper.js fn createHtml() then postHtmlFileToConsole
 }
 
 function postHtmlFileToConsole(outputFile) {
