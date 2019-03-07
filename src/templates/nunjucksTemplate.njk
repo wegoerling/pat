@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- if there's access to internet adding a reference to bootstrap cdn would be nice help with the styling -->
+    <!-- I'd be preferable not to use external scripts/css
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous"> -->
+
+    <!-- <link href="./style.css" rel="stylesheet" type="text/css" /> -->
+
+    <!-- CSS goes in the document HEAD or added to your external stylesheet -->
+    <style type="text/css">
+        @media print{@page {size: landscape}}
+
+        body {
+            font-family: Arial,sans-serif;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        /* img {
+            width: 10em;
+        } */
+
+        table.gridtable {
+            /* font-family: verdana, arial, sans-serif; */
+            /* font-size: 16px; */
+            color: #333333;
+            border-width: 2px;
+            border-color: #666666;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            page-break-after: always;
+        }
+
+        table.gridtable th {
+            border-width: 2px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        table.gridtable td {
+            border-width: 2px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0px;
+            padding: 5px 5px 5px 20px;
+        }
+
+        ol {
+            margin: 0px;
+            margin-left: 10px;
+            padding: 5px;
+            padding-left: 10px;
+        }
+
+        li {
+            margin: 1px 0px;
+            padding: 0px;
+            line-height: 110%;
+        }
+
+        li p {
+            margin: 2px 0px;
+            padding: 0px;
+        }
+
+        div.ncw {
+            border: solid black 1px;
+            padding: 0px;
+            margin: 5px 0px;
+        }
+
+        div.ncw div {
+            border: solid black 1px;
+            margin: 0px;
+        }
+
+        div.ncw-head {
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        div.ncw-warning div.ncw-head {
+            background-color: red;
+            color: white;
+        }
+
+        div.ncw-caution div.ncw-head {
+            background-color: yellow;
+            color: black;
+        }
+
+        div.ncw-body {
+            padding: 5px;
+        }
+
+    </style>
+
+    <title>{{procedure_name}}</title>
+</head>
+
+{% macro writeStepColumn(steps) %}
+        {% for step in steps %}
+            <li>{{step.step}}</li>
+        {% endfor %}
+{% endmacro %}
+
+<body>
+    <div class="container-fluid">
+        <h1>
+            {{procedure_name}}
+        </h1>
+
+        {% for checklist in tasks %}
+            <h2>{{checklist.title}} ({{checklist.duration}})</h2>
+            <table class="gridtable">
+                {# Create Headers for each Actor #}
+                <tr>
+                    {% for actor in actors %}
+                        {% set actor.counter = 0 %}
+                        <th>{{actor.role}}({{actor.name if actor.name}})</th>
+                    {% endfor %}
+                </tr>
+                {% for taskList in checklist.evaTasks %}
+                    {% for actor, steps in taskList %}
+                        {% if actor == "simo" %}
+                            <tr><td>{{actor}}<td>{{steps | dump}}</td></tr>
+                        {% else %}
+                            <tr>
+                            {% for colActor in actors %}
+                                <td>
+                                {% if actor == colActor.role %}
+                                    {{writeStepColumn(steps)}}
+                                {% endif %}
+                                </td>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        {% else %}
+            <h2> No Tasks! </h2>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
