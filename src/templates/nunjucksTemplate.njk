@@ -118,10 +118,27 @@
     <title>{{procedure_name}}</title>
 </head>
 
-{% macro writeStepColumn(steps) %}
-        {% for step in steps %}
-            <li>{{step.step}}</li>
-        {% endfor %}
+
+{# Create a micro that will write a bunch of steps as a list. #}
+{% macro writeStepColumn(actor, steps) %}
+    {# start the ordered list, keeping the numbering for the current actor column #}
+    <ol start="{{actor.stepNum}}">
+        {# Need to check of the step is a simple string for a single step, or is more complex #}
+        {% if steps|isString %}
+            {# If a simple string, the value is easy #}
+            <li>{{steps}}</li>
+            {# Make sure to increment the step #}
+            {{actor|stepIncrement}}
+        {% else %}
+            {# Loop through each step #}
+            {% for step in steps %}
+                {# For simple case, just print the step. More work needs to be done for more complex cases #}
+                <li>{{step.step}}</li>
+                {# Make sure to increment the step number #}
+                {{actor|stepIncrement}}
+            {% endfor %}
+        {% endif %}
+    </ol>
 {% endmacro %}
 
 <body>
@@ -130,30 +147,55 @@
             {{procedure_name}}
         </h1>
 
+        {# For each checklist in the tasks array, create a table #}
         {% for checklist in tasks %}
+
+            {# Write the table name #}
             <h2>{{checklist.title}} ({{checklist.duration}})</h2>
             <table class="gridtable">
                 {# Create Headers for each Actor #}
                 <tr>
                     {% for actor in actors %}
-                        {% set actor.counter = 0 %}
+                        {{ actor|stepIncrement(1) }}
                         <th>{{actor.role}}({{actor.name if actor.name}})</th>
                     {% endfor %}
                 </tr>
+
+                {# Cycle through the tasks in the checklist #}
                 {% for taskList in checklist.evaTasks %}
-                    {% for actor, steps in taskList %}
-                        {% if actor == "simo" %}
-                            <tr><td>{{actor}}<td>{{steps | dump}}</td></tr>
-                        {% else %}
-                            <tr>
+
+                    {# Get the first level inside the taskList.  The variable here called 'name' is either
+                       an actor, or could be a simultaneous step, labeled "simo".   If actor is actually 
+                       an actor, then values are the steps.  If actor is "simo", then values would be a list 
+                       of actors and steps that execute simultaneously (i.e. are in the same table row). 
+                       
+                       Either way, each entry in taskList represents a table row.  #}
+                    {% for name, values in taskList %}
+                        <tr>
+                        {# Check for a 'simo' step #}
+                        {% if name == "simo" %}
+                            
+                            {# Cycle through the columns, and get the contents if it exists #}
                             {% for colActor in actors %}
                                 <td>
-                                {% if actor == colActor.role %}
-                                    {{writeStepColumn(steps)}}
-                                {% endif %}
+                                    {% if values[colActor.role] %}
+                                        {{writeStepColumn(colActor, values[colActor.role])}}
+                                    {% endif %}
+                                </td>
+                            {% endfor %} 
+
+                        {% else %} {# Not a simo step #}
+                            
+                            {# Cycle through the columns, and get the contents if it exists #}
+                            {% for colActor in actors %}
+                                <td>
+                                    {% if name == colActor.role %}
+                                        {{writeStepColumn(colActor, values)}}
+                                    {% endif %}
                                 </td>
                             {% endfor %}
                         {% endif %}
+                        </tr>
                     {% endfor %}
                 {% endfor %}
             </table>
