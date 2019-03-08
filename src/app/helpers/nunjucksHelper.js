@@ -4,6 +4,7 @@
 const nunjucks = require("nunjucks");
 const formatter = require("./markdownHelper");
 const fs = require("fs");
+const path = require('path');
 
 let inputPath = '';
 let outputPath = '';
@@ -73,6 +74,19 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
             text = `{{CHECKMARK}} ${text}`;
         }
         return text;
+    });
+
+    // Add custom nunjucks filter for images
+    env.addFilter('imagePath', function(image) {
+        const dir = path.dirname(outputPath);
+        let imageName = path.basename(image);
+        fs.copyFile(`${inputPath}/${imageName}`, `${dir}/${imageName}`, (err) => {
+            if (err) {
+                console.log('could not move an image from the source YAML file', err);
+            }
+        });
+
+        return `${dir}/${imageName}`;
     });
 
     // Render the html
