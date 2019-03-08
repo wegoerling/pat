@@ -47,6 +47,7 @@
     "commander": "^2.19.0",
     "docx": "^4.3.0",
     "jquery": "^3.3.1",
+    "js-beautify": "^1.9.0",
     "lodash": "^4.17.11",
     "nunjucks": "^3.2.0",
     "path": "^0.12.7",

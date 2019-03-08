@@ -5,6 +5,7 @@ const nunjucks = require("nunjucks");
 const formatter = require("./markdownHelper");
 const fs = require("fs");
 const path = require('path');
+const beautify_html = require('js-beautify').html;
 
 let inputPath = '';
 let outputPath = '';
@@ -92,7 +93,10 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
     // Render the html
     var html = env.render(htmlFileTemplate, evaTask);
 
-    fs.writeFile(outputFilename, html, err => {
+    // Beautify the html
+    var prettyHtml = beautify_html(html, { indent_size: 2, space_in_empty_paren: true, preserve_newlines: false });
+
+    fs.writeFile(outputFilename, prettyHtml, err => {
         if (!!err) {
             console.log("Unable to save file:");
             console.log(err);
