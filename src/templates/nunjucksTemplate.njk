@@ -172,64 +172,8 @@
                 {# If not warning, caution, or note, it must be a step! #}
                 {% else %}
                     
-                    {# First, print the step #}
-                    <li>
-                        {{step.step|markdownFormatter}}
-                        {# Make sure to increment the step number #}
-                        {{actor|stepIncrement}}
-
-                        {# Check for checkboxes #}
-                        {% if step.checkboxes %}
-                            <ul>
-                                {% if step.checkboxes|isString %}
-                                    <li>{{step.checkboxes|checkboxes|markdownFormatter}}</li>
-                                {% else %}
-                                    {% for checkbox in step.checkboxes %}
-                                        <li>{{checkbox|checkboxes|markdownFormatter}}</li>
-                                    {% endfor %}
-                                {% endif %}
-                            </ul>
-                        {% endif %}
-
-                        {# Check for substeps. #}
-                        {# NOTWORKING!!!!!!!!!!!!!!!!!!!!!! Calling second macro throws weird errors... #}
-                        {% if step.substeps %}
-                            <ul>
-                                {% if step.substeps|isString %}
-                                    {#{writeStep(step.substeps)}#}
-                                {% else %}
-                                    {% for substep in step.substeps %}
-                                        {#{writeStep(substep)}#}
-                                    {% endfor %}
-                                {% endif %}
-                            </ul>
-                        {% endif %}
-
-                        {# Check for images. #}
-                        {% if step.images %}
-                            {% if step.images|isString %}
-                                <img class="img-fluid" src="{{step.images|imagePath}}" alt="image" />
-                            {% else %}
-                                {% for image in step.images %}
-                                    <img class="img-fluid" src="{{image|imagePath}}" alt="image" />
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-
-                        {# Check for comment. #}
-                        {% if step.comment %}
-                            {% if step.commnet|isString %}
-                                <p>{{step.comment|markdownFormatter}}</p>
-                            {% else %}
-                                {% for comment in step.comment %}
-                                    <div style="text-align: center;border-style: solid;border: 1">
-                                        {{comment|markdownFormatter}}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-
-                    </li>
+                    {{writeStep(actor, step)}}
+                    
                 {% endif %}
             {% endfor %}
         {% endif %}
@@ -237,9 +181,65 @@
 {% endmacro %}
 
 {# Put the actual step in a macro since it can call itself for substeps... #}
-{% macro writeStep(step) %}
+{% macro writeStep(actor, step) %}
 
+    {# First, print the step #}
+    <li>
+        {{step.step|markdownFormatter}}
+        {# Make sure to increment the step number #}
+        {{actor|stepIncrement}}
 
+        {# Check for checkboxes #}
+        {% if step.checkboxes %}
+            <ul>
+                {% if step.checkboxes|isString %}
+                    <li>{{step.checkboxes|checkboxes|markdownFormatter}}</li>
+                {% else %}
+                    {% for checkbox in step.checkboxes %}
+                        <li>{{checkbox|checkboxes|markdownFormatter}}</li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        {% endif %}
+
+        {# Check for substeps. #}
+        {% if step.substeps %}
+            <ul>
+                {% if step.substeps|isString %}
+                    {{writeStep(actor, step.substeps)}}
+                {% else %}
+                    {% for substep in step.substeps %}
+                        {{writeStep(actor, substep)}}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        {% endif %}
+
+        {# Check for images. #}
+        {% if step.images %}
+            {% if step.images|isString %}
+                <img class="img-fluid" src="{{step.images|imagePath}}" alt="image" />
+            {% else %}
+                {% for image in step.images %}
+                    <img class="img-fluid" src="{{image|imagePath}}" alt="image" />
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+
+        {# Check for comment. #}
+        {% if step.comment %}
+            {% if step.commnet|isString %}
+                <p>{{step.comment|markdownFormatter}}</p>
+            {% else %}
+                {% for comment in step.comment %}
+                    <div style="text-align: center;border-style: solid;border: 1">
+                        {{comment|markdownFormatter}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+
+    </li>
 
 {%- endmacro -%}
 

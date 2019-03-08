@@ -53,12 +53,25 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
     // called stepNum to each actor which keeps track of the ordered list number for the next step.
     // The value can be reset by passing in a number into the filter.
     env.addFilter('stepIncrement', function(actor, value) {
+        
+        // Check if actor exists
+        if (!actor) {
+            console.log("Actor does not exist!");
+            return "";
+        }
+        
+        // If the stepNum does not exist, set it to one
         if (!actor.stepNum) {
             actor.stepNum = 1;
         }
+
+        // If the value was passed in, set to the specified value
         if (typeof value !== 'undefined') {
             actor.stepNum = value;
-        } else {
+        } 
+        
+        // Increment the step if no value was sent
+        else {
             actor.stepNum = actor.stepNum+1;
         }
         return "";
