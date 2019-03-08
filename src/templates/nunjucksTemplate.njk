@@ -120,26 +120,100 @@
 </head>
 
 
-{# Create a micro that will write a bunch of steps as a list. #}
+
+
+{# Create a micro that will write a bunch of steps as a list.
+ # This is intended to be utilized as the internals of a table cell (<td>)
+ #}
 {% macro writeStepColumn(actor, steps) %}
+
     {# start the ordered list, keeping the numbering for the current actor column #}
     <ol start="{{actor.stepNum}}">
+
         {# Need to check of the step is a simple string for a single step, or is more complex #}
         {% if steps|isString %}
+
             {# If a simple string, the value is easy #}
-            <li>{{steps}}</li>
+            <li>{{steps|markdownFormatter}}</li>
+
             {# Make sure to increment the step #}
             {{actor|stepIncrement}}
         {% else %}
+
             {# Loop through each step #}
             {% for step in steps %}
-                {# For simple case, just print the step. More work needs to be done for more complex cases #}
-                <li>{{step.step}}</li>
-                {# Make sure to increment the step number #}
-                {{actor|stepIncrement}}
+                
+                {# Write the title if it exists #}
+                {% if step.title %}
+                    {{step.title|markdownFormatter}}
+                {% endif %}
+
+                {# Check for warning #}
+                {% if step.warning %}
+                    <div class="ncw ncw-warning">
+                        <div class="ncw-head">WARNING</div>
+                        <div class="ncw-body">{{step.warning|markdownFormatter}}</div>
+                    </div>
+
+                {# Check for caution #}
+                {% elif step.caution %}
+                    <div class="ncw ncw-caution">
+                        <div class="ncw-head">CAUTION</div>
+                        <div class="ncw-body">{{step.caution|markdownFormatter}}</div>
+                    </div>
+
+                {# Check for note #}
+                {% elif step.note %}
+                    <div class="ncw ncw-note">
+                        <div class="ncw-head">NOTE</div>
+                        <div class="ncw-body">{{step.note|markdownFormatter}}</div>
+                    </div>
+
+                {# If not warning, caution, or note, it must be a step! #}
+                {% else %}
+                    
+                    {# First, print the step #}
+                    <li>{{step.step|markdownFormatter}}</li>
+                    {# Make sure to increment the step number #}
+                    {{actor|stepIncrement}}
+
+                    {# Check for checkboxes #}
+                    {% if step.checkboxes %}
+                        <ul>
+                            {% if step.checkboxes|isString %}
+                                <li>{{step.checkboxes|checkboxes|markdownFormatter}}</li>
+                            {% else %}
+                                {% for checkbox in step.checkboxes %}
+                                    <li>{{checkbox|checkboxes|markdownFormatter}}</li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+
+                    {# Check for substeps. #}
+                    {# NOTWORKING!!!!!!!!!!!!!!!!!!!!!! Calling second macro throws weird errors... #}
+                    {% if step.substeps %}
+                        <ul>
+                            {% if step.substeps|isString %}
+                                {#{writeStep(step.substeps)}#}
+                            {% else %}
+                                {% for substep in step.substeps %}
+                                    {#{writeStep(substep)}#}
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         {% endif %}
     </ol>
+{% endmacro %}
+
+{# Put the actual step in a macro since it can call itself for substeps... #}
+{% macro writeStep(step) %}
+
+
+
 {% endmacro %}
 
 <body>

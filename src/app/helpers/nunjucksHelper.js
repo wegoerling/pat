@@ -2,6 +2,7 @@
 
 "use strict"
 const nunjucks = require("nunjucks");
+const formatter = require("./markdownHelper");
 const fs = require("fs");
 
 let inputPath = '';
@@ -41,7 +42,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
     //nunjucks.configure('templates', { autoescape: true });
 
     // Add custom nunjucks filter to test if variable is a string
-    var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('templates'), {autoescape: true});
+    var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('templates'), {autoescape: false});
     env.addFilter('isString', function (obj) {
         return typeof obj == 'string';
     });
@@ -59,7 +60,20 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
             actor.stepNum = actor.stepNum+1;
         }
         return "";
-    })
+    });
+
+    // Add custom nunjucks filter to pass the content through the markdown helper
+    env.addFilter('markdownFormatter', function(text) {
+        return formatter.convert(text);
+    });
+
+    // Add custom nunjucks filter for checkboxes
+    env.addFilter('checkboxes', function(text) {
+        if (text.indexOf('{{CHECKMARK}}') < 0) {
+            text = `{{CHECKMARK}} ${text}`;
+        }
+        return text;
+    });
 
     // Render the html
     var html = env.render(htmlFileTemplate, evaTask);
