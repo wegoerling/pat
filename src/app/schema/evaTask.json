@@ -8,7 +8,15 @@
                     "items": {
                         "type": "object",
                         "properties": {
-                            "step": {"type": "string"},
+                            "step": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                ]
+                            },
                             "images": {
                                 "oneOf": [
                                     {"type": "string"},
