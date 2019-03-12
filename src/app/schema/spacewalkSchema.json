@@ -1,0 +1,25 @@
+{
+    "type": "object",
+    "properties": {
+        "procedure_name": { "type": "string" },
+        "actors": {
+            "type": "array",
+            "items": { 
+                "type": "object",
+                "properties": {
+                    "role": { "type": "string"},
+                    "name": { "type": "string"}
+                }
+            }
+        },
+        "tasks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "file": { "type": "string"}
+                }
+            }
+        }
+    }
+}

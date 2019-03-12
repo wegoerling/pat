@@ -1,0 +1,95 @@
+{
+    "definitions": {
+        "step": {
+            "oneOf": [
+                {"type": "string"},
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "step": {"type": "string"},
+                            "images": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                ]
+                            },
+                            "title": {"type": "string"},
+                            "checkboxes": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                ]
+                            },
+                            "substeps": { "$ref": "#/definitions/step" },
+                            "warning": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                ]
+                            },
+                            "caution": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                ]
+                            },
+                            "comment": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                ]
+                            },
+                            "note": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "type": "object",
+    "properties": {
+        "title": { "type": "string" },
+        "duration": { 
+            "type": "string",
+            "pattern": "^[0-9]{2}:[0-9]{2}$"
+        },
+        "steps": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "simo": { 
+                        "type": "object",
+                        "additionalProperties": { "$ref": "#/definitions/step" }
+                    }
+                },
+                "additionalProperties": { "$ref": "#/definitions/step" }
+            }
+        }
+    }
+}
