@@ -40,7 +40,7 @@ function setOutputFilename(filename) {
  */
 function createHtml(evaTask, htmlFileTemplate, callback) {
     //For now, since this is an example, ignore the html file template and use a hard-coded one.
-    htmlFileTemplate = 'nunjucksTemplate.njk';
+    htmlFileTemplate = 'spacewalk.njk';
     //nunjucks.configure('templates', { autoescape: true });
 
     // Add custom nunjucks filter to test if variable is a string

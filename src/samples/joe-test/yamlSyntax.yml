@@ -56,4 +56,6 @@ task:
       EV1:
         - warning: warning text
         - caution: caution text
-        - 
+        - step:
+          images: ./file/location/filename.jpg
+          
