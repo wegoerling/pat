@@ -59,7 +59,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {//evaTask is evaTaskLi
                         html += `<td style="width: ${tdTableWidth}%;"></td>`;// create empty td in row until actor's col
                     }//end for let $td
                 }//end if idx>0
-                html += writeRowToHtml(task, actor, tdTableWidth, evaTask.actors, outputPath);
+                html += writeRowToHtml(task, actor, tdTableWidth, evaTask.actors);
 
                 if (idx < evaTask.actors.length - 1) {
                     for (let $td = idx; $td < evaTask.actors.length - 1; $td++) {
@@ -81,7 +81,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {//evaTask is evaTaskLi
                             console.log(`Found invalid actor: ${simoActor}`);
                         } else {// if (idx < 0)
                             // write this actor's td and save the index in actorCols array
-                            actorCols[idx] = writeRowToHtml(simo, simoActor, tdTableWidth, evaTask.actors, outputPath);
+                            actorCols[idx] = writeRowToHtml(simo, simoActor, tdTableWidth, evaTask.actors);
                         }//end else if (idx < 0)
                     });// end forEach(simoActors, simoActor)
 
@@ -134,7 +134,7 @@ function writeRowToHtml(task, actor, rowWidth, allActors) {
                 const comment = steps.comment ? steps.comment : undefined;
                 const note = steps.note ? steps.note : undefined;
 
-                if (title && title !== null) {
+                if (title !== null) {
                     html += `${formatter.convert(title)}`;
                 }
 
@@ -208,12 +208,12 @@ function writeStepToHtml(step, checkboxes, substeps, images, comment) {
         });
     }
 
-    if (comment && comment !== null) {
+    if (comment !== null) {
         if (typeof comment === 'string') {
             html += `<p>${formatter.convert(comment)}</p>`;
         } else {
             _.forEach(comment, (cm) => {
-                if (cm && cm !== null) {
+                if (cm !== null) {
                     html += `<div style="text-align: center;border-style: solid;border: 1">${formatter.convert(cm)}</div>`;
                 }
             });

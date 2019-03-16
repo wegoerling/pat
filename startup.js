@@ -54,7 +54,7 @@ function validateArguments(program) {
             throw new SyntaxError("\n" + program.template + "\nTemplate file does not Exist\n");
         }
 
-        if (!program.output || program.output === null) {
+        if (program.output === null) {
             throw new SyntaxError(`missing --output or -o parameter: got: [${program.output}]`);
         }
 

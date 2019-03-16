@@ -6,7 +6,7 @@ const showdown = require('showdown');
 const wiky = require('wiky');
 
 exports.convert = function (html) {
-    if (!html || html === null || (typeof html !== 'string')) {
+    if (html === null || (typeof html !== 'string')) {
         return html;
     }
 

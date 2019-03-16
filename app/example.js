@@ -3,7 +3,6 @@ let fs = require('fs');
 let _ = require('lodash');
 let program = require('commander');
 let exp = require('./exports');
-let path = require('path');
 
 // Run npm start to run this function
 function startUp(fileLocation) {
