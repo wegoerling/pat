@@ -3,4 +3,4 @@
 **/*.orig
 **/.nyc_output/
 **/coverage/
-**/*.png
+**/node_modules
