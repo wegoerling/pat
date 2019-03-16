@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path');
 
 const ver = require('./app/helpers/versionHelper');
-const html = require('./app/helpers/htmlHelper').generators;
+// const html = require('./app/helpers/htmlHelper').generators;
+const html = require('./app/helpers/nunjucksHelper').generators;
 
 exports.startup = {
     buildProgramArguments: buildProgramArguments,
@@ -90,7 +91,8 @@ function generateHtmlChecklist(evaTaskList, program) {
     html.params.inputDir(path.resolve(path.dirname(program.input)));
     html.params.outputDir(path.resolve(path.dirname(program.output)));
     html.params.htmlFile(outputFile);
-
+    
+    // call to htmlHelper.js fn createHtml() then postHtmlFileToConsole
     html.create(evaTaskList, program.template, () => postHtmlFileToConsole(outputFile));
 }
 

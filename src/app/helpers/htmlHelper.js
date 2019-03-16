@@ -30,71 +30,75 @@ function setOutputFilename(filename) {
     outputFilename = filename;
 }
 
-function createHtml(evaTask, htmlFileTemplate, callback) {
+//TODO rework createHtml to use templates. file requires nunjucks statement
+
+function createHtml(evaTask, htmlFileTemplate, callback) {//evaTask is evaTaskList. evaTaskList high level is procedure, actors, tasks
     let html = "";
+    //evaTask.tasks is each eva mission. tasks high level is title, duration, steps.
+    _.forEach(evaTask.tasks, checklist => {//create heading with title and duration
 
-    _.forEach(evaTask.tasks, checklist => {
-        // draw the checklist title
+        // checklist title and duration to html
         html += `<h2>${checklist.title} (${checklist.duration})</h2>`;
-        html += '<table class="gridtable">';
+        html += '<table class="gridtable">';//start task table for each evaTaskList tasks
 
-        html += "<tr>";
+        html += "<tr>";//new table row for each actor
         _.forEach(evaTask.actors, actor => {
-            html += createActorHeading(actor);
-            actor.counter = 1;
-        });
-        html += "</tr>";
+            html += createActorHeading(actor);//creates theader for each actor
+            actor.counter = 1;// what is this?
+        });// end forEach(evaTask.actors, actor)
+        html += "</tr>";//close header row
 
-        const tdTableWidth = 100 / evaTask.actors.length;
-        _.forEach(checklist.evaTasks, task => {
-            let actor = Object.keys(task)[0];
-            if (actor.toLowerCase() !== "simo") {
-                html += `<tr>`;
+        const tdTableWidth = 100 / evaTask.actors.length;//scale columns to equal size each
+        _.forEach(checklist.evaTasks, task => {// here evaTasks are the task file's steps: i.e. index 0 of steps is simo
+            let actor = Object.keys(task)[0]; //get the keys of step 
+            if (actor.toLowerCase() !== "simo") {// non simo step
+                html += `<tr>`;// new row
                 let idx = _.findIndex(evaTask.actors, a => a.role === actor);
-                if (idx > 0) {
+                if (idx > 0) {//find column for actor 
                     for (let $td = 0; $td < idx; $td++) {
-                        html += `<td style="width: ${tdTableWidth}%;"></td>`;
-                    }
-                }
+                        html += `<td style="width: ${tdTableWidth}%;"></td>`;// create empty td in row until actor's col
+                    }//end for let $td
+                }//end if idx>0
                 html += writeRowToHtml(task, actor, tdTableWidth, evaTask.actors, outputPath);
 
                 if (idx < evaTask.actors.length - 1) {
                     for (let $td = idx; $td < evaTask.actors.length - 1; $td++) {
                         html += `<td style="width: ${tdTableWidth}%;"></td>`;
-                    }
-                }
+                    } // end for (let $td ...)
+                }// end if (idx < evaTask.acotors.length -1)
 
-                html += "</tr>";
-            } else {
-                if (task[actor] !== null) {
+                html += "</tr>";// end new row
+            } else {// end if (actor.toLowerCase() !== "simo")
+                if (task[actor] !== null) {// simo step
                     html += '<tr>';
                     let simo = task[actor];
-                    let simoActors = Object.keys(simo);
+                    let simoActors = Object.keys(simo);// simo actors
 
                     let actorCols = new Array(evaTask.actors.length);
-                    _.forEach(simoActors, simoActor => {
+                    _.forEach(simoActors, simoActor => {// find the index of the simoActor for referencing
                         let idx = _.findIndex(evaTask.actors, a => a.role === simoActor);
-                        if (idx < 0) {
+                        if (idx < 0) {//cannot find actor
                             console.log(`Found invalid actor: ${simoActor}`);
-                        } else {
+                        } else {// if (idx < 0)
+                            // write this actor's td and save the index in actorCols array
                             actorCols[idx] = writeRowToHtml(simo, simoActor, tdTableWidth, evaTask.actors, outputPath);
-                        }
-                    });
+                        }//end else if (idx < 0)
+                    });// end forEach(simoActors, simoActor)
 
                     for (let $td = 0; $td < actorCols.length; $td++) {
                         if (actorCols[$td] === null || !actorCols[$td]) {
                             actorCols[$td] = `<td style="width: ${tdTableWidth}%;"></td>`;
-                        }
-                    }
+                        }// end if (actorCols[$td]..)
+                    }// end for (let $td..)
 
                     _.forEach(actorCols, aCol => {
-                        html += aCol;
-                    });
+                        html += aCol;//add the td column to the row
+                    });// end forEach(actorCols, aCol)
 
                     html += '</tr>';
-                }
-            }
-        });
+                }// end if (task[actor])
+            }//end forEach else
+        });// end forEach(checklist.evaTasks, task)
 
         html += "</table>";
     });
