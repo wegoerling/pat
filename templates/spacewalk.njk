@@ -1,4 +1,4 @@
-{% extends "bask.njk" %}
+{% extends "base.njk" %}
 
 {% block content %}
     <div class="container-fluid">
@@ -9,7 +9,7 @@
         {# For each checklist in the tasks array, create a table #}
         {% for checklist in tasks %}
             {# make a table for the checklist #}
-            {% include "taskTable"%}
+            {% include "taskTable.njk"%}
         {% else %}
             <h2> No Tasks! </h2>
         {% endfor %}

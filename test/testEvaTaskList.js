@@ -1,9 +1,130 @@
+/**
+ * Unit tests for evaTaskList.js
+ */
 let evaTaskList = require('../app/models/evaTaskList'),
   expect = require('chai').expect,
   sinon = require('sinon'),
   _ = require('lodash'),
   path = require('path');
 
+const YAML = require('yamljs');
+
+/**
+ * Negative testing for createFromYaml
+ */
+describe('createFromYaml - Negative Testing', function() {
+    describe('Bad Input', () => {
+        it('should return null if yaml is missing procedure_name', () => {
+            let yamlString = `
+
+                actors:
+                    - role: IV/SSRMS
+                    - role: EV1
+                      name: Drew
+                    - role: EV2
+                      name: Taz
+
+                tasks:
+                    - file: egress.yml
+                    - file: misse7.yml
+                `;
+
+            let yamlObject = YAML.parse(yamlString);
+
+            expect(yamlObject).to.exist;
+
+            let ecl = evaTaskList.createFromYaml(yamlObject);
+
+            expect(ecl).to.be.null;
+        });
+
+        it('should return null if yaml is missing actors', () => {
+            let yamlString = `
+                procedure_name: Foo Procedure 1
+
+                tasks:
+                    - file: egress.yml
+                    - file: misse7.yml
+                `;
+
+            let yamlObject = YAML.parse(yamlString);
+
+            expect(yamlObject).to.exist;
+
+            let ecl = evaTaskList.createFromYaml(yamlObject);
+
+            expect(ecl).to.be.null;
+        });
+
+        it('should return null if yaml is missing tasks', () => {
+            let yamlString = `
+                procedure_name: Foo Procedure 1
+
+                actors:
+                    - role: IV/SSRMS
+                    - role: EV1
+                      name: Drew
+                    - role: EV2
+                      name: Taz
+
+                `;
+            let yamlObject = YAML.parse(yamlString);
+
+            expect(yamlObject).to.exist;
+
+            let ecl = evaTaskList.createFromYaml(yamlObject);
+
+            expect(ecl).to.be.null;
+        });
+    });
+});
+
+/**
+ * Positive testing for createFromYaml
+ */
+describe('createFromYaml - Positive Testing', function() {
+    describe('Normal Input', () => {
+        it('should return an evaChecklist for normal input', () => {
+            let yamlString = `
+                procedure_name: Foo Procedure 1
+
+                actors:
+                    - role: IV/SSRMS
+                    - role: EV1
+                      name: Drew
+                    - role: EV2
+                      name: Taz
+
+                tasks:
+                    - file: egress.yml
+                    - file: misse7.yml
+                `;
+
+            let yamlObject = YAML.parse(yamlString);
+
+            expect(yamlObject).to.exist;
+
+            let ecl = evaTaskList.createFromYaml(yamlObject);
+
+            expect(ecl).to.exist;
+
+            expect(ecl.procedure_name).to.be.a('string');
+            expect(ecl.procedure_name).to.equal('Foo Procedure 1');
+
+            expect(ecl.actors).to.be.an('array');
+            expect(ecl.actors).to.have.all.keys(0, 1, 2);
+
+            expect(ecl.actors[0].role).to.equal('IV/SSRMS');
+            expect(ecl.actors[1].role).to.equal('EV1');
+            expect(ecl.actors[2].role).to.equal('EV2');
+
+            expect(ecl.actors[1].name).to.equal('Drew');
+            expect(ecl.actors[2].name).to.equal('Taz');
+        });
+    });
+});
+
+/*
 //test genericEVATask
 describe('evaTaskList', function () {
   let fsStub, yamlStub, evaTaskStub;
@@ -266,9 +387,25 @@ describe('evaTaskList', function () {
         expect(initialyml).to.not.deep.equal(testyml);
       });
     });
-    */
 });
 
+function fakeMainText() {
+    return `
+    procedure_name: Foo Procedure 1
+
+    actors:
+        - role: IV/SSRMS
+        - role: EV1
+          name: Drew
+        - role: EV2
+          name: Taz
+
+    tasks:
+        - file: egress.yml
+        - file: misse7.yml
+
+    `;
+}
 function fakeTasksText() {
   return `
   title: EGRESS/SETUP
@@ -301,3 +438,4 @@ function fakeTasksText() {
           - Blank hook to EV1 R Waist Tether 
   `;
 }
+*/
