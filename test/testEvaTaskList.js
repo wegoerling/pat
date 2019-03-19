@@ -10,6 +10,33 @@ let evaTaskList = require('../app/models/evaTaskList'),
 const YAML = require('yamljs');
 
 /**
+ * Testing for create
+ */
+describe('create Testing', function() {
+    describe('Normal create', () => {
+        it('should create a valid evaTaskList object', () => {
+                
+            //TODO: Use more realistic parameters
+            let fakeProcedureName = 1;
+            let fakeActors = 2;
+            let fakeTaskFiles = 3;
+
+            let ecl = new evaTaskList.create(
+                fakeProcedureName,
+                fakeActors,
+                fakeTaskFiles);
+
+            expect(ecl).to.exist;
+            expect(ecl.procedure_name).to.equal(1);
+            expect(ecl.actors).to.equal(2);
+            expect(ecl.taskFiles).to.equal(3);
+            expect(ecl.tasks).to.be.an('array');
+
+        });
+    });
+});
+
+/**
  * Negative testing for createFromYaml
  */
 describe('createFromYaml - Negative Testing', function() {
@@ -120,6 +147,16 @@ describe('createFromYaml - Positive Testing', function() {
 
             expect(ecl.actors[1].name).to.equal('Drew');
             expect(ecl.actors[2].name).to.equal('Taz');
+        });
+    });
+});
+
+/**
+ * Positive testing for createFromFile
+ */
+describe('createFromFile - Positive Testing', function() {
+    describe('Normal Input', () => {
+        it('should return an evaChecklist for normal input', () => {
         });
     });
 });
