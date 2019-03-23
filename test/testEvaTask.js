@@ -7,12 +7,13 @@ let evaTask = require('../app/models/evaTask'),
   _ = require('lodash'),
   path = require('path');
 
-const YAML = require('yamljs');
+fs = require('fs');
+yj = require('yamljs');
 
 /**
- * Negative testing for createFromYaml
+ * Negative testing for createFromYamlString
  */
-describe('createFromYaml - Negative Testing', function() {
+describe('createFromYamlString - Negative Testing', function() {
     describe('Bad Input', () => {
         it('should return null if yaml is missing title', () => {
             let yamlString = `
@@ -22,11 +23,7 @@ describe('createFromYaml - Negative Testing', function() {
                         - step: "Go Outside"
                 `;
 
-            let yamlObject = YAML.parse(yamlString);
-
-            expect(yamlObject).to.exist;
-
-            let et = evaTask.createFromYaml(yamlObject);
+            let et = evaTask.createFromYamlString(yamlString);
 
             expect(et).to.be.null;
         });
@@ -39,11 +36,7 @@ describe('createFromYaml - Negative Testing', function() {
                         - step: "Go Outside"
                 `;
 
-            let yamlObject = YAML.parse(yamlString);
-
-            expect(yamlObject).to.exist;
-
-            let et = evaTask.createFromYaml(yamlObject);
+            let et = evaTask.createFromYamlString(yamlString);
 
             expect(et).to.be.null;
         });
@@ -53,21 +46,29 @@ describe('createFromYaml - Negative Testing', function() {
                 title: Foo Task
                 duration: 25
                 `;
-            let yamlObject = YAML.parse(yamlString);
 
-            expect(yamlObject).to.exist;
-
-            let et = evaTask.createFromYaml(yamlObject);
+            let et = evaTask.createFromYamlString(yamlString);
 
             expect(et).to.be.null;
+        });
+
+        it('should return null if file contains invalid YAML', () => {
+
+            let badYaml = `
+                THIS IS NOT YAML.
+                `;
+
+            let etl = evaTask.createFromYamlString(badYaml);
+
+            expect(etl).to.be.null;
         });
     });
 });
 
 /**
- * Positive testing for createFromYaml
+ * Positive testing for createFromYamlString
  */
-describe('createFromYaml - Positive Testing', function() {
+describe('createFromYamlString - Positive Testing', function() {
     describe('Normal Input', () => {
         it('should return an evaTask for normal input', () => {
             let yamlString = `
@@ -78,11 +79,7 @@ describe('createFromYaml - Positive Testing', function() {
                         - step: "Go Outside"
                 `;
 
-            let yamlObject = YAML.parse(yamlString);
-
-            expect(yamlObject).to.exist;
-
-            let et = evaTask.createFromYaml(yamlObject);
+            let et = evaTask.createFromYamlString(yamlString);
 
             expect(et).to.exist;
 
@@ -91,10 +88,52 @@ describe('createFromYaml - Positive Testing', function() {
 
             expect(et.duration).to.be.a('number');
             expect(et.duration).to.equal(25);
-
-            //expect(ecl.actors[0].role).to.equal('IV/SSRMS');
-            //expect(ecl.actors[1].role).to.equal('EV1');
-            //expect(ecl.actors[2].role).to.equal('EV2');
         });
     });
 });
+
+/**
+ * Positive testing for createFromFile
+ */
+describe('createFromFile - Positive Testing', function() {
+    describe('Normal Input', () => {
+        let yamlString = `
+            title: Foo Task
+            duration: 25
+            steps:
+                - EV1:
+                    - step: "Go Outside"
+            `;
+        const filename = "foo.yml";
+        var sandbox;
+        var fakeYamlObj = yj.parse(yamlString);
+
+        //  stub some things
+        before(() => {
+            sandbox = sinon.sandbox.create();
+
+            sandbox.stub(fs, 'existsSync').withArgs(filename).returns(true)
+            sandbox.stub(fs, 'readFileSync').withArgs(filename).returns(yamlString);
+            sandbox.stub(yj, 'load').withArgs(filename).returns(fakeYamlObj);
+        });
+
+        //  restore the stubs
+        after(() => {
+            sandbox = sandbox.restore();
+        });
+
+        it('should return an evaTask for normal input', () => {
+
+            let et = evaTask.createFromFile(filename, fs, yj);
+
+            expect(et).to.exist;
+
+            expect(et.title).to.be.a('string');
+            expect(et.title).to.equal('Foo Task');
+
+            expect(et.duration).to.be.a('number');
+            expect(et.duration).to.equal(25);
+        });
+    });
+});
+

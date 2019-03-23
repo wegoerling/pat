@@ -1,10 +1,9 @@
 'use strict';
 
-const fs = require('fs');
 const YAML = require('yamljs');
 
 exports.create = taskObject;
-exports.createFromYaml = taskObjectFromYaml;
+exports.createFromYamlString = taskObjectFromYamlString;
 exports.createFromFile = taskObjectFromFile;
 
 /**
@@ -24,10 +23,19 @@ function taskObject(title, duration, steps) {
 /**
  * This function creates an evaTask from a yaml object
  *
- * @param yaml    A YAML object
- * @returns       An evaTask, or null if an error occurred
+ * @param yamlString    A YAML string
+ * @returns             An evaTask, or null if an error occurred
  */
-function taskObjectFromYaml(yaml) {
+function taskObjectFromYamlString(yamlString) {
+
+    try {
+        var yaml = YAML.parse(yamlString);
+    }
+    catch (e) {
+        console.log("Failed to parse task YAML");
+        return null;
+    }
+
     if(!yaml.title) {
         console.log("Input YAML missing title");
         return null;
@@ -55,23 +63,20 @@ function taskObjectFromYaml(yaml) {
  * This function creates an evaTask from a yaml file
  *
  * @param file      The full path to the YAML file
+ * @param fs        An fs object for this function to use
+ * @param yj        A yamljs object for this function to use
  * @returns         An evaTask, or null if an error occurred
  */
-function taskObjectFromFile(file) {
+function taskObjectFromFile(file, fs, yj) {
     if(!fs.existsSync(file)) {
         console.log("File doesn't exist: " + file);
         return null;
     }
 
-    //  Load the task YAML
-    let yaml = YAML.load(file);
-    if(!yaml) {
-        console.log("Failed to load YAML file: " + file);
-        return null;
-    }
+    let yamlString = fs.readFileSync(file, 'utf8');
 
     //  Construct an evaTask from the YAML
-    let et = taskObjectFromYaml(yaml);
+    let et = taskObjectFromYamlString(yamlString);
     if(!et) {
         return null;
     }

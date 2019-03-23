@@ -3,13 +3,12 @@
 let actor = require('./actor');
 let evaTask = require('./evaTask');
 
-const fs = require('fs');
 const _ = require('lodash');
 const YAML = require('yamljs');
 const path = require('path');
 
 exports.create = taskListObject;
-exports.createFromYaml = taskListObjectFromYaml;
+exports.createFromYamlString = taskListObjectFromYamlString;
 exports.createFromFile = taskListObjectFromFile;
 
 /**
@@ -30,10 +29,19 @@ function taskListObject(procedure_name, actors, taskFiles) {
 /**
  * This function creates an evaTaskList from a yaml object
  *
- * @param yaml      A YAML object
- * @returns         An evaTaskList, or null if an error occurred
+ * @param yamlString    A YAML string
+ * @returns             An evaTaskList, or null if an error occurred
  */
-function taskListObjectFromYaml(yaml) {
+function taskListObjectFromYamlString(yamlString) {
+
+    try {
+        var yaml = YAML.parse(yamlString);
+    }
+    catch (e) {
+        console.log("Failed to parse task list YAML");
+        return null;
+    }
+
     if(!yaml.procedure_name) {
         console.log("Input YAML missing procedure_name");
         return null;
@@ -65,23 +73,20 @@ function taskListObjectFromYaml(yaml) {
  * This function creates an evaTaskList from a yaml file
  *
  * @param file      The full path to the YAML file
+ * @param fs        An fs object for this function to use
+ * @param yj        A yamljs object for this function to use
  * @returns         An evaTaskList, or null if an error occurred
  */
-function taskListObjectFromFile(file) {
+function taskListObjectFromFile(file, fs, yj) {
     if(!fs.existsSync(file)) {
         console.log("File doesn't exist: " + file);
         return null;
     }
 
-    //  Load the main YAML
-    let yaml = YAML.load(file);
-    if(!yaml) {
-        console.log("Failed to load YAML file: " + file);
-        return null;
-    }
+    let yamlString = fs.readFileSync(file, 'utf8');
 
     //  Construct an evaTaskList from the YAML
-    let etl = taskListObjectFromYaml(yaml);
+    let etl = taskListObjectFromYamlString(yamlString);
     if(!etl) {
         return null;
     }
@@ -91,16 +96,10 @@ function taskListObjectFromFile(file) {
         let taskFile = `${path.dirname(file)}/${t.file}`;
         if(fs.existsSync(taskFile)) {
 
-            //  Try to load the task YAML
-            let taskYaml = YAML.load(taskFile);
-            if(taskYaml) {
-
-                //  Try to construct an evaTask from the YAML
-                let et = evaTask.createFromYaml(taskYaml);
-                if(et) {
-                    //  Add this evaTask to the evaTaskList
-                    etl.tasks.push(et);
-                }
+            let et = evaTask.createFromFile(taskFile, fs, yj);
+            if(et) {
+                //  Add this evaTask to the evaTaskList
+                etl.tasks.push(et);
             }
         }
     });

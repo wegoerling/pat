@@ -14,6 +14,6 @@ const app = require('./startup').startup;// calls startup.js?
 (function () {
     const args = app.buildProgramArguments();// app is alias to startup.js fn buildProgramArguments() returns cli arguments
     app.validateArguments(args);// startup.js fn validateArguments()
-    const evaTaskList = doc.createFromFile(args.input);
+    const evaTaskList = doc.createFromFile(args.input, fs, YAML);
     app.generateHtmlChecklist(evaTaskList, args);// startup.js fn generateHtmlChecklist()
 })();
