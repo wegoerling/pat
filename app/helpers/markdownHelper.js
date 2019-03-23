@@ -22,13 +22,15 @@ exports.convert = function (markdown) {
     }
 
     //  Find and replace check marks
-    markdown = markdown.replace(/{{CHECKMARK}}/gi, '&#10003;');
-    markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10003;');
     markdown = markdown.replace(/{{CHECK}}/gi, '&#10003;');
 
     //  Find and replace check boxes
     markdown = markdown.replace(/{{CHECKBOX}}/gi, '&#10063;');
     markdown = markdown.replace(/{{CHECK BOX}}/gi, '&#10063;');
+
+    //TODO: Why does checmkark actually mean checkbox?
+    markdown = markdown.replace(/{{CHECKMARK}}/gi, '&#10063;');
+    markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10063;');
 
     //  Find and replace emphasis markdown?
     if (markdown.includes("'''") || markdown.includes('**')) {

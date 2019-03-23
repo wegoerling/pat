@@ -48,8 +48,10 @@ function createHtml(evaTask, htmlFileTemplate, callback) {//evaTask is evaTaskLi
         });// end forEach(evaTask.actors, actor)
         html += "</tr>";//close header row
 
+        //console.log(checklist.evaTasks);
         const tdTableWidth = 100 / evaTask.actors.length;//scale columns to equal size each
-        _.forEach(checklist.evaTasks, task => {// here evaTasks are the task file's steps: i.e. index 0 of steps is simo
+        _.forEach(checklist.steps, task => {// here evaTasks are the task file's steps: i.e. index 0 of steps is simo
+            //console.log(task);
             let actor = Object.keys(task)[0]; //get the keys of step 
             if (actor.toLowerCase() !== "simo") {// non simo step
                 html += `<tr>`;// new row
