@@ -103,21 +103,18 @@ describe('createFromFile - Positive Testing', function() {
                 - file: misse7.yml
             `;
         const filename = "foo.yml";
-        var sandbox;
         var fakeYamlObj = yj.parse(yamlString);
 
         //  stub some things
         before(() => {
-            sandbox = sinon.sandbox.create();
-
-            sandbox.stub(fs, 'existsSync').withArgs(filename).returns(true)
-            sandbox.stub(fs, 'readFileSync').withArgs(filename).returns(yamlString);
-            sandbox.stub(yj, 'load').withArgs(filename).returns(fakeYamlObj);
+            sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
+            sinon.stub(fs, 'readFileSync').withArgs(filename).returns(yamlString);
+            sinon.stub(yj, 'load').withArgs(filename).returns(fakeYamlObj);
         });
 
         //  restore the stubs
         after(() => {
-            sandbox = sandbox.restore();
+            sinon.restore();
         });
 
         it('should return an evaChecklist for normal input', () => {
@@ -162,15 +159,14 @@ describe('createFromFile - Negative Testing', function() {
                 THIS IS NOT YAML.
                 `;
 
-            sandbox = sinon.sandbox.create();
-            sandbox.stub(fs, 'existsSync').withArgs(filename).returns(true)
-            sandbox.stub(fs, 'readFileSync').returns(badYaml);
+            sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
+            sinon.stub(fs, 'readFileSync').returns(badYaml);
 
             let etl = evaTaskList.createFromFile(filename, fs, yj);
 
             expect(etl).to.be.null;
 
-            sandbox = sandbox.restore();
+            sinon.restore();
         });
     });
 });

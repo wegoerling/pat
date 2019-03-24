@@ -1,83 +1,79 @@
-#!/usr/bin/env node
-
 'use strict';
-const program = require('commander');
-const fs = require('fs');
 const path = require('path');
 
 const ver = require('./app/helpers/versionHelper');
 const html = require('./app/helpers/htmlHelper').generators;
+const fs = require('fs');
 //const html = require('./app/helpers/nunjucksHelper').generators;
 
 exports.startup = {
     buildProgramArguments: buildProgramArguments,
-    additionalHelpArgument: additionalHelpArgument,
     validateArguments: validateArguments,
     getFileExtension: getFileExtension,
     generateHtmlChecklist: generateHtmlChecklist,
     postHtmlFileToConsole: postHtmlFileToConsole
 }
 
-
-function buildProgramArguments() {
+/**
+ * This function configures commander.js for this application's command line
+ * arguments, and attemps to parse the arguments passed to this process.
+ *
+ * @param program   A commander.js object for this function to use
+ * @param args      Command line argument array (e.g. process.argv)
+ */
+function buildProgramArguments(program, args) {
     const DEFAULT_TEMPLATE = `${__dirname}/templates/htmlHelper-template.thtml`;
 
     program
         .version(ver.currentVersion, '-v, --version')
         .name('eva-checklist')
         .description('Generate the spacewalk EVA checklist from YAML files')
-        .option('-i, --input [.yml]', 'specify the yml file to use')
-        .option('-o, --output [.html]', 'where do you want the result located')
-        .option('-t, --template [.html]', 'specify a template to generate', DEFAULT_TEMPLATE)
-        .action(validateArguments);
+        .option('-i, --input <input.yml>', 'name the YAML file for this EVA')
+        .option('-o, --output <.html>', 'name of output HTML file')
+        .option('-t, --template <.html>', 'specify a template to use', DEFAULT_TEMPLATE)
+        .option('-d, --doc', 'Also generate Word doc output', null)
+        .allowUnknownOption();
 
-    program.on('--help', additionalHelpArgument);
+    //  Commander.js does an unhelpful thing if there are invalid options;
+    //  Override the default behavior to do a more helpful thing.
+    program.unknownOption = function() {
+        //  An invalid option has been received. Print usage and exit.
+        program.help();
+    }
 
-    program.parse(process.argv);
+    try {
+        program.parse(args);
+    } catch(e) {
+        if(e instanceof TypeError) {
+            //  Commander.js will annoyingly throw a TypeError if an argument
+            //  that requires a parameter is missing its parameter.
+            program.help();
+        }
+    }
+
     return program;
 }
 
+/**
+ * This function attempts to validate commander.js arguments for this program.
+ * If invalid arguments are discovered, help is printed and the program will
+ * exit.
+ *
+ * @param program       A commander.js object
+ */
 function validateArguments(program) {
-    try {
 
-        if (!program.input) {
-            throw new SyntaxError(`\nmissing --input or -i parameter: got: [${program.input}]\n`);
-        }
-
-        if (getFileExtension(program.input) !== 'yml') {
-            throw new SyntaxError("\n" + program.input + "\nInvalid input file extension\n");
-        }
-        if (!fs.existsSync(program.input)) {
-            throw new SyntaxError("\n" + program.input + "\nFile Does Not Exist\n");
-        }
-        if (!fs.existsSync(program.template)) {
-            throw new SyntaxError("\n" + program.template + "\nTemplate file does not Exist\n");
-        }
-
-        if (program.output === null) {
-            throw new SyntaxError(`missing --output or -o parameter: got: [${program.output}]`);
-        }
-
-        if (getFileExtension(program.output) !== 'html') {
-            throw new SyntaxError("\n" + program.output + "\nInvalid output file extension\n");
-        }
-
-        const dir = path.dirname(program.output);
-        if (!fs.existsSync(dir)) {
-            throw new SyntaxError(`directory has not been created: ${dir}`);
-        }
-    } catch (err) {
-        console.log(err.message);
-        process.exit(-1);
+    //  The input file must end in .yml
+    if (getFileExtension(program.input) !== 'yml') {
+        console.log("\nInvalid input file extension\n");
+        program.help();
     }
-}
 
-function additionalHelpArgument() {
-    const textOutput = `\n\n
-Examples:
-$ eva-checklist --input file.yml --output file.html
-$ eva-checklist -i file.yml -o file.html\n`;
-    console.log(textOutput);
+    //  The output file must end in .html
+    if (getFileExtension(program.output) !== 'html') {
+        console.log("\nInvalid output file extension\n");
+        program.help();
+    }
 }
 
 function getFileExtension(fileName) {
@@ -93,10 +89,17 @@ function generateHtmlChecklist(evaTaskList, program) {
     html.params.htmlFile(outputFile);
     
     // call to htmlHelper.js fn createHtml() then postHtmlFileToConsole
-    html.create(evaTaskList, program.template, () => postHtmlFileToConsole(outputFile));
+    html.create(evaTaskList, program.template, () => postHtmlFileToConsole(fs, outputFile));
 }
 
-function postHtmlFileToConsole(outputFile) {
+/**
+ * This function checks whether the output file was created. If it was, a success
+ * message is printed, otherwise a failure message is printed.
+ *
+ * @param fs            A commander.js object for this function to use
+ * @param outputFile    The name of the output file to check
+ */
+function postHtmlFileToConsole(fs, outputFile) {
     if (fs.existsSync(outputFile)) {
         console.log(`Completed! your file is located at file://${outputFile}`);
     } else {

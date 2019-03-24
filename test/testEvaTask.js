@@ -105,21 +105,18 @@ describe('createFromFile - Positive Testing', function() {
                     - step: "Go Outside"
             `;
         const filename = "foo.yml";
-        var sandbox;
         var fakeYamlObj = yj.parse(yamlString);
 
         //  stub some things
         before(() => {
-            sandbox = sinon.sandbox.create();
-
-            sandbox.stub(fs, 'existsSync').withArgs(filename).returns(true)
-            sandbox.stub(fs, 'readFileSync').withArgs(filename).returns(yamlString);
-            sandbox.stub(yj, 'load').withArgs(filename).returns(fakeYamlObj);
+            sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
+            sinon.stub(fs, 'readFileSync').withArgs(filename).returns(yamlString);
+            sinon.stub(yj, 'load').withArgs(filename).returns(fakeYamlObj);
         });
 
         //  restore the stubs
         after(() => {
-            sandbox = sandbox.restore();
+            sinon.restore();
         });
 
         it('should return an evaTask for normal input', () => {
