@@ -2,9 +2,9 @@
 const path = require('path');
 
 const ver = require('./app/helpers/versionHelper');
-const html = require('./app/helpers/htmlHelper').generators;
+//const html = require('./app/helpers/htmlHelper').generators;
 const fs = require('fs');
-//const html = require('./app/helpers/nunjucksHelper').generators;
+const html = require('./app/helpers/nunjucksHelper').generators;
 
 exports.startup = {
     buildProgramArguments: buildProgramArguments,

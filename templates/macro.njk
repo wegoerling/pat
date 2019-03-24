@@ -6,115 +6,97 @@
     {# start the ordered list, keeping the numbering for the current actor column #}
     <ol start="{{actor.stepNum}}">
 
-        {# Need to check of the step is a simple string for a single step, or is more complex #}
-        {% if steps|isString %}
+        {# Loop through each step #}
+        {% for step in steps %}
+            
+            {# Write the title if it exists #}
+            {% if step.title %}
+                {{step.title|markdownFormatter}}
+            {% endif %}
 
-            {# If a simple string, the value is easy #}
-            <li>{{steps|markdownFormatter}}</li>
-
-            {# Make sure to increment the step #}
-            {{actor|stepIncrement}}
-        {% else %}
-
-            {# Loop through each step #}
-            {% for step in steps %}
-                
-                {# Write the title if it exists #}
-                {% if step.title %}
-                    {{step.title|markdownFormatter}}
-                {% endif %}
-
-                {# Check for warning #}
-                {% if step.warning %}
-                    <div class="ncw ncw-warning">
-                        <div class="ncw-head">WARNING</div>
-                        <div class="ncw-body">{{step.warning|markdownFormatter}}</div>
-                    </div>
-
-                {# Check for caution #}
-                {% elif step.caution %}
-                    <div class="ncw ncw-caution">
-                        <div class="ncw-head">CAUTION</div>
-                        <div class="ncw-body">{{step.caution|markdownFormatter}}</div>
-                    </div>
-
-                {# Check for note #}
-                {% elif step.note %}
-                    <div class="ncw ncw-note">
-                        <div class="ncw-head">NOTE</div>
-                        <div class="ncw-body">{{step.note|markdownFormatter}}</div>
-                    </div>
-
-                {# If not warning, caution, or note, it must be a step! #}
-                {% else %}
-                    
-                    {{writeStep(actor, step)}}
-                    
-                {% endif %}
+            {# Check for warning #}
+            {% for warning in step.warnings %}
+                <div class="ncw ncw-warning">
+                    <div class="ncw-head">WARNING</div>
+                    <div class="ncw-body">{{warning|markdownFormatter}}</div>
+                </div>
             {% endfor %}
-        {% endif %}
+
+            {# Check for caution #}
+            {% for caution in step.cautions %}
+                <div class="ncw ncw-caution">
+                    <div class="ncw-head">CAUTION</div>
+                    <div class="ncw-body">{{caution|markdownFormatter}}</div>
+                </div>
+            {% endfor %}
+
+            {# Check for note #}
+            {% for note in step.notes %}
+                <div class="ncw ncw-note">
+                    <div class="ncw-head">NOTE</div>
+                    <div class="ncw-body">{{note|markdownFormatter}}</div>
+                </div>
+            {% endfor %}
+
+            {# If not warning, caution, or note, it must be a step! #}
+
+                
+            {{writeStep(actor, step)}}
+                
+
+        {% endfor %}
     </ol>
 {% endmacro %}
 
 {# Put the actual step in a macro since it can call itself for substeps... #}
 {% macro writeStep(actor, step) %}
 
-    {# First, print the step #}
-    <li>
-        {{step.step|markdownFormatter}}
-        {# Make sure to increment the step number #}
-        {{actor|stepIncrement}}
+    {# First first, check to make sure something will be printed.  
+     # If not, skip everything because otherwise the list will get messed up. 
+     #}
+    {% if step.text.length > 0 or step.checkboxes.length > 0 or step.substeps.length > 0 or step.images.length > 0 or step.comments.length > 0 %}
 
-        {# Check for checkboxes #}
-        {% if step.checkboxes %}
-            <ul>
-                {% if step.checkboxes|isString %}
-                    <li>{{step.checkboxes|checkboxes|markdownFormatter}}</li>
-                {% else %}
+        {# First, print the step #}
+        <li>
+            {{step.text|markdownFormatter}}
+            {# Make sure to increment the step number #}
+            {{actor|stepIncrement}}
+
+            {# Check for checkboxes #}
+            {% if step.checkboxes %}
+                <ul>
                     {% for checkbox in step.checkboxes %}
                         <li>{{checkbox|checkboxes|markdownFormatter}}</li>
                     {% endfor %}
-                {% endif %}
-            </ul>
-        {% endif %}
+                </ul>
+            {% endif %}
 
-        {# Check for substeps. #}
-        {% if step.substeps %}
-            <ul>
-                {% if step.substeps|isString %}
-                    {{writeStep(actor, step.substeps)}}
-                {% else %}
+            {# Check for substeps. #}
+            {% if step.substeps %}
+                <ul>
                     {% for substep in step.substeps %}
                         {{writeStep(actor, substep)}}
                     {% endfor %}
-                {% endif %}
-            </ul>
-        {% endif %}
+                </ul>
+            {% endif %}
 
-        {# Check for images. #}
-        {% if step.images %}
-            {% if step.images|isString %}
-                <img class="img-fluid" src="{{step.images|imagePath}}" alt="image" />
-            {% else %}
+            {# Check for images. #}
+            {% if step.images %}
                 {% for image in step.images %}
                     <img class="img-fluid" src="{{image|imagePath}}" alt="image" />
                 {% endfor %}
             {% endif %}
-        {% endif %}
 
-        {# Check for comment. #}
-        {% if step.comment %}
-            {% if step.commnet|isString %}
-                <p>{{step.comment|markdownFormatter}}</p>
-            {% else %}
+            {# Check for comment. #}
+            {% if step.comment %}
                 {% for comment in step.comment %}
                     <div style="text-align: center;border-style: solid;border: 1">
                         {{comment|markdownFormatter}}
                     </div>
                 {% endfor %}
             {% endif %}
-        {% endif %}
 
-    </li>
+        </li>
+    {% endif %}
 
 {%- endmacro -%}
