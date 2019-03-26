@@ -82,6 +82,7 @@ function readFilePromise(file) {
         fs.readFile(file, (err, data) => {
             if(err) {
                 reject(err);
+                return;
             }
 
             resolve(data.toString('utf8'));
@@ -132,7 +133,8 @@ async function taskListObjectFromFile(file, fs, yj, callback) {
     console.log("Reading EVA Task List YAML from file: " + file);
 
     if(!fs.existsSync(file)) {
-        callback('File doesn\'t exist: ' + file, null);
+        callback('File doesn\'t exist', null);
+        return;
     }
 
     let yamlString = fs.readFileSync(file, 'utf8');
@@ -141,6 +143,7 @@ async function taskListObjectFromFile(file, fs, yj, callback) {
     let etl = taskListObjectFromYamlString(yamlString);
     if(!etl) {
         callback('Failed to construct an evaTaskList', null);
+        return;
     }
 
     //  Iterate each task and attempt to load the corresponding YAML file
@@ -154,7 +157,13 @@ async function taskListObjectFromFile(file, fs, yj, callback) {
             const taskFile = `${path.dirname(file)}/${t.file}`;
 
             //  Wait for the file read to complete
-            const yamlString = await readFilePromise(taskFile);
+            try {
+                console.log('Reading task file: ' + taskFile);
+                yamlString = await readFilePromise(taskFile);
+            } catch(e) {
+                callback(e, null);
+                return;
+            }
 
             //  Parse EVA Task YAML
             let et = evaTask.createFromYamlString(yamlString);
@@ -166,7 +175,13 @@ async function taskListObjectFromFile(file, fs, yj, callback) {
         //  Is this a URL?
         } else if(t.url) {
             //  Wait for URL fetch to complete
-            const yamlString = await readUrlPromise(t.url);
+            try {
+                console.log('Reading task URL: ' + t.url);
+                yamlString = await readUrlPromise(t.url);
+            } catch(e) {
+                callback(e, null);
+                return;
+            }
 
             //  Parse EVA Task YAML
             let et = await evaTask.createFromYamlString(yamlString);

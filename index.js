@@ -20,7 +20,7 @@ const app = require('./startup').startup;// calls startup.js?
  */
 function generateHtmlOutput(err, evaTaskList) {
     if(err) {
-        console.err(err);
+        console.error(err);
     }
 
     app.generateHtmlChecklist(evaTaskList, program);
