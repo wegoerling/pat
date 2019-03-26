@@ -3,6 +3,7 @@
 let actor = require('./actor');
 let evaTask = require('./evaTask');
 
+const fs = require('fs');
 const _ = require('lodash');
 const YAML = require('yamljs');
 const path = require('path');
@@ -70,17 +71,68 @@ function taskListObjectFromYamlString(yamlString) {
 }
 
 /**
+ * This function returns a Promise that provides the contents of the specified
+ * file as a UTF-8 string.
+ *
+ * @param file      The file to read
+ * @returns         A promise
+ */
+function readFilePromise(file) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(file, (err, data) => {
+            if(err) {
+                reject(err);
+            }
+
+            resolve(data.toString('utf8'));
+        });
+    });
+}
+
+/**
+ * This function returns a Promise that provides the contents of a fetched URL
+ * as a UTF-8 string.
+ *
+ * @see: https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies
+ *
+ * @param url       The URL to read
+ * @returns         A promise
+ */
+function readUrlPromise(url) {
+    const lib = url.startsWith('https') ? require('https') : require('http');
+
+    return new Promise((resolve, reject) => {
+        const request = lib.get(url, (response) => {
+            const body = [];
+
+            response.on('data', (chunk) => {
+                body.push(chunk);
+            });
+
+            response.on('end', () => {
+                resolve(body.toString('utf8'));
+            });
+        });
+
+        request.on('error', (err) => {
+            reject(err)
+        });
+    });
+}
+
+/**
  * This function creates an evaTaskList from a yaml file
  *
  * @param file      The full path to the YAML file
  * @param fs        An fs object for this function to use
  * @param yj        A yamljs object for this function to use
- * @returns         An evaTaskList, or null if an error occurred
+ * @param callback  A function to be called after all YAML has been fetched
  */
-function taskListObjectFromFile(file, fs, yj) {
+async function taskListObjectFromFile(file, fs, yj, callback) {
+    console.log("Reading EVA Task List YAML from file: " + file);
+
     if(!fs.existsSync(file)) {
-        console.log("File doesn't exist: " + file);
-        return null;
+        callback('File doesn\'t exist: ' + file, null);
     }
 
     let yamlString = fs.readFileSync(file, 'utf8');
@@ -88,21 +140,44 @@ function taskListObjectFromFile(file, fs, yj) {
     //  Construct an evaTaskList from the YAML
     let etl = taskListObjectFromYamlString(yamlString);
     if(!etl) {
-        return null;
+        callback('Failed to construct an evaTaskList', null);
     }
 
     //  Iterate each task and attempt to load the corresponding YAML file
-    _.forEach(etl.taskFiles, function (t) {
-        let taskFile = `${path.dirname(file)}/${t.file}`;
-        if(fs.existsSync(taskFile)) {
+    //_.forEach(etl.taskFiles, function (t) { // this breaks await
+    var i;
+    for(i=0; i<etl.taskFiles.length; i++) {
+        const t = etl.taskFiles[i];
 
-            let et = evaTask.createFromFile(taskFile, fs, yj);
+        //  Is this a file?
+        if(t.file) {
+            const taskFile = `${path.dirname(file)}/${t.file}`;
+
+            //  Wait for the file read to complete
+            const yamlString = await readFilePromise(taskFile);
+
+            //  Parse EVA Task YAML
+            let et = evaTask.createFromYamlString(yamlString);
+            if(et) {
+                //  Add this evaTask to the evaTaskList
+                etl.tasks.push(et);
+            }
+
+        //  Is this a URL?
+        } else if(t.url) {
+            //  Wait for URL fetch to complete
+            const yamlString = await readUrlPromise(t.url);
+
+            //  Parse EVA Task YAML
+            let et = await evaTask.createFromYamlString(yamlString);
             if(et) {
                 //  Add this evaTask to the evaTaskList
                 etl.tasks.push(et);
             }
         }
-    });
+    }
 
-    return etl;
+    //  Tasks have been fetched, send the complete evaTaskList to the callback
+    //  function
+    callback(null, etl);
 }
