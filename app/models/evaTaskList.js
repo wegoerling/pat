@@ -94,6 +94,7 @@ function taskListObjectFromFile(file, fs, yj) {
     //  Iterate each task and attempt to load the corresponding YAML file
     _.forEach(etl.taskFiles, function (t) {
         let taskFile = `${path.dirname(file)}/${t.file}`;
+        path.join(path.dirname(file), t.file);
         if(fs.existsSync(taskFile)) {
 
             let et = evaTask.createFromFile(taskFile, fs, yj);
