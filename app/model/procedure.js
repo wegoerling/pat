@@ -20,7 +20,7 @@ module.exports = class Procedure {
         if (!fs.existsSync(fileName)) {
             throw new Error("Could not find file " + fileName);
         }
-        let procedureYaml = YAML.load(fileName);
+        let procedureYaml = YAML.load(fileName, null, true);
 
         // Save the procedure Name
         if (!procedureYaml.procedure_name) {
@@ -54,7 +54,7 @@ module.exports = class Procedure {
                 if (!fs.existsSync(taskFileName)) {
                     throw new Error("Could not find task file " + taskFileName);
                 }
-                let loadedTaskYaml = YAML.load(taskFileName);
+                let loadedTaskYaml = YAML.load(taskFileName, null, true);
 
                 // Save the task!
                 this.tasks.push(new Task(loadedTaskYaml));
