@@ -35,6 +35,8 @@ module.exports = class YamlValidator {
             throw new ValidationError("YAML Validation Failed", ajv.errors);
         }
 
+        return valid;
+
     }
 
 }
