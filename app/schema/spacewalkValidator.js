@@ -4,12 +4,12 @@ const path = require("path");
 
 const YamlValidator = require("./yamlValidator");
 
-const PROCEDURE_SCHEMA_FILE = "./procedureSchema";
-const TASK_SCHEMA_FILE = "./taskSchema";
+const PROCEDURE_SCHEMA_FILE = "./procedureSchema.json";
+const TASK_SCHEMA_FILE = "./taskSchema.json";
 
 module.exports = class SpacewalkValidator {
 
-    constructor();
+    constructor() {}
     
     validateProcedureSchema(procedureYamlFilePath) {
 
@@ -27,7 +27,7 @@ module.exports = class SpacewalkValidator {
 
         let taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
         
-        return yamlValidator.validate(procedureYamlFilePath, taskSchema);
+        return yamlValidator.validate(taskYamlFilePath, taskSchema);
 
     }
 

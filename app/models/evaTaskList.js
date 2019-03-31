@@ -2,6 +2,7 @@
 
 let actor = require('./actor');
 let evaTask = require('./evaTask');
+let SpacewalkValidator = require('../schema/spacewalkValidator');
 
 const _ = require('lodash');
 const YAML = require('yamljs');
@@ -44,6 +45,7 @@ function taskListObjectFromYamlString(yamlString) {
 
     if(!yaml.procedure_name) {
         console.log("Input YAML missing procedure_name");
+        console.log(JSON.stringify(yaml));
         return null;
     }
 
@@ -83,6 +85,19 @@ function taskListObjectFromFile(file, fs, yj) {
         return null;
     }
 
+    // Validate the input file
+    let spacewalkValidator = new SpacewalkValidator();
+    try {
+        spacewalkValidator.validateProcedureSchema(file);
+    }
+    catch (err) {
+        console.log("Invalid YAML: " + err);
+        if (err.validationErrors) {
+            console.log(JSON.stringify(err.validationErrors));
+        }
+        return null;
+    }
+
     let yamlString = fs.readFileSync(file, 'utf8');
 
     //  Construct an evaTaskList from the YAML
@@ -93,10 +108,23 @@ function taskListObjectFromFile(file, fs, yj) {
 
     //  Iterate each task and attempt to load the corresponding YAML file
     _.forEach(etl.taskFiles, function (t) {
-        let taskFile = `${path.dirname(file)}/${t.file}`;
-        path.join(path.dirname(file), t.file);
+        // let taskFile = `${path.dirname(file)}/${t.file}`;
+        let taskFile = path.join(path.dirname(file), t.file);
         if(fs.existsSync(taskFile)) {
 
+                // Validate the task file
+                let spacewalkValidator = new SpacewalkValidator();
+                try {
+                    spacewalkValidator.validateTaskSchema(taskFile);
+                }
+                catch (err) {
+                    console.log("Invalid YAML for " + taskFile + ": " + err);
+                    if (err.validationErrors) {
+                        console.log(JSON.stringify(err.validationErrors));
+                    }
+                    return null;
+                }
+            
             let et = evaTask.createFromFile(taskFile, fs, yj);
             if(et) {
                 //  Add this evaTask to the evaTaskList

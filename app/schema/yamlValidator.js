@@ -12,7 +12,7 @@ const ValidationError = require("./validationError");
  */
 module.exports = class YamlValidator {
 
-    constructor();
+    constructor() {}
 
     /**
      * Validates a YAML file against the provided schema.
