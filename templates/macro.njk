@@ -94,7 +94,7 @@
         {# Check for images. #}
         {% if step.images %}
             {% if step.images|isString %}
-                <div class="sizeable">
+                <div class="sizeable"><p>drag bottom right corner to size image</p>
                 <img class="img-fluid" src="{{step.images|imagePath}}" alt="image" />
                 </div>
             {% else %}
