@@ -91,7 +91,7 @@ function generateHtmlChecklist(evaTaskList, program) {
     
     // call to htmlHelper.js fn createHtml() then postHtmlFileToConsole
     // call to nunjucksHelper.js createHtml() then postHtmlFileToConsole
-    console.log(program.template)
+    
     html.create(evaTaskList, program.template, () => postHtmlFileToConsole(fs, outputFile));
 }
 
@@ -104,7 +104,7 @@ function generateHtmlChecklist(evaTaskList, program) {
  */
 function postHtmlFileToConsole(fs, outputFile) {
     if (fs.existsSync(outputFile)) {
-        console.log(`1 Completed! your file is located at file://${outputFile}`);
+        console.log(`Completed! your file is located at file://${outputFile}`);
     } else {
         console.log('The HTML file was not created, please check your YAML file');
         process.exit(-1);

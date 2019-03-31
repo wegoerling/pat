@@ -3,15 +3,13 @@
 
         body {
             font-family: Arial,sans-serif;
+            margin: auto;
+            max-width: 90%;
         }
 
         td {
             vertical-align: top;
         }
-
-        /* img {
-            width: 10em;
-        } */
 
         table.gridtable {
             /* font-family: verdana, arial, sans-serif; */
@@ -98,8 +96,21 @@
             padding: 5px;
         }
 
-        .tableTitle {
-            color: red;
+        .sizeable{
+            border: 1px solid;
+            display: inline-block;
+            resize: both;
+            overflow: auto;
+            
+            max-height: 100%;
+            max-width: 100%;
+
         }
+        
+        img {
+            width: auto;
+            height: 100%;
+        }
+        
 
 </style>

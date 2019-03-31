@@ -94,10 +94,12 @@
         {# Check for images. #}
         {% if step.images %}
             {% if step.images|isString %}
+                <div class="sizeable">
                 <img class="img-fluid" src="{{step.images|imagePath}}" alt="image" />
+                </div>
             {% else %}
                 {% for image in step.images %}
-                    <img class="img-fluid" src="{{image|imagePath}}" alt="image" />
+                    <img class="img-fluid zoom" src="{{image|imagePath}}" alt="image" />
                 {% endfor %}
             {% endif %}
         {% endif %}

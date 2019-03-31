@@ -104,7 +104,6 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
     });
 
     // Render the html
-    console.log(htmlFileTemplate)
     var html = env.render(htmlFileTemplate, evaTask);
 
     // Beautify the html

@@ -72,9 +72,9 @@ function taskObjectFromFile(file, fs, yj) {
         console.log("File doesn't exist: " + file);
         return null;
     }
-
+    // console.log(file)
     let yamlString = fs.readFileSync(file, 'utf8');
-
+    // console.log(yamlString)
     //  Construct an evaTask from the YAML
     let et = taskObjectFromYamlString(yamlString);
     if(!et) {
