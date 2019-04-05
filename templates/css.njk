@@ -3,15 +3,13 @@
 
         body {
             font-family: Arial,sans-serif;
+            margin: auto;
+            max-width: 90%;
         }
 
         td {
             vertical-align: top;
         }
-
-        /* img {
-            width: 10em;
-        } */
 
         table.gridtable {
             /* font-family: verdana, arial, sans-serif; */
@@ -97,5 +95,48 @@
         div.ncw-body {
             padding: 5px;
         }
+
+        .sizeable{
+            border: 1px solid;
+            display: inline-block;
+            resize: both;
+            overflow: auto;
+            
+            max-height: 100%;
+            max-width: 100%;
+
+        }
+        
+        img {
+            width: auto;
+            height: 100%;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+
+        /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            /*top: -5px;
+            left: 105%; */
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+        
 
 </style>

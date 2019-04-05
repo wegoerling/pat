@@ -33,6 +33,7 @@ function setOutputFilename(filename) {
 //TODO rework createHtml to use templates. file requires nunjucks statement
 
 function createHtml(evaTask, htmlFileTemplate, callback) {//evaTask is evaTaskList. evaTaskList high level is procedure, actors, tasks
+    console.log('htmlHelper here')
     let html = "";
     //evaTask.tasks is each eva mission. tasks high level is title, duration, steps.
     _.forEach(evaTask.tasks, checklist => {//create heading with title and duration
@@ -240,7 +241,7 @@ function writeImageToHtml(image) {
 }
 
 function writeHtmlToFile($title, $content, htmlFileTemplate, callback) {
-    console.log(`opening template ${htmlFileTemplate}`);
+    console.log(`1 opening template ${htmlFileTemplate}`);
     let htmlTemplate = fs.readFileSync(
         htmlFileTemplate,
         "utf8"
