@@ -5,14 +5,9 @@
 'use strict';
 
 const program = require('commander');
-const _ = require('lodash');
-const fs = require('fs');
-const path = require('path');
-const YAML = require('yamljs');
 
-const doc = require('./app/models/evaTaskList');
-let evaTask = require('./app/models/evaTask');
 const app = require('./startup').startup;// calls startup.js?
+const Procedure = require("./app/model/procedure");
 
 /**
  * This function is called back after all YAML has been fetched (from files,
@@ -32,5 +27,12 @@ function generateHtmlOutput(err, evaTaskList) {
 (function () {
     app.buildProgramArguments(program, process.argv);
 
-    doc.createFromFile(program.input, fs, YAML, generateHtmlOutput);
+    // Parse the input file
+    let procedure = new Procedure();
+    procedure.populateFromFile(program.input).then( () => {
+        // Generate the output file
+        app.generateHtmlChecklist(procedure, program);// startup.js fn generateHtmlChecklist()
+    })
+
+
 })();
