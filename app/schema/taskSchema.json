@@ -99,5 +99,6 @@
                 "additionalProperties": { "$ref": "#/definitions/step" }
             }
         }
-    }
+    },
+    "required": ["title", "duration", "steps"]
 }

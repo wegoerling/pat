@@ -10,18 +10,6 @@ const app = require('./startup').startup;// calls startup.js?
 const Procedure = require("./app/model/procedure");
 
 /**
- * This function is called back after all YAML has been fetched (from files,
- * urls, etc)
- */
-function generateHtmlOutput(err, evaTaskList) {
-    if(err) {
-        console.error(err);
-    }
-
-    app.generateHtmlChecklist(evaTaskList, program);
-}
-
-/**
  * Program entry point when run from the command line using node
  */
 (function () {
@@ -29,7 +17,14 @@ function generateHtmlOutput(err, evaTaskList) {
 
     // Parse the input file
     let procedure = new Procedure();
-    procedure.populateFromFile(program.input).then( () => {
+    procedure.populateFromFile(program.input).then( (err) => {
+
+        // Check if an error occurred
+        if(err) {
+            console.error(err);
+            return;
+        }
+
         // Generate the output file
         app.generateHtmlChecklist(procedure, program);// startup.js fn generateHtmlChecklist()
     })

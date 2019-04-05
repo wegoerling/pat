@@ -6,6 +6,7 @@ const YAML = require("yamljs");
 
 const Actor = require("./actor.js");
 const Task = require("./task.js");
+const SpacewalkValidator = require("../schema/spacewalkValidator");
 
 module.exports = class Procedure {
 
@@ -24,70 +25,86 @@ module.exports = class Procedure {
      */
     async populateFromFile(fileName) {
 
-        // Load the YAML File
-        if (!fs.existsSync(fileName)) {
-            throw new Error("Could not find file " + fileName);
-        }
-        let procedureYaml = YAML.load(fileName, null, true);
+        try {
 
-        // Save the procedure Name
-        if (!procedureYaml.procedure_name) {
-            throw new Error("Input YAML missing procedure_name");
-        }
-        this.name = procedureYaml.procedure_name;
+            // Check if the file exists
+            if (!fs.existsSync(fileName)) {
+                throw new Error("Could not find file " + fileName);
+            }
 
-        // Save the actors
-        if (!procedureYaml.actors) {
-            throw new Error("Input YAML missing actors");
-        }
-        
-        for (var actorYaml of procedureYaml.actors) {
-            this.actors.push(new Actor(actorYaml));
-        }
+            // Validate the input file
+            let spacewalkValidator = new SpacewalkValidator();
+            spacewalkValidator.validateProcedureSchemaFile(fileName);
 
-        // Save the tasks
-        if (!procedureYaml.tasks) {
-            throw new Error("Input YAML missing tasks");
-        }
-        
-        for (var taskYaml of procedureYaml.tasks) {
 
-            // Check that the task is a file
-            if (taskYaml.file) {
-                
-                // Since the task file is in relative path to the procedure file, need to translate it!
-                let taskFileName = path.join(path.dirname(fileName), taskYaml.file);
+            // Load the YAML File
+            let procedureYaml = YAML.load(fileName, null, true);
 
-                // Load the yaml file!
-                if (!fs.existsSync(taskFileName)) {
-                    throw new Error("Could not find task file " + taskFileName);
-                }
-                let loadedTaskYaml = YAML.load(taskFileName, null, true);
+            // Save the procedure Name
+            if (!procedureYaml.procedure_name) {
+                throw new Error("Input YAML missing procedure_name");
+            }
+            this.name = procedureYaml.procedure_name;
 
-                // Save the task!
-                this.tasks.push(new Task(loadedTaskYaml));
-
-            } 
-
-            //  Is this a URL?
-            else if(taskYaml.url) {
-
-                //  Wait for URL fetch to complete
-                // console.log('Reading task URL: ' + t.url);
-                let yamlString = await readUrlPromise(taskYaml.url);
-
-                //  Parse the Task YAML
-                let loadedTaskYaml = YAML.parse(yamlString);
-                
-                // Save the task!
-                this.tasks.push(new Task(loadedTaskYaml));
+            // Save the actors
+            if (!procedureYaml.actors) {
+                throw new Error("Input YAML missing actors");
             }
             
-            // Task encountered that do not know how to handle!
-            else {
-                throw new Error("Unknown task type found in procedure: " + JSON.stringify(taskYaml));
+            for (var actorYaml of procedureYaml.actors) {
+                this.actors.push(new Actor(actorYaml));
             }
 
+            // Save the tasks
+            if (!procedureYaml.tasks) {
+                throw new Error("Input YAML missing tasks");
+            }
+            
+            for (var taskYaml of procedureYaml.tasks) {
+
+                // Check that the task is a file
+                if (taskYaml.file) {
+                    
+                    // Since the task file is in relative path to the procedure file, need to translate it!
+                    let taskFileName = path.join(path.dirname(fileName), taskYaml.file);
+
+                    // Validate & Load the yaml file!
+                    if (!fs.existsSync(taskFileName)) {
+                        throw new Error("Could not find task file " + taskFileName);
+                    }
+                    spacewalkValidator.validateTaskSchemaFile(taskFileName);
+                    let loadedTaskYaml = YAML.load(taskFileName, null, true);
+
+                    // Save the task!
+                    this.tasks.push(new Task(loadedTaskYaml));
+
+                } 
+
+                //  Is this a URL?
+                else if(taskYaml.url) {
+
+                    //  Wait for URL fetch to complete
+                    // console.log('Reading task URL: ' + t.url);
+                    let yamlString = await readUrlPromise(taskYaml.url);
+
+                    // Validate the data read from url
+                    spacewalkValidator.validateTaskSchemaString(yamlString);
+
+                    //  Parse the Task YAML
+                    let loadedTaskYaml = YAML.parse(yamlString);
+                    
+                    // Save the task!
+                    this.tasks.push(new Task(loadedTaskYaml));
+                }
+                
+                // Task encountered that do not know how to handle!
+                else {
+                    throw new Error("Unknown task type found in procedure: " + JSON.stringify(taskYaml));
+                }
+
+            }
+        } catch (err) {
+            return err;
         }
 
     }
