@@ -1,10 +1,12 @@
 'use strict';
 
 const YAML = require('yamljs');
+const wait = require('wait.for');
 
 exports.create = taskObject;
 exports.createFromYamlString = taskObjectFromYamlString;
 exports.createFromFile = taskObjectFromFile;
+exports.createFromUrl = taskObjectFromUrl;
 
 /**
  * This Constructor creates a evaTask using the specified parameters
@@ -68,6 +70,8 @@ function taskObjectFromYamlString(yamlString) {
  * @returns         An evaTask, or null if an error occurred
  */
 function taskObjectFromFile(file, fs, yj) {
+    console.log("Reading EVA Task YAML from file: " + file);
+
     if(!fs.existsSync(file)) {
         console.log("File doesn't exist: " + file);
         return null;
@@ -83,4 +87,70 @@ function taskObjectFromFile(file, fs, yj) {
 
     return et;
 }
+
+function doRequest(url, https, callback) {
+    return new Promise((resolve, reject) => {
+        const request = https.get(url, (response) => {
+            const body = [];
+
+            response.on('data', (chunk) => {
+                console.log("data");
+                body.push(chunk);
+            });
+
+            response.on('end', () => {
+                console.log("end");
+                resolve(body.toString('utf8'));
+            });
+        });
+
+        request.on('error', (err) => reject(err));
+    });
+}
+
+/**
+ * This function creates an evaTask from a URL pointing to a YAML file
+ *
+ * @param url       The url to load
+ * @param https     An http object for this function to use
+ * @param yj        A yamljs object for this function to use
+ * @returns         An evaTask, or null if an error occurred
+ */
+function taskObjectFromUrl(url, https, yj) {
+    console.log("Reading EVA Task YAML from url: " + url);
+
+    return new Promise((resolve, reject) => {
+        const request = https.get(url, (response) => {
+            const body = [];
+
+            response.on('data', (chunk) => {
+                console.log("data");
+                body.push(chunk);
+            });
+
+            response.on('end', () => {
+                console.log("end");
+                let et = taskObjectFromYamlString(body.toString('utf8'));
+                resolve(et);
+            });
+        });
+
+        request.on('error', (err) => reject(err));
+    });
+    /*
+    //  Wait for the HTTPS response
+    getPromise.then(function(value) {
+        console.log('resolved');
+        return value;
+    });
+
+    //  Check for errors
+    getPromise.catch(function(value) {
+        console.log('rejected');
+        console.log(value);
+    });
+    */
+
+}
+
 
