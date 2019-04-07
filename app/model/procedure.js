@@ -36,7 +36,6 @@ module.exports = class Procedure {
             let spacewalkValidator = new SpacewalkValidator();
             spacewalkValidator.validateProcedureSchemaFile(fileName);
 
-
             // Load the YAML File
             let procedureYaml = YAML.load(fileName, null, true);
 
