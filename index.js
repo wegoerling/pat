@@ -15,8 +15,7 @@ const Procedure = require("./app/model/procedure");
 (function () {
     app.buildProgramArguments(program, process.argv);
 
-    console.log('number of arguments: ' + process.argv.length);
-    //  Check arguments
+    //  Minimum number of arguments is 3:
     if(process.argv.length < 3) {
         program.help();
     }
