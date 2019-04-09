@@ -15,6 +15,13 @@ const Procedure = require("./app/model/procedure");
 (function () {
     app.buildProgramArguments(program, process.argv);
 
+    console.log('number of arguments: ' + process.argv.length);
+    //  Check arguments
+    if(process.argv.length < 3) {
+        program.help();
+    }
+
+
     // Parse the input file
     let procedure = new Procedure();
     procedure.populateFromFile(program.input).then( (err) => {
