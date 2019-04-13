@@ -54,6 +54,10 @@ const Procedure = require("./app/model/procedure");
         let p = path.parse(program.output);
         let outputDir = p.dir;
 
+        if(outputDir === '') {
+            outputDir = '.';
+        }
+
         try {
             fs.accessSync(outputDir, fs.constants.W_OK);
         } catch(err) {
