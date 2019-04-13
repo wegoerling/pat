@@ -6,8 +6,9 @@
 
 const program = require('commander');
 const path = require('path');
+const fs = require('fs');
 
-const app = require('./startup').startup;// calls startup.js?
+const app = require('./startup').startup;
 const Procedure = require("./app/model/procedure");
 
 /**
@@ -31,6 +32,12 @@ const Procedure = require("./app/model/procedure");
         program.output = name;
 
         console.log('No output filename specified, using default: ' + name);
+    }
+
+    //  If the input file doesn't exist, emit an error and quit
+    if (!fs.existsSync(program.input)) {
+        console.error('Input YAML doesn\'t exist: ' + program.input)
+        return;
     }
 
     // Parse the input file
