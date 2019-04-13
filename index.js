@@ -23,6 +23,8 @@ const Procedure = require("./app/model/procedure");
         program.help();
     }
 
+    console.log('Input YAML file: ' + program.input);
+
     //  If no output file was specified, use a default
     if(!program.output) {
         let p = path.parse(program.input);
@@ -31,8 +33,6 @@ const Procedure = require("./app/model/procedure");
         let name = file_without_path.replace(ext, '.html');
 
         program.output = name;
-
-        console.log('No output filename specified, using default: ' + name);
     }
 
     //  If the input file doesn't exist, emit an error and quit
