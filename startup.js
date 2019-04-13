@@ -82,7 +82,7 @@ function getFileExtension(fileName) {
     return fileExtension[fileExtension.length - 1];
 }
 
-function generateHtmlChecklist(evaTaskList, program) {
+async function generateHtmlChecklist(evaTaskList, program, callback) {
     let outputFile = path.resolve(program.output);
 
     html.params.inputDir(path.resolve(path.dirname(program.input)));
@@ -92,7 +92,8 @@ function generateHtmlChecklist(evaTaskList, program) {
     // call to htmlHelper.js fn createHtml() then postHtmlFileToConsole
     // call to nunjucksHelper.js createHtml() then postHtmlFileToConsole
     
-    html.create(evaTaskList, program.template, () => postHtmlFileToConsole(fs, outputFile));
+    html.create(evaTaskList, program.template, callback);
+
 }
 
 /**

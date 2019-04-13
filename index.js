@@ -7,6 +7,7 @@
 const program = require('commander');
 const path = require('path');
 const fs = require('fs');
+const child = require('child_process');
 
 const app = require('./startup').startup;
 const Procedure = require("./app/model/procedure");
@@ -76,9 +77,37 @@ const Procedure = require("./app/model/procedure");
             return;
         }
 
-        // Generate the output file
-        app.generateHtmlChecklist(procedure, program);// startup.js fn generateHtmlChecklist()
-    })
+        // Generate the HTML output file
+        app.generateHtmlChecklist(procedure, program, function () {
+            if(!fs.existsSync(program.output)) {
+                console.error('Failed to generate HTML output');
+                return;
+            }
 
+            console.log('HTML output written to: ' + program.output);
+
+            //  Perform HTML -> DOCX conversion, if requested
+            if(program.doc) {
+
+                //  Figure out docx output filename
+                let p = path.parse(program.output);
+                let ext = p.ext;
+                let docfile = program.output.replace(ext, '.docx');
+
+                //  Outsource the conversion to pandoc
+                //  WARNING: NEVER USE THIS ON A WEB SERVER!
+                let command = `/usr/bin/pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
+                child.execSync(command);
+
+                if(!fs.existsSync(docfile)) {
+                    console.error('Failed to generate DOCX output');
+                    return;
+                }
+
+                console.log('DOCX output written to: ' + docfile);
+            }
+        });
+    });
 
 })();
+
