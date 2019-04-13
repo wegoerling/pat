@@ -12,7 +12,6 @@ exports.startup = {
     validateArguments: validateArguments,
     getFileExtension: getFileExtension,
     generateHtmlChecklist: generateHtmlChecklist,
-    postHtmlFileToConsole: postHtmlFileToConsole
 }
 
 /**
@@ -89,25 +88,6 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
     html.params.outputDir(path.resolve(path.dirname(program.output)));
     html.params.htmlFile(outputFile);
     
-    // call to htmlHelper.js fn createHtml() then postHtmlFileToConsole
-    // call to nunjucksHelper.js createHtml() then postHtmlFileToConsole
-    
     html.create(evaTaskList, program.template, callback);
-
 }
 
-/**
- * This function checks whether the output file was created. If it was, a success
- * message is printed, otherwise a failure message is printed.
- *
- * @param fs            A commander.js object for this function to use
- * @param outputFile    The name of the output file to check
- */
-function postHtmlFileToConsole(fs, outputFile) {
-    if (fs.existsSync(outputFile)) {
-        console.log(`Completed! your file is located at file://${outputFile}`);
-    } else {
-        console.log('The HTML file was not created, please check your YAML file');
-        process.exit(-1);
-    }
-}
