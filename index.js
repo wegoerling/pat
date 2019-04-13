@@ -35,9 +35,31 @@ const Procedure = require("./app/model/procedure");
     }
 
     //  If the input file doesn't exist, emit an error and quit
-    if (!fs.existsSync(program.input)) {
-        console.error('Input YAML doesn\'t exist: ' + program.input)
+    if(!fs.existsSync(program.input)) {
+        console.error('Input YAML doesn\'t exist: ' + program.input);
         return;
+    }
+
+    //  If this process can't write to the output location, emit an error and quit
+    if(fs.existsSync(program.output)) {
+        //  Output file exists - Can we write to it?
+        try {
+            fs.accessSync(program.output, fs.constants.W_OK);
+        } catch(err) {
+            console.error('Can\'t write to output file: ' + program.output);
+            return;
+        }
+    } else {
+        //  Output file doesn't exist - Can we write to the output directory?
+        let p = path.parse(program.output);
+        let outputDir = p.dir;
+
+        try {
+            fs.accessSync(outputDir, fs.constants.W_OK);
+        } catch(err) {
+            console.error('Can\'t write to output directory: ' + outputDir);
+            return;
+        }
     }
 
     // Parse the input file
