@@ -1,5 +1,6 @@
 .DS_Store
 **/*.html
+**/*.docx
 **/.nyc_output/
 **/coverage/
 **/node_modules/
