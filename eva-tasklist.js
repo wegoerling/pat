@@ -15,11 +15,14 @@ const html = require('./app/helpers/nunjucksHelper').generators;
 
 module.exports = {
     run: run,
-    buildProgramArguments: buildProgramArguments
+    buildProgramArguments: buildProgramArguments,
+    validateProgramArguments: validateProgramArguments
 }
 
 /**
  * Surrogate program entry point
+ *
+ * @param args      Command line arguments
  */
 function run(args) {
     console.log('\nNASA EVA Tasklist Generator version ' + ver.currentVersion + '\n');
@@ -27,59 +30,13 @@ function run(args) {
     //  Use Commander to process command line arguments
     buildProgramArguments(program, args);
 
-    //  Minimum number of arguments is 3:
-    if(process.argv.length < 3) {
-        program.help();
-    }
+    validateProgramArguments(program);
 
     console.log('Input YAML file: \t\t' + program.input);
-
-    //  If no output file was specified, use a default
-    if(!program.output) {
-        let p = path.parse(program.input);
-        let file_without_path = p.base;
-        let ext = p.ext;
-        let name = file_without_path.replace(ext, '.html');
-
-        program.output = name;
-    }
-
-    //  If the input file doesn't exist, emit an error and quit
-    if(!fs.existsSync(program.input)) {
-        console.error('Input YAML doesn\'t exist: ' + program.input);
-        return;
-    }
-
-    //  If this process can't write to the output location, emit an error and quit
-    if(fs.existsSync(program.output)) {
-        //  Output file exists - Can we write to it?
-        try {
-            fs.accessSync(program.output, fs.constants.W_OK);
-        } catch(err) {
-            console.error('Can\'t write to output file: ' + program.output);
-            return;
-        }
-    } else {
-        //  Output file doesn't exist - Can we write to the output directory?
-        let p = path.parse(program.output);
-        let outputDir = p.dir;
-
-        if(outputDir === '') {
-            outputDir = '.';
-        }
-
-        try {
-            fs.accessSync(outputDir, fs.constants.W_OK);
-        } catch(err) {
-            console.error('Can\'t write to output directory: ' + outputDir);
-            return;
-        }
-    }
 
     // Parse the input file
     let procedure = new Procedure();
     procedure.populateFromFile(program.input).then( (err) => {
-
         // Check if an error occurred
         if(err) {
             console.error('Error while deserializing YAML: ' + err);
@@ -90,39 +47,60 @@ function run(args) {
             return;
         }
 
-        // Generate the HTML output file
-        generateHtmlChecklist(procedure, program, function () {
-            if(!fs.existsSync(program.output)) {
-                console.error('Failed to generate HTML output');
-                return;
-            }
-
-            console.log('HTML output written to: \t' + program.output);
-
-            //  Perform HTML -> DOCX conversion, if requested
-            if(program.doc) {
-
-                //  Figure out docx output filename
-                let p = path.parse(program.output);
-                let ext = p.ext;
-                let docfile = program.output.replace(ext, '.docx');
-
-                //  Outsource the conversion to pandoc
-                //  WARNING: NEVER USE THIS ON A WEB SERVER!
-                let command = `/usr/bin/pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
-                child.execSync(command);
-
-                if(!fs.existsSync(docfile)) {
-                    console.error('Failed to generate DOCX output');
-                    return;
-                }
-
-                console.log('DOCX output written to: \t' + docfile);
-            }
-
-            console.log('\nDone!');
-        });
+        genHtml(program, procedure);
     });
+}
+
+/**
+ * High level function to generate HTML output
+ *
+ * @param program       Program arguments and stuff
+ * @param procedure     The procedure to generate HTML for
+ */
+function genHtml(program, procedure) {
+
+    // Generate the HTML output file
+    generateHtmlChecklist(procedure, program, function () {
+        if(!fs.existsSync(program.output)) {
+            console.error('Failed to generate HTML output');
+            return;
+        }
+
+        console.log('HTML output written to: \t' + program.output);
+
+        genDoc(program);
+    });
+}
+
+/**
+ * High level function to generate DOCX output
+ *
+ * @param program       Program arguments and stuff
+ */
+function genDoc(program) {
+
+    //  Perform HTML -> DOCX conversion, if requested
+    if(program.doc) {
+
+        //  Figure out docx output filename
+        let p = path.parse(program.output);
+        let ext = p.ext;
+        let docfile = program.output.replace(ext, '.docx');
+
+        //  Outsource the conversion to pandoc
+        //  WARNING: NEVER USE THIS ON A WEB SERVER!
+        let command = `/usr/bin/pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
+        child.execSync(command);
+
+        if(!fs.existsSync(docfile)) {
+            console.error('Failed to generate DOCX output');
+            return;
+        }
+
+        console.log('DOCX output written to: \t' + docfile);
+    }
+
+    console.log('\nDone!');
 }
 
 /**
@@ -166,30 +144,24 @@ function buildProgramArguments(program, args) {
 }
 
 /**
- * This function generates a checklist in HTML format and calls the callback
- * when complete.
+ * Validates the arguments...
  */
-async function generateHtmlChecklist(evaTaskList, program, callback) {
-    let outputFile = path.resolve(program.output);
+function validateProgramArguments(program) {
 
-    html.params.inputDir(path.resolve(path.dirname(program.input)));
-    html.params.outputDir(path.resolve(path.dirname(program.output)));
-    html.params.htmlFile(outputFile);
-    
-    html.create(evaTaskList, program.template, callback);
-}
-
-/*
-(function () {
-
-
-    console.log('Input YAML file: ' + program.input);
+    //  Minimum number of arguments is 4:
+    //  e.g. node index.js -i something
+    if(process.argv.length < 4) {
+        program.help();
+    }
 
     //  If no output file was specified, use a default
     if(!program.output) {
         let p = path.parse(program.input);
         let file_without_path = p.base;
         let ext = p.ext;
+
+        //  Use input file name with .html extension
+        //  e.g. test.yml becomes test.html
         let name = file_without_path.replace(ext, '.html');
 
         program.output = name;
@@ -226,53 +198,19 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
             return;
         }
     }
+}
 
-    // Parse the input file
-    let procedure = new Procedure();
-    procedure.populateFromFile(program.input).then( (err) => {
+/**
+ * This function generates a checklist in HTML format and calls the callback
+ * when complete.
+ */
+async function generateHtmlChecklist(evaTaskList, program, callback) {
+    let outputFile = path.resolve(program.output);
 
-        // Check if an error occurred
-        if(err) {
-            console.error('Error while deserializing YAML: ' + err);
-            if (err.validationErrors) {
-                console.log("Validation Errors:");
-                console.log(err.validationErrors);
-            }
-            return;
-        }
+    html.params.inputDir(path.resolve(path.dirname(program.input)));
+    html.params.outputDir(path.resolve(path.dirname(program.output)));
+    html.params.htmlFile(outputFile);
+    
+    html.create(evaTaskList, program.template, callback);
+}
 
-        // Generate the HTML output file
-        generateHtmlChecklist(procedure, program, function () {
-            if(!fs.existsSync(program.output)) {
-                console.error('Failed to generate HTML output');
-                return;
-            }
-
-            console.log('HTML output written to: ' + program.output);
-
-            //  Perform HTML -> DOCX conversion, if requested
-            if(program.doc) {
-
-                //  Figure out docx output filename
-                let p = path.parse(program.output);
-                let ext = p.ext;
-                let docfile = program.output.replace(ext, '.docx');
-
-                //  Outsource the conversion to pandoc
-                //  WARNING: NEVER USE THIS ON A WEB SERVER!
-                let command = `/usr/bin/pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
-                child.execSync(command);
-
-                if(!fs.existsSync(docfile)) {
-                    console.error('Failed to generate DOCX output');
-                    return;
-                }
-
-                console.log('DOCX output written to: ' + docfile);
-            }
-        });
-    });
-
-})();
-
-*/
