@@ -170,33 +170,13 @@ function validateProgramArguments(program) {
     //  If the input file doesn't exist, emit an error and quit
     if(!fs.existsSync(program.input)) {
         console.error('Input YAML doesn\'t exist: ' + program.input);
-        return;
+        process.exit();
     }
 
     //  If this process can't write to the output location, emit an error and quit
-    if(fs.existsSync(program.output)) {
-        //  Output file exists - Can we write to it?
-        try {
-            fs.accessSync(program.output, fs.constants.W_OK);
-        } catch(err) {
-            console.error('Can\'t write to output file: ' + program.output);
-            return;
-        }
-    } else {
-        //  Output file doesn't exist - Can we write to the output directory?
-        let p = path.parse(program.output);
-        let outputDir = p.dir;
-
-        if(outputDir === '') {
-            outputDir = '.';
-        }
-
-        try {
-            fs.accessSync(outputDir, fs.constants.W_OK);
-        } catch(err) {
-            console.error('Can\'t write to output directory: ' + outputDir);
-            return;
-        }
+    if(!canWrite(program.output)) {
+        console.error('Can\'t write to output location: ' + program.output);
+        process.exit();
     }
 }
 
@@ -214,3 +194,42 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
     html.create(evaTaskList, program.template, callback);
 }
 
+/**
+ * Tests whether the specified path can be written to by this process
+ *
+ * @param path      The path to test
+ * @returns         True if path can be written to, false otherwise
+ */
+function canWrite(path) {
+    //  Check whether the path exists
+    if(fs.existsSync(path)) {
+        //  File exists - Can we write to it?
+        try {
+            fs.accessSync(program.output, fs.constants.W_OK);
+            //  Yes
+            return true;
+        } catch(err) {
+            //  No
+            return false;
+        }
+    } else {
+        //  File doesn't exist - Can we write to the output directory?
+        let p = path.parse(program.output);
+        let dir = p.dir;
+
+        if(dir === '') {
+            dir = '.';
+        }
+
+        try {
+            fs.accessSync(dir, fs.constants.W_OK);
+            //  Yes
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    //  What?
+    return false;
+}
