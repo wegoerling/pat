@@ -137,32 +137,4 @@ describe('startup.js', () => {
         });
     });
 
-    describe('postHtmlFileToConsole', () => {
-        
-        beforeEach(() => {
-            exitStub = sinon.stub(process, 'exit').callsFake(function () {});
-        });
-
-        afterEach(() => {
-            sinon.restore();
-        });
-
-        it('should display a success message if file exists', () => {
-            var existsSyncStub = sinon.stub(fs, 'existsSync').returns(true);
-
-            startup.postHtmlFileToConsole(fs, 'foo.html');
-
-            sinon.assert.calledOnce(existsSyncStub);
-            sinon.assert.notCalled(exitStub);
-        });
-
-        it('should display a failure message if file doesn\'t exist', () => {
-            var existsSyncStub = sinon.stub(fs, 'existsSync').returns(false);
-
-            startup.postHtmlFileToConsole(fs, 'foo.html');
-
-            sinon.assert.calledOnce(existsSyncStub);
-            sinon.assert.calledOnce(exitStub);
-        });
-    });
 });
