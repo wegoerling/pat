@@ -40,25 +40,14 @@ module.exports = class Procedure {
             let procedureYaml = YAML.load(fileName, null, true);
 
             // Save the procedure Name
-            if (!procedureYaml.procedure_name) {
-                throw new Error("Input YAML missing procedure_name");
-            }
             this.name = procedureYaml.procedure_name;
 
             // Save the actors
-            if (!procedureYaml.actors) {
-                throw new Error("Input YAML missing actors");
-            }
-            
             for (var actorYaml of procedureYaml.actors) {
                 this.actors.push(new Actor(actorYaml));
             }
 
             // Save the tasks
-            if (!procedureYaml.tasks) {
-                throw new Error("Input YAML missing tasks");
-            }
-            
             for (var taskYaml of procedureYaml.tasks) {
 
                 // Check that the task is a file
@@ -94,11 +83,6 @@ module.exports = class Procedure {
                     
                     // Save the task!
                     this.tasks.push(new Task(loadedTaskYaml));
-                }
-                
-                // Task encountered that do not know how to handle!
-                else {
-                    throw new Error("Unknown task type found in procedure: " + JSON.stringify(taskYaml));
                 }
 
             }
