@@ -197,39 +197,31 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
 /**
  * Tests whether the specified path can be written to by this process
  *
- * @param path      The path to test
- * @returns         True if path can be written to, false otherwise
+ * @param pathToTest    The path to test
+ * @returns             True if path can be written to, false otherwise
  */
-function canWrite(path) {
+function canWrite(pathToTest) {
+
     //  Check whether the path exists
-    if(fs.existsSync(path)) {
-        //  File exists - Can we write to it?
-        try {
-            fs.accessSync(program.output, fs.constants.W_OK);
-            //  Yes
-            return true;
-        } catch(err) {
-            //  No
-            return false;
-        }
-    } else {
-        //  File doesn't exist - Can we write to the output directory?
-        let p = path.parse(program.output);
+    if(!fs.existsSync(pathToTest)) {
+        //  File doesn't exist - check permissions for the parent dir
+        let p = path.parse(pathToTest);
         let dir = p.dir;
 
         if(dir === '') {
             dir = '.';
         }
 
-        try {
-            fs.accessSync(dir, fs.constants.W_OK);
-            //  Yes
-            return true;
-        } catch(err) {
-            return false;
-        }
+        pathToTest = dir;
     }
 
-    //  What?
-    return false;
+    //  Test permissions
+    try {
+        fs.accessSync(pathToTest, fs.constants.W_OK);
+        //  Yes
+        return true;
+    } catch(err) {
+        //  No
+        return false;
+    }
 }

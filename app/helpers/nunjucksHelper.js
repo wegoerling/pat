@@ -92,7 +92,8 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 
     // Add custom nunjucks filter for images
     env.addFilter('imagePath', function(image) {
-        const dir = path.dirname(outputPath);
+        //const dir = path.dirname(outputPath);
+        const dir = outputPath;
         let imageName = path.basename(image);
         fs.copyFile(`${inputPath}/${imageName}`, `${dir}/${imageName}`, (err) => {
             if (err) {
