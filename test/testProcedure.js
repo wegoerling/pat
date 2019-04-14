@@ -44,31 +44,25 @@ describe('Procedure constructor - Positive Testing', function() {
         var fakeEgressYamlObj = yj.parse(egressYamlString);
 
         
-
+        // Read some files in for schema checking prior to stubbing the readFileSync method
         let procedureFile = path.join(__dirname, "../app/schema/procedureSchema.json");
         let taskFile = path.join(__dirname, "../app/schema/taskSchema.json");
-        let procedureSchema = fs.readFileSync(procedureFile);
+        let procedureSchema = fs.readFileSync(procedureFile, 'utf-8');
         let taskSchema = fs.readFileSync(taskFile);
 
         //  stub some things
         before(() => {
             let existsSync = sinon.stub(fs, 'existsSync');
-            let load = sinon.stub(yj, 'load');
             let readFileSync = sinon.stub(fs, 'readFileSync');
 
             existsSync.withArgs(filename).returns(true);
             readFileSync.withArgs(filename).returns(yamlString);
-            load.withArgs(filename).returns(fakeYamlObj);
 
-            sinon.stub(path, 'dirname').withArgs(filename).returns('');
-            sinon.stub(path, 'join').withArgs('', 'egress.yml').returns('egress.yml');
-            existsSync.withArgs('egress.yml').returns(true);
-            load.withArgs('egress.yml').returns(fakeEgressYamlObj);
+            existsSync.withArgs(sinon.match('egress.yml')).returns(true);
+            readFileSync.withArgs(sinon.match('egress.yml')).returns(egressYamlString);
 
-            // readFileSync.withArgs(procedureFile).returns(procedureSchema);
-            // readFileSync.withArgs(taskFile).returns(taskSchema);
-            // sinon.stub(SpacewalkValidator, 'validateProcedureSchemaFile').withArgs(filename).returns(true);
-            sinon.stub(ajv.prototype, 'validate').returns(true);
+            readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
+            readFileSync.withArgs(sinon.match('taskSchema.json')).returns(taskSchema);
             
         });
 
@@ -79,11 +73,9 @@ describe('Procedure constructor - Positive Testing', function() {
 
         it('should return a procedure for normal input', async () => {
 
-/*
             let procedure = new Procedure();
 
             let err = await procedure.populateFromFile(filename);
-            console.log(err);
 
             expect(err).to.not.exist;
 
@@ -121,7 +113,6 @@ describe('Procedure constructor - Positive Testing', function() {
 
             expect(procedure.tasks[0].concurrentSteps[0].EV1[0].text).to.be.a('string');
             expect(procedure.tasks[0].concurrentSteps[0].EV1[0].text).to.equal('Go Outside');
-            */
         });
     });
 });
@@ -136,13 +127,18 @@ describe('Procedure constructor - Negative Testing', function() {
             sinon.restore();
         })
 
+        // Read some files in for schema checking prior to stubbing the readFileSync method
+        let procedureFile = path.join(__dirname, "../app/schema/procedureSchema.json");
+        let taskFile = path.join(__dirname, "../app/schema/taskSchema.json");
+        let procedureSchema = fs.readFileSync(procedureFile, 'utf-8');
+        let taskSchema = fs.readFileSync(taskFile);
+        
+
         it('should throw error if file doesn\'t exist', async () => {
 
             let procedure = new Procedure();
             let err = await procedure.populateFromFile('wrong.txt');
             expect(err).to.exist;
-
-            // expect(() => procedure.populateFromFile('wrong.txt')).to.throw('Could not find file '); 
 
         });
 
@@ -154,15 +150,16 @@ describe('Procedure constructor - Negative Testing', function() {
                 `;
 
             sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
-            sinon.stub(fs, 'readFileSync').returns(badYaml);
+            let readFileSync = sinon.stub(fs, 'readFileSync');
+            readFileSync.withArgs(sinon.match(filename)).returns(badYaml);
+            readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
+            readFileSync.withArgs(sinon.match('taskSchema.json')).returns(taskSchema);
+
 
             let procedure = new Procedure();
             let err = await procedure.populateFromFile(filename);
             expect(err).to.exist;
 
-            // expect(() => procedure.populateFromFile(filename)).to.throw();
-
-            sinon.restore();
         });
 
         it('should throw error if yaml is missing procedure_name', async () => {
@@ -183,15 +180,18 @@ describe('Procedure constructor - Negative Testing', function() {
                 `;
 
             sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
-            sinon.stub(fs, 'readFileSync').returns(yamlString);
+            let readFileSync = sinon.stub(fs, 'readFileSync');
+            readFileSync.withArgs(sinon.match(filename)).returns(yamlString);
+            readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
+            readFileSync.withArgs(sinon.match('taskSchema.json')).returns(taskSchema);
             
             let procedure = new Procedure();
             let err = await procedure.populateFromFile(filename);
             expect(err).to.exist;
+            expect(err.validationErrors).to.exist;
+            expect(err.validationErrors).to.not.be.empty;
 
-            // expect(() => procedure.populateFromFile(filename)).to.throw('Input YAML missing procedure_name');
 
-            sinon.restore();
         });
 
         it('should throw error if yaml is missing actors', async () => {
@@ -205,15 +205,17 @@ describe('Procedure constructor - Negative Testing', function() {
                 `;
 
             sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
-            sinon.stub(fs, 'readFileSync').returns(yamlString);
+            let readFileSync = sinon.stub(fs, 'readFileSync');
+            readFileSync.withArgs(sinon.match(filename)).returns(yamlString);
+            readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
+            readFileSync.withArgs(sinon.match('taskSchema.json')).returns(taskSchema);
             
             let procedure = new Procedure();
             let err = await procedure.populateFromFile(filename);
             expect(err).to.exist;
+            expect(err.validationErrors).to.exist;
+            expect(err.validationErrors).to.not.be.empty;
 
-            // expect(() => procedure.populateFromFile(filename)).to.throw('Input YAML missing actors');
-
-            sinon.restore();
 
         });
 
@@ -232,14 +234,17 @@ describe('Procedure constructor - Negative Testing', function() {
                 `;
 
             sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
-            sinon.stub(fs, 'readFileSync').returns(yamlString);
+            let readFileSync = sinon.stub(fs, 'readFileSync');
+            readFileSync.withArgs(sinon.match(filename)).returns(yamlString);
+            readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
+            readFileSync.withArgs(sinon.match('taskSchema.json')).returns(taskSchema);
             
             let procedure = new Procedure();
             let err = await procedure.populateFromFile(filename);
             expect(err).to.exist;
-            // expect(() => procedure.populateFromFile(filename)).to.throw('Input YAML missing tasks');
+            expect(err.validationErrors).to.exist;
+            expect(err.validationErrors).to.not.be.empty;
 
-            sinon.restore();    
         });
     });
 });

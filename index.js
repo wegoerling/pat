@@ -73,7 +73,11 @@ const Procedure = require("./app/model/procedure");
 
         // Check if an error occurred
         if(err) {
-            console.error(err);
+            console.error('Error while deserializing YAML: ' + err);
+            if (err.validationErrors) {
+                console.log("Validation Errors:");
+                console.log(err.validationErrors);
+            }
             return;
         }
 

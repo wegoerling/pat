@@ -103,8 +103,7 @@ module.exports = class Procedure {
 
             }
         } catch (err) {
-            console.log('Error while deserializing YAML: ' + err);
-            process.exit();
+            return err;
         }
 
     }
