@@ -47,7 +47,6 @@ module.exports = class Procedure {
             for (var actorYaml of procedureYaml.actors) {
                 this.actors.push(new Actor(actorYaml));
             }
-
             // Save the tasks
             for (var taskYaml of procedureYaml.tasks) {
 
