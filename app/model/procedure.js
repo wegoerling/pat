@@ -49,8 +49,8 @@ module.exports = class Procedure {
             }
             if(procedureYaml.css) {
                 let newCSS = translatePath(fileName, procedureYaml.css);
-                this.css = fs.read(newCSS);
-                console.log(this.css);
+                this.css = fs.readFileSync(newCSS);
+                
             }
             // Save the tasks
             for (var taskYaml of procedureYaml.tasks) {
