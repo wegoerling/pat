@@ -14,6 +14,7 @@ module.exports = class Procedure {
         this.name = "";
         this.actors = [];
         this.tasks = [];
+        this.css = ""
     }
 
     /**
@@ -46,7 +47,11 @@ module.exports = class Procedure {
             for (var actorYaml of procedureYaml.actors) {
                 this.actors.push(new Actor(actorYaml));
             }
-
+            if(procedureYaml.css) {
+                let newCSS = translatePath(fileName, procedureYaml.css);
+                this.css = fs.read(newCSS);
+                console.log(this.css);
+            }
             // Save the tasks
             for (var taskYaml of procedureYaml.tasks) {
 
@@ -54,7 +59,8 @@ module.exports = class Procedure {
                 if (taskYaml.file) {
                     
                     // Since the task file is in relative path to the procedure file, need to translate it!
-                    let taskFileName = path.join(path.dirname(fileName), taskYaml.file);
+                    let taskFileName = translatePath(fileName, taskYaml.file);
+                    //path.join(path.dirname(fileName), taskYaml.file);
 
                     // Validate & Load the yaml file!
                     if (!fs.existsSync(taskFileName)) {
@@ -123,4 +129,8 @@ function readUrlPromise(url) {
             reject(err)
         });
     });
+}
+function translatePath(fileName, file ){
+    let fullPath = path.join(path.dirname(fileName), file);
+    return fullPath;
 }

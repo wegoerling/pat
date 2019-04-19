@@ -7,6 +7,8 @@ actors:
   - role: EV2
     name: Taz
 
+css: custom.css
+
 tasks:
   - file: egress.yml
   - file: misse7.yml
