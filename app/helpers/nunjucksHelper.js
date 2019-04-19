@@ -10,13 +10,15 @@ const beautify_html = require('js-beautify').html;
 let inputPath = '';
 let outputPath = '';
 let outputFilename = '';
+let cssFilename = '';
 
 exports.generators = {
     create: createHtml,
     params: {
         inputDir: setInputPath,
         outputDir: setOutputPath,
-        htmlFile: setOutputFilename
+        htmlFile: setOutputFilename,
+        cssFile: setCssFilename
     }
 };
 
@@ -33,6 +35,10 @@ function setOutputPath(output) {
 
 function setOutputFilename(filename) {
     outputFilename = filename;
+}
+
+function setCssFilename(filename) {
+    cssFilename = filename;
 }
 
 /*
@@ -104,8 +110,20 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
         return `${dir}/${imageName}`;
     });
 
+    // Create the object passed into nunjucks from the evaTask and the css file (if it exists)
+    var nunjucksObject = {
+        procedure: evaTask
+    }
+
+    // If the css file exists, read it in and add it to the nunjucksObject
+    if (cssFilename !== '') {
+        if (fs.existsSync(cssFilename)) {
+            nunjucksObject.css = fs.readFileSync(cssFilename);
+        }
+    }
+
     // Render the html
-    var html = env.render(htmlFileTemplate, evaTask);
+    var html = env.render(htmlFileTemplate, nunjucksObject);
 
     // Beautify the html
     var prettyHtml = beautify_html(html, { indent_size: 2, space_in_empty_paren: true, preserve_newlines: false });

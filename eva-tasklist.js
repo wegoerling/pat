@@ -121,6 +121,7 @@ function buildProgramArguments(program, args) {
         .option('-o, --output <.html>', 'name of output HTML file')
         .option('-t, --template <.html>', 'specify a template to use', DEFAULT_TEMPLATE)
         .option('-d, --doc', 'Also generate Word doc output', null)
+        .option('-c, --css <.css>', 'CSS to append to generated HTML', null)
         .allowUnknownOption();
 
     //  Commander.js does an unhelpful thing if there are invalid options;
@@ -190,6 +191,9 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
     html.params.inputDir(path.resolve(path.dirname(program.input)));
     html.params.outputDir(path.resolve(path.dirname(program.output)));
     html.params.htmlFile(outputFile);
+    if (program.css) {
+        html.params.cssFile(path.resolve(program.css));
+    }
     
     html.create(evaTaskList, program.template, callback);
 }

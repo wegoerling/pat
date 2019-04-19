@@ -3,11 +3,11 @@
 {% block content %}
     <div class="container-fluid">
         <h1>
-            {{name}}
+            {{procedure.name}}
         </h1>
 
         {# For each checklist in the tasks array, create a table #}
-        {% for task in tasks %}
+        {% for task in procedure.tasks %}
             {# make a table for the checklist #}
             {% include "taskTable.njk" %}
         {% else %}
