@@ -87,6 +87,16 @@ module.exports = class Procedure {
                 }
 
             }
+
+            // Pull in css file if it is defined
+            if (procedureYaml.css) {
+                let cssFileName = translatePath(fileName, procedureYaml.css);
+                if (!fs.existsSync(cssFileName) {
+                    throw new Error("Could not find css file " + cssFileName);
+                }
+                this.css = fs.readFileSync(cssFileName);
+            }
+
         } catch (err) {
             return err;
         }

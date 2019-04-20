@@ -30,7 +30,8 @@
                     }
                 ]
             }
-        }
+        },
+        "css": {"type": "string"}
     },
     "required": ["procedure_name", "actors", "tasks"]
 }
