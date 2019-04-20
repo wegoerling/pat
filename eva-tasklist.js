@@ -111,7 +111,7 @@ function genDoc(program) {
  * @param args      Command line argument array (e.g. process.argv)
  */
 function buildProgramArguments(program, args) {
-    const DEFAULT_TEMPLATE = `${__dirname}/templates/htmlHelper-template.thtml`;
+    const DEFAULT_TEMPLATE = 'templates/spacewalk.njk';
 
     program
         .version(ver.currentVersion, '-v, --version')

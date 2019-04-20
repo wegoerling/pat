@@ -45,12 +45,13 @@ function setCssFilename(filename) {
  * Create the html from the template file
  */
 function createHtml(evaTask, htmlFileTemplate, callback) {
-    //For now, since this is an example, ignore the html file template and use a hard-coded one.
-    htmlFileTemplate = 'spacewalk.njk';
-    //nunjucks.configure('templates', { autoescape: true });
+
+    // Get the directory and main template name
+    var templatePath = path.resolve(htmlFileTemplate);
+
 
     // Add custom nunjucks filter to test if variable is a string
-    var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('templates'), {autoescape: false});
+    var env = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.dirname(templatePath)), {autoescape: false});
     env.addFilter('isString', function (obj) {
         return typeof obj == 'string';
     });
@@ -123,7 +124,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
     }
 
     // Render the html
-    var html = env.render(htmlFileTemplate, nunjucksObject);
+    var html = env.render(path.basename(templatePath), nunjucksObject);
 
     // Beautify the html
     var prettyHtml = beautify_html(html, { indent_size: 2, space_in_empty_paren: true, preserve_newlines: false });
