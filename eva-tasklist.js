@@ -67,6 +67,7 @@ function genHtml(program, procedure) {
         }
 
         console.log('HTML output written to: \t' + program.output);
+        console.log('HTML url for browser: \t\tfile://' + path.resolve(program.output));
 
         genDoc(program);
     });
