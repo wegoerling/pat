@@ -197,7 +197,7 @@ describe('eva-tasklist.js', () => {
 
         beforeEach(() => {
             helpStub = sinon.stub(program, 'help').callsFake(function () {});
-            //exitStub = sinon.stub(process, 'exit').callsFake(function () {});
+            exitStub = sinon.stub(process, 'exit').callsFake(function () {});
         });
 
         afterEach(() => {
@@ -217,7 +217,7 @@ describe('eva-tasklist.js', () => {
 
             et.buildProgramArguments(program, args);
 
-            sinon.assert.calledOnce(helpStub);
+            sinon.assert.calledOnce(exitStub);
         });
 
         it('should exit if the -o argument has no parameter', () => {
