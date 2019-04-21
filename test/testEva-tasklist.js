@@ -197,7 +197,7 @@ describe('eva-tasklist.js', () => {
 
         beforeEach(() => {
             helpStub = sinon.stub(program, 'help').callsFake(function () {});
-            exitStub = sinon.stub(process, 'exit').callsFake(function () {});
+            //exitStub = sinon.stub(process, 'exit').callsFake(function () {});
         });
 
         afterEach(() => {

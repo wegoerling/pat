@@ -6,6 +6,7 @@ const formatter = require("./markdownHelper");
 const fs = require("fs");
 const path = require('path');
 const beautify_html = require('js-beautify').html;
+const ver = require('./versionHelper');
 
 let inputPath = '';
 let outputPath = '';
@@ -111,9 +112,11 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
         return `${dir}/${imageName}`;
     });
 
-    // Create the object passed into nunjucks from the evaTask and the css file (if it exists)
+    // Create the object passed into nunjucks from the evaTask and the css file
+    // (if it exists)
     var nunjucksObject = {
-        procedure: evaTask
+        procedure: evaTask,
+        version: ver.currentVersion
     }
 
     // If the css file exists, read it in and add it to the nunjucksObject
