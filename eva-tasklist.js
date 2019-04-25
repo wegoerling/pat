@@ -90,7 +90,7 @@ function genDoc(program) {
 
         //  Outsource the conversion to pandoc
         //  WARNING: NEVER USE THIS ON A WEB SERVER!
-        let command = `/usr/bin/pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
+        let command = `pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
         child.execSync(command);
 
         if(!fs.existsSync(docfile)) {
