@@ -162,45 +162,7 @@ during an Extravehicular Activity (i.e. Spacewalk).
 
 ### JSON Schema
 
-```json
-{
-  "type": "object",
-  "properties": {
-    "procedure_name": { "type": "string" },
-    "actors": {
-      "type": "array",
-      "items": { 
-        "type": "object",
-        "properties": {
-          "role": { "type": "string"},
-          "name": { "type": "string"}
-        },
-        "required": ["role"]
-      }
-    },
-    "tasks": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "file": { "type": "string"},
-          "url": {"type": "string"}
-        },
-        "anyOf": [
-          {
-            "required": ["file"]
-          },
-          {
-            "required": ["url"]
-          }
-        ]
-      }
-    },
-    "css": {"type": "string"}
-  },
-  "required": ["procedure_name", "actors", "tasks"]
-}
-```
+See [Procedure JSON Schema](../app/schema/procedureSchema.json) for the current JSON Schema definition.
 
 ### YAML Definitions
 
@@ -221,112 +183,7 @@ Task File Description
 
 ### JSON Schema
 
-```json
-{
-  "definitions": {
-    "step": {
-      "oneOf": [
-        {"type": "string"},
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "step": {
-                "oneOf": [
-                  {"type": "string"},
-                  {
-                    "type": "array",
-                    "items": {"type": "string"}
-                  }
-                ]
-              },
-              "images": {
-                "oneOf": [
-                  {"type": "string"},
-                  {
-                    "type": "array",
-                    "items": {"type": "string"}
-                  }
-                ]
-              },
-              "title": {"type": "string"},
-              "checkboxes": {
-                "oneOf": [
-                  {"type": "string"},
-                  {
-                    "type": "array",
-                    "items": {"type": "string"}
-                  }
-                ]
-              },
-              "substeps": { "$ref": "#/definitions/step" },
-              "warning": {
-                "oneOf": [
-                  {"type": "string"},
-                  {
-                    "type": "array",
-                    "items": {"type": "string"}
-                  }
-                ]
-              },
-              "caution": {
-                "oneOf": [
-                  {"type": "string"},
-                  {
-                    "type": "array",
-                    "items": {"type": "string"}
-                  }
-                ]
-              },
-              "comment": {
-                "oneOf": [
-                  {"type": "string"},
-                  {
-                    "type": "array",
-                    "items": {"type": "string"}
-                  }
-                ]
-              },
-              "note": {
-                "oneOf": [
-                  {"type": "string"},
-                  {
-                    "type": "array",
-                    "items": {"type": "string"}
-                  }
-                ]
-              }
-            }
-          }
-        }
-      ]
-    }
-  },
-  "type": "object",
-  "properties": {
-    "title": { "type": "string" },
-    "duration": { 
-      "type": "string",
-      "pattern": "^[0-9]{2}:[0-9]{2}$"
-    },
-    "steps": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "simo": { 
-            "type": "object",
-            "additionalProperties": { "$ref": "#/definitions/step" }
-          }
-        },
-        "additionalProperties": { "$ref": "#/definitions/step" }
-      }
-    }
-  },
-  "required": ["title", "duration", "steps"]
-}
-```
+See [Task JSON Schema](../app/schema/taskSchema.json) for the current JSON Schema definition.
 
 ###  YAML Definitions
 
@@ -370,7 +227,7 @@ frequently-used Unicode characters to be easily input into YAML, the
 table below describes how some of the Unicode characters can be
 represented.
 
-NOTE: Because the characters '}' and '}' are reserved characters in
+NOTE: Because the characters '{' and '}' are reserved characters in
 YAML, any text strings which contain these characters need to be
 surrounded with single-quotes ('). This means the ENTIRE string needs to
 be surrounded by the single quote, not just the character definition.
