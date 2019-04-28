@@ -13,31 +13,29 @@ module.exports = class ConcurrentStep {
             for (var actorRole in concurrentStepYaml.simo) {
                 
                 // Get the actor steps array
-                let actorSteps = getActorSteps(concurrentStepYaml.simo[actorRole]);
+                var actorSteps = getActorSteps(concurrentStepYaml.simo[actorRole]);
 
                 // Set the actor and steps in the object
                 this[actorRole] = actorSteps;
 
             }
 
+            return;
         } 
         
         // Not a simo, so just an actor role
-        else {
 
-            // Get the actor role
-            if (Object.keys(concurrentStepYaml).length !== 1) {
-                throw new Error("Expected a single actor role, but instead got " + JSON.stringify(concurrentStepYaml));
-            }
-            let actorRole = Object.keys(concurrentStepYaml)[0];
-
-            // get the actor steps
-            let actorSteps = getActorSteps(concurrentStepYaml[actorRole]);
-
-            // Set the actor and steps in the object
-            this[actorRole] = actorSteps;
-
+        // Get the actor role
+        if (Object.keys(concurrentStepYaml).length !== 1) {
+            throw new Error("Expected a single actor role, but instead got " + JSON.stringify(concurrentStepYaml));
         }
+        var actorRole = Object.keys(concurrentStepYaml)[0];
+
+        // get the actor steps
+        var actorSteps = getActorSteps(concurrentStepYaml[actorRole]);
+
+        // Set the actor and steps in the object
+        this[actorRole] = actorSteps;
 
     }
 
