@@ -33,14 +33,14 @@ This software intends to assist NASA personnel in the performance and management
 ## Installation
 The following are step by step instructions for how to get the NASA EVA Task Generator development environment installed and running. The software can be run on Window, Linux, and Mac OS.
 
-1. Install [node LTS version]( https://nodejs.org/en/download/).
-2. Install [Visual Studio Code]( https://code.visualstudio.com/download).
-3. Clone the NASA EVA Task Generator “spacewalk” repository from GitHub  
- ```git clone https://github.com/jamesmontalvo3/spacewalk.git```
-4. Navigate into the project directory, using command `cd spacewalk` 
-5. Use NPM to install the module, using command `npm install` 
-6. Install the EVA Task Generator `npm install -g evachecklist`
-7. Check the install is working by running help menu `node index.js -h` or the version `node index.js -v`
+1. Install [node LTS version]( https://nodejs.org/en/download/). 
+2. Install [Visual Studio Code]( https://code.visualstudio.com/download). 
+3. _(Optional) For conversion to .docx format, install [Pandoc](https://pandoc.org/).  **In order for .docx conversion to work, the pandoc command must be on the PATH**_ 
+4. Clone the NASA EVA Task Generator “spacewalk” repository from GitHub
+ ```git clone https://github.com/jamesmontalvo3/spacewalk.git``` 
+5. Navigate into the project directory, using command `cd spacewalk`  
+6. Use NPM to install the module, using command `npm install`  
+7. Check the install is working by running help menu `node index.js -h` or the version `node index.js -v` 
 
 ## How to Use \ User Instructions
 The following files demostrates how to use the application features via the console command line. 
@@ -59,13 +59,15 @@ The following files demostrates how to use the application features via the cons
 
 ## API Reference
 
-Libraries used include nunjucks for CSS template customization, chai assertion for unit testing, and pandoc for HTML-to-Word file conversion.
+Libraries used include nunjucks for HTML/CSS template customization, chai assertion for unit testing, and pandoc for HTML-to-Word file conversion.
+
+Installation of Pandoc is required for HTML-to-Word file conversion.  The ```pandoc``` command must be on the user’s path. 
 
 See [YAML Definition]( docs/yamlDefinition.md) for an overview of YAML file syntax. This link also provides details on how NASA JSC writes procedures in the YAML files format for EVA Tasks and how the EVA Task Generator uses the data dictionary to parse YAML files. 
 
 ## Tests
 
-# Unit Testing
+### Unit Testing
 
 This directory contains unit tests for the spacewalk project. Unit tests are
 automatically run by travis-ci after commits are made to this repo, and the
@@ -85,7 +87,7 @@ Mocha will generate a nice test report for you.
 * If any of the unit tests fail, you should fix them.
 * If statement coverage is below 50%, you should add more tests.
 
-# Integration Testing
+### Integration Testing
 
 Run the program with sample YAML files.
 The following samples may be run from within the spacewalk directory
@@ -97,32 +99,32 @@ The following samples may be run from within the spacewalk directory
 `node index.js --input samples/sta-134-eva/maincss.yml --output sta-134-aqua.html`
 - Sample with CSS on both command line and within input file
 `node index.js --input samples/sta-134-eva/maincss.yml --css samples/sta-134-eva/custom.css --output sta-134-aqua.html`
--Sample with docx output
+- Sample with docx output
 `node index.js --input samples/sta-134-eva/maincss.yml --css samples/sta-134-eva/custom.css --output sta-134-aqua.html -d`
 Or
 `node index.js --input samples/sta-134-eva/maincss.yml --css samples/sta-134-eva/custom.css --output sta-134-aqua.html -d *outputfile.docx*`
 
 ## Credits
 
-*NASA Project Sponsor*
+*NASA Project Sponsor*  
 James Montalvo
 
-*UMUC Phase II Development Team, Spring 2019*
-Akruthi Shetty
-Christopher Redding
-Ebony Christian
-Joe Bidinger
-Ted Deloggio
+*UMUC Phase II Development Team, Spring 2019*  
+Akruthi Shetty  
+Christopher Redding  
+Ebony Christian  
+Joe Bidinger  
+Ted Deloggio  
 
-*UMUC Phase I Development Team, Fall 2018*
-Jose De la Cruz
-Jason Foley
-Alexandra Kuntz
-Engedawork Befekadu
-Timothy Smith"
-Christopher Drury
-Kevin Terry
-John-Carlo Babin
+*UMUC Phase I Development Team, Fall 2018*  
+Jose De la Cruz  
+Jason Foley  
+Alexandra Kuntz  
+Engedawork Befekadu  
+Timothy Smith  
+Christopher Drury  
+Kevin Terry  
+John-Carlo Babin  
 
 
 ## License
