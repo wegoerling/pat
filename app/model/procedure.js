@@ -120,13 +120,14 @@ function readUrlPromise(url) {
     return new Promise((resolve, reject) => {
         const request = lib.get(url, (response) => {
             const body = [];
+            response.setEncoding('utf8');
 
             response.on('data', (chunk) => {
                 body.push(chunk);
             });
 
             response.on('end', () => {
-                resolve(body.toString('utf8'));
+                resolve(body.toString());
             });
         });
 
