@@ -47,12 +47,15 @@ The following files demostrates how to use the application via console command l
 
 *EVA Task Generator CSS- Customizable & scalable CSS template*
 **docs/qna/images/CSS Demo.mp4**
+[![CSS Demo](https://img.youtube.com/vi/l8NPJTH6QzU&t/0.jpg)](https://www.youtube.com/watch?v=l8NPJTH6QzU&t "Click to play CSS Demo on YouTube.com")
 
 *EVA Task Generator Pandoc- HTML-to-Word Conversion*
 **docs/qna/images/Pandoc Demo.mp4**
+[![Pandoc Demo](https://img.youtube.com/vi/G60tPv9cM08/0.jpg)](https://www.youtube.com/watch?v=G60tPv9cM08 "Click to play Pandoc Demo on YouTube.com")
 
 *EVA Task Generator URL- Externally Reference Files*
 **docs/qna/images/URL Demo .mp4**
+[![URL Demo](https://img.youtube.com/vi/uTopcel6VpA/0.jpg)](https://www.youtube.com/watch?v=uTopcel6VpA "Click to play URL Demo on YouTube.com")
 
 ## API Reference
 
