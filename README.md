@@ -49,7 +49,7 @@ The following are step by step instructions for how to get the NASA EVA Task Gen
 
 Libraries used include nunjucks for CSS template customization and pandoc for HTML-to-Word file conversion.
 
-See [YAML Definition]( mdocs/yamlDefinition.md) for details on how NASA JSC writes procedures in the YAML files format for EVA Tasks, and how the EVA Task Generator uses the data dictionary to parse YAML files. 
+See [YAML Definition]( docs/yamlDefinition.md) for details on how NASA JSC writes procedures in the YAML files format for EVA Tasks, and how the EVA Task Generator uses the data dictionary to parse YAML files. 
 
 ## Tests
 
