@@ -43,9 +43,10 @@ The following are step by step instructions for how to get the NASA EVA Task Gen
 7. Check the install is working by running help menu `node index.js -h` or the version `node index.js -v`
 
 ## How to Use \ User Instructions
+The following demostrates how to use the application via console command line. The software can be run on Window, Linux, and Mac OS.
+*EVA Task Generator CSS- Customizable & scalable CSS template*
 
-*EVA Task Generator Successful Execution*
-![EVA Excecution](docs/qna/images/Successful_Execution.png)
+![CSS Demo](docs/qna/images/CSS Demo.mp4)
 
 ## API Reference
 
