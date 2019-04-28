@@ -33,8 +33,12 @@ exports.convert = function (markdown) {
     markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10063;');
 
     //  Find and replace emphasis markdown?
-    if (markdown.includes("'''") || markdown.includes('**')) {
-        let regex = markdown.includes("'''") ? /([\'])+/gi : /([\*])+/gi;
+    if (markdown.includes("'''")) {
+        var regex = /([\'])+/gi
+        markdown = markdown.replace(regex, '*');
+    }
+    if (markdown.includes('**')) {
+        var regex =  /([\*])+/gi;
         markdown = markdown.replace(regex, '*');
     }
 
