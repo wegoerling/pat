@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- if there's access to internet adding a reference to bootstrap cdn would be nice help with the styling -->
+  <!-- I'd be preferable not to use external scripts/css
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous"> -->
+  <!-- <link href="./style.css" rel="stylesheet" type="text/css" /> -->
+  <!-- CSS goes in the document HEAD or added to your external stylesheet -->
+  <style type="text/css">
+    @media print {
+      @page {
+        size: landscape
+      }
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: auto;
+      max-width: 90%;
+    }
+
+    td {
+      vertical-align: top;
+    }
+
+    table.gridtable {
+      /* font-family: verdana, arial, sans-serif; */
+      /* font-size: 16px; */
+      color: #333333;
+      border-width: 2px;
+      border-color: #666666;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+      page-break-after: always;
+    }
+
+    table.gridtable th {
+      border-width: 2px;
+      padding: 8px;
+      border-style: solid;
+      border-color: #666666;
+      background-color: #ffffff;
+      text-align: center;
+    }
+
+    table.gridtable td {
+      border-width: 2px;
+      padding: 8px;
+      border-style: solid;
+      border-color: #666666;
+      background-color: #ffffff;
+      width: 33%;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0px;
+      padding: 5px 5px 5px 20px;
+    }
+
+    ol {
+      margin: 0px;
+      margin-left: 10px;
+      padding: 5px;
+      padding-left: 10px;
+    }
+
+    li {
+      margin: 1px 0px;
+      padding: 0px;
+      line-height: 110%;
+    }
+
+    li p {
+      margin: 2px 0px;
+      padding: 0px;
+    }
+
+    div.ncw {
+      border: solid black 1px;
+      padding: 0px;
+      margin: 5px 0px;
+    }
+
+    div.ncw div {
+      border: solid black 1px;
+      margin: 0px;
+    }
+
+    div.ncw-head {
+      font-weight: bold;
+      padding: 10px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    div.ncw-warning div.ncw-head {
+      background-color: red;
+      color: white;
+    }
+
+    div.ncw-caution div.ncw-head {
+      background-color: yellow;
+      color: black;
+    }
+
+    div.ncw-body {
+      padding: 5px;
+    }
+
+    .sizeable {
+      border: 1px solid;
+      display: inline-block;
+      resize: both;
+      overflow: hidden;
+      max-height: 100%;
+      max-width: 100%;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+      /*top: -5px;
+            left: 105%; */
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+
+    div.footer {
+      text-align: center;
+    }
+  </style>
+  <title>STS-134 EVA 1</title>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <h1> STS-134 EVA 1 </h1>
+    <h2>EGRESS/SETUP (00:25)</h2>
+    <table class="gridtable">
+      <tr>
+        <th>IV(SSRMS)</th>
+        <th>EV1(Drew)</th>
+        <th>EV2(Taz)</th>
+      </tr>
+      <tr>
+        <td>
+          <ol start="1">
+            <li>
+              <p>Record PET start time ___<em>:</em>___ (Pwr to Batt)</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Start WVS Recorders</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+              <div class="sizeable tooltip">
+                <span class="tooltiptext">drag bottom right corner to size image</span>
+                <img class="img-fluid" src="C:\Users\ebony\Documents\Ebony_Backup_Documents\Academia_UMUC\SWEN_670_Capstone_Project\NASA_EVA_Phase_II\spacewalk-master_Phase2M4\spacewalk-master\docs\qna/WVSRecorders.png" alt="image" />
+              </div>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="1">
+            <p><strong>Initial Configuration</strong></p>
+            <li>
+              <p>&#10003; All gates closed & hooks locked</p>
+              <ul>
+                <li>
+                  <p>&#10063; R Waist Tether to EV2 Blank hook</p>
+                </li>
+                <li>
+                  <p>&#10063; Red hook on L D-ring ext</p>
+                </li>
+                <li>
+                  <p>&#10063; Yellow hook on Green ERCM</p>
+                </li>
+                <li>
+                  <p>&#10063; Green hook on Red ERCM</p>
+                </li>
+                <li>
+                  <p>&#10063; Blank hook on MWS</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="1">
+            <p><strong>Initial Configuration</strong></p>
+            <li>
+              <p>&#10003; All gates closed & hooks locked</p>
+              <ul>
+                <li>
+                  <p>&#10063; All gates closed & hooks locked</p>
+                </li>
+                <li>
+                  <p>&#10063; R Waist Tether to A/L D-ring ext</p>
+                </li>
+                <li>
+                  <p>&#10063; Red hook on L D-ring ext</p>
+                </li>
+                <li>
+                  <p>&#10063; Yellow hook on Green ERCM</p>
+                </li>
+                <li>
+                  <p>&#10063; Green hook on Red ERCM</p>
+                </li>
+                <li>
+                  <p>&#10063; Blank hook to EV1 R Waist Tether</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <ol start="3">
+            <li>
+              <p>Start Hatch thermal cover clock PET (30 min) ___<em>:</em>___</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="2">
+            <p>EGRESS/SETUP (00:25)</p>
+            <li>
+              <p>Open hatch thermal cover</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Egress A/L</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="4">
+            <li>
+              <p>Receive EWC ORU bag from EV3, stow on BRT w/RET</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="2">
+            <li>
+              <p>Transfer EWC ORU Bag to EV1</p>
+              <ul>
+                <li>
+                  <p>&#10063; Position CETA ORU bag near hatch</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <ol start="4">
+            <li>
+              <p>Post crew egress, WVS Software:</p>
+              <ul>
+              </ul>
+              <ul>
+                <li>
+                  <p>select page - RF camera.</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+                <li>
+                  <p>Sel 'Advanced Controls'</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+                <li>
+                  <p>S-Band Level (two) - Max</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+        </td>
+        <td>
+          <ol start="3">
+            <li>
+              <p>Perform buddy checks</p>
+              <ul>
+                <li>
+                  <p>&#10063; MWS tabs up</p>
+                </li>
+                <li>
+                  <p>&#10063; BRT tab up</p>
+                </li>
+                <li>
+                  <p>&#10063; tether configs</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Verify SAFER config</p>
+              <ul>
+                <li>
+                  <p>&#10063;L handle down (MAN ISOL Vlv - Open)</p>
+                </li>
+                <li>
+                  <p>&#10063;R handle down (HCM - Closed)</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>&#10063;WVS - Green LED</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="5">
+            <li>
+              <p>Perform buddy checks</p>
+              <ul>
+                <li>
+                  <p>&#10063; MWS tabs up</p>
+                </li>
+                <li>
+                  <p>&#10063; BRT tab up</p>
+                </li>
+                <li>
+                  <p>&#10063; tether configs</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Verify SAFER config</p>
+              <ul>
+                <li>
+                  <p>&#10063;L handle down (MAN ISOL Vlv - Open)</p>
+                </li>
+                <li>
+                  <p>&#10063;R handle down (HCM - Closed)</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>&#10063;WVS - Green LED</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="6">
+            <li>
+              <p>Perform buddy checks</p>
+              <ul>
+                <li>
+                  <p>&#10063; MWS tabs up</p>
+                </li>
+                <li>
+                  <p>&#10063; BRT tab up</p>
+                </li>
+                <li>
+                  <p>&#10063; tether configs</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Verify SAFER config</p>
+              <ul>
+                <li>
+                  <p>&#10063;L handle down (MAN ISOL Vlv - Open)</p>
+                </li>
+                <li>
+                  <p>&#10063;R handle down (HCM - Closed)</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>&#10063;WVS - Green LED</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="8">
+            <li>
+              <p>Translate to S0 Port Struts</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Attach EV1 <strong>BLANK</strong> hook to port-outboard strut</p>
+              <ul>
+                <li>
+                  <p>&#10063; Gat closed, hook locked, reels unlocked, release RET</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Attach EV2 <strong>BLANK</strong> hook to port-inboard strut</p>
+              <ul>
+                <li>
+                  <p>&#10063; Gate closed, hook locked</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Release EV1 R Waist Tether from EV2 <strong>BLANK</strong> hook</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="9">
+            <li>
+              <p>Retrieve CETA ORU bag, stow on BRT with RET</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="12">
+            <li>
+              <p>Give <strong>EV3 GO</strong> to release Waist Tether</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="10">
+            <li>
+              <p>On <strong>EV1 GO</strong>, EV2 release right Waist Tether from Airlock internal D-Ring</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="13">
+            <li>
+              <p>Translate forward along Lab.</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Stow EWC ORU bag on Lab HR 0260, 0259 with hinge ISS aft</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate to S1 Face 1, zenith - MISSE 7 Retrieve</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="11">
+            <li>
+              <p>Close hatch thermal cover</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Perform translation adaptation</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate to S1 Face 1, nadir - MISSE 7 Retrieve</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <ol start="5">
+            <li>
+              <p>Stop Hatch Thermal Cover clock PET (30 min) ___<em>:</em>___</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+    </table>
+    <h2>MISSE 7 RETRIEVE (00:60)</h2>
+    <table class="gridtable">
+      <tr>
+        <th>IV(SSRMS)</th>
+        <th>EV1(Drew)</th>
+        <th>EV2(Taz)</th>
+      </tr>
+      <tr>
+        <td>
+          <ol start="1">
+            <li>
+              <p>Verify inhibits in place</p>
+              <ul>
+              </ul>
+              <ul>
+                <li>
+                  <p>&#10063; Stbd SARJ locked</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+                <li>
+                  <p>&#10063; MISSE/ELC-2 inhibits</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="1">
+            <div class="ncw ncw-warning">
+              <div class="ncw-head">WARNING</div>
+              <div class="ncw-body">
+                <p>Do not touch the hinged side while closing the MISSE PECs (Pinch Point)</p>
+              </div>
+            </div>
+            <div class="ncw ncw-caution">
+              <div class="ncw-head">CAUTION</div>
+              <div class="ncw-body">
+                <p>Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA</p>
+              </div>
+            </div>
+            <div class="ncw ncw-caution">
+              <div class="ncw-head">CAUTION</div>
+              <div class="ncw-body">
+                <p>There isn't a second caution in this block, but I wanted to add one here to show that there could be (also for "warning" and "note" blocks).</p>
+              </div>
+            </div>
+          </ol>
+        </td>
+        <td>
+          <ol start="1">
+            <div class="ncw ncw-warning">
+              <div class="ncw-head">WARNING</div>
+              <div class="ncw-body">
+                <p>Do not touch the hinged side while closing the MISSE PECs (Pinch Point)</p>
+              </div>
+            </div>
+            <div class="ncw ncw-caution">
+              <div class="ncw-head">CAUTION</div>
+              <div class="ncw-body">
+                <p>Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA</p>
+              </div>
+            </div>
+            <div class="ncw ncw-caution">
+              <div class="ncw-head">CAUTION</div>
+              <div class="ncw-body">
+                <p>There isn't a second caution in this block, but I wanted to add one here to show that there could be (also for "warning" and "note" blocks).</p>
+              </div>
+            </div>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="1">
+            <li>
+              <p>Translate to S1 Face 2, zenith route</p>
+              <ul>
+                <li>
+                  <p>&#10063; Fairlead on S0 HR 3467 (bay 1)</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Attach <strong>GREEN</strong> hook on S1 HR 3208 (bay 17)</p>
+              <ul>
+                <li>
+                  <p>&#10063; Gate closed, hook locked, reels unlocked, release RET</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate zenith to ELC-2</p>
+              <ul>
+                <li>
+                  <p>&#10063; Fairlead on S3 HR 3052 (face 1)</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Photograph deployed PECs</p>
+              <ul>
+              </ul>
+              <ul>
+                <li>
+                  <p>PEC 7B (&#10063; Ram/Fwd side, &#10063; Aft side)</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+                <li>
+                  <p>PEC 7A (&#10063; Zenith side, &#10063; Nadir side)</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+                <li>
+                  <p>&#10063;&#10063; Overall View (2 angles)</p>
+                  <ul>
+                  </ul>
+                  <ul>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="1">
+            <li>
+              <p>Translate to S1 Face 6, nadir route</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Attach <strong>GREEN</strong> hook on S1 HR 3217 or Xo 5790 (bay 17)</p>
+              <ul>
+                <li>
+                  <p>&#10063; Gate closed, hook locked, reels unlocked, release RET</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate outbd to bay 19</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Stow CETA ORU bag on S3 HRs 3046, 3038</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate zenith to ELC2</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <ol start="6">
+            <li>
+              <p>If EV1 complete with photos of PEC 7B, close PEC 7B</p>
+              <ul>
+                <li>
+                  <p>&#10063; All 4 PIP pins are re-installed</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Disconnect connector from PEC 7B</p>
+              <ul>
+                <li>
+                  <p>&#10063; RET, remove cap from dummy connector J7B</p>
+                </li>
+                <li>
+                  <p>&#10063; Demate connector from PEC</p>
+                </li>
+                <li>
+                  <p>Mate connector to dummy connector J7B (&#10063; no FOD, pins)</p>
+                </li>
+                <li>
+                  <p>&#10063; Install cap onto PEC 7B</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="5">
+            <li>
+              <p>Close PEC 7A</p>
+              <ul>
+                <li>
+                  <p>&#10063; All 4 PIP pins are re-installed</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="8">
+            <li>
+              <p>Disconnect connector from PEC 7A</p>
+              <ul>
+                <li>
+                  <p>&#10063; RET, remove cap from dummy connector J7A</p>
+                </li>
+                <li>
+                  <p>&#10063; Demate connector from PEC</p>
+                </li>
+                <li>
+                  <p>Mate connector to dummy connector J7A (&#10063; no FOD, pins)</p>
+                </li>
+                <li>
+                  <p>&#10063; Install cap onto PEC 7A</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <ol start="9">
+            <li>
+              <p>Release PEC 7B (2 PIP pins), stow on BRT w/RET (nadir HR)</p>
+              <ul>
+                <li>
+                  <p>&#10063; Reinstall Socket PIP pins (2)</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <ul>
+                <li>
+                  <p>&#10063; Reinstall Socket PIP pins (2)</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="6">
+            <div class="ncw ncw-caution">
+              <div class="ncw-head">CAUTION</div>
+              <div class="ncw-body">
+                <p>When translating around fwd edge of Node 2 and PMA2, avoid contact with Shuttle</p>
+              </div>
+            </div>
+          </ol>
+        </td>
+        <td>
+          <ol start="11">
+            <div class="ncw ncw-caution">
+              <div class="ncw-head">CAUTION</div>
+              <div class="ncw-body">
+                <p>When translating around fwd edge of Node 2 and PMA2, avoid contact with Shuttle</p>
+              </div>
+            </div>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="6">
+            <li>
+              <p>Retrieve GREEN hook from S1 HR 3208</p>
+              <ul>
+                <li>
+                  <p>&#10063; Gate closed, hook locked, reels unlocked, release RET</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate to Node 2, along port/zenith</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <p>STOW MISSE 7A IN PLB (00:10)</p>
+            <li>
+              <p>Attach GREEN hook on Node 2 HR 0344</p>
+              <ul>
+                <li>
+                  <p>&#10063; Gate closed, hook locked, reels unlocked, release RET</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate to Orbiter, port, bay 4</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Remove SWC latch PIP pins (2)</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Release latch (2) from stow position</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Stow PEC 7A in carrier (HRs out, Probe up)</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Lock fwd latch in landing config</p>
+              <ul>
+                <li>
+                  <p>&#10063; Install PIP pin</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Retrieve RET</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Lock aft latch in landing config</p>
+              <ul>
+                <li>
+                  <p>&#10063; Install PIP pin</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="11">
+            <li>
+              <p>Retrieve GREEN hook from S1 HR 3217 or Xo 5790</p>
+              <ul>
+                <li>
+                  <p>&#10063; Gate closed, hook locked, reels unlocked, release RET</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate to Node 2, stbd/zenith route</p>
+              <ul>
+                <li>
+                  <p>&#10063; Fairlead on Lab HR 0247 with wrist Adj</p>
+                </li>
+                <li>
+                  <p>&#10063; Fairlead on Node 2 HR 0314</p>
+                </li>
+                <li>
+                  <p>&#10063; Face toward Col and Node 2</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <p>STOW MISSE 7B IN PLB (00:15)</p>
+            <div class="ncw ncw-warning">
+              <div class="ncw-head">WARNING</div>
+              <div class="ncw-body">
+                <p>Stay  2 ft from exposed EFGF connector when OBSS berthed, powered, and EFGF not grappled</p>
+              </div>
+            </div>
+            <li>
+              <p>Translate to Orbiter, stbd, bay 4</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Remove SWC latch PIP pins (2)</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Release latch (2) from stow position</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Stow PEC 7B in carrier (HRs out, Probe up)</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Lock aft latch in landing config</p>
+              <ul>
+                <li>
+                  <p>&#10063; Install PIP pin</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Retrieve RET</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Lock fwd latch in landing config</p>
+              <ul>
+                <li>
+                  <p>&#10063; Install PIP pin</p>
+                </li>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <ol start="16">
+            <li>
+              <p>Glove and Gauntlet check</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p>Translate aft to Bay 9 - MISSE 8 Retrieve</p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol start="20">
+            <li>
+              <p><strong>Glove and Gauntlet check</strong></p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+            <li>
+              <p><strong>Translate aft to S3 Face 1 - S3 CETA Light Install</strong></p>
+              <ul>
+              </ul>
+              <ul>
+              </ul>
+            </li>
+          </ol>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer">Generated with eva-tasklist version 1.2.0</div>
+</body>
+
+</html>
