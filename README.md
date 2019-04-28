@@ -46,6 +46,8 @@ The following are step by step instructions for how to get the NASA EVA Task Gen
 The following demostrates how to use the application via console command line. The software can be run on Window, Linux, and Mac OS.
 *EVA Task Generator CSS- Customizable & scalable CSS template*
 
+<video src="docs/qna/images/CSS Demo.mp4" width="320" height="200" controls preload></video>
+<video src="CSS Demo.mp4" width="320" height="200" controls preload></video>
 ![CSS Demo](docs/qna/images/CSS Demo.mp4)
 
 ## API Reference
