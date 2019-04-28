@@ -80,29 +80,39 @@ module.exports = class SpacewalkValidator {
      */
     validateFile(yamlFile, jsonSchemaFile) {
         
-        // Load the json-schema
-        let schema = JSON.parse(fs.readFileSync(jsonSchemaFile));
-
         // Parse the yaml file into json
         let yaml = YAML.load(yamlFile);
 
-        // Validate the yaml
-        let ajv = new Ajv();
-        let valid = ajv.validate(schema, yaml);
-        if (!valid) {
-            throw new ValidationError("YAML Validation Failed", ajv.errors);
-        }
-
-        return valid;
+        // Validate the YAML
+        return this.validateYaml(yaml, jsonSchemaFile);
 
     }
 
+    /**
+     * Validates a YAML string against the provided schema.
+     * 
+     * @param {*} yamlString Yaml string to validate
+     * @param {*} jsonSchemaFile Schema file to validate against
+     */
     validateString(yamlString, jsonSchemaFile) {
+
+        // Parse the yaml string into json
+        let yaml = YAML.parse(yamlString);
+
+        return this.validateYaml(yaml, jsonSchemaFile);
+
+    }
+
+    /**
+     * Validates a parsed YAML against the provided schema.
+     * 
+     * @param {*} yamlString Yaml string to validate
+     * @param {*} jsonSchemaFile Schema file to validate against
+     */
+    validateYaml(yaml, jsonSchemaFile) {
+
         // Load the json-schema
         let schema = JSON.parse(fs.readFileSync(jsonSchemaFile));
-
-        // Parse the yaml file into json
-        let yaml = YAML.parse(yamlString);
 
         // Validate the yaml
         let ajv = new Ajv();
