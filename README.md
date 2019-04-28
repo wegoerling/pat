@@ -2,10 +2,10 @@
 **Last Updated by Ebony Christian 4/28/2019**
 
 ## User Guide for Phase II EVA Task Generator Project
-The purposed of the EVA Task Generator project is to replace manual procedure creation process for Extravehicular Activities (EVA) by NASA, Johnson Space Center personnel. The goal of the application is to takes an EVA checklist in YAML file format as input, and output a Word document in the standard procedure format with minimal post processing.
+The purpose of the EVA Task Generator project is to replace the manual procedure creation process for Extravehicular Activities (EVAs) by NASA, Johnson Space Center personnel. The goal of the application is to take an EVA checklist in a YAML file format as input, and output a Word document in the standard procedure format with minimal post processing required.
 
 ## Motivation
-The software intends to assist NASA personnel in the performance and management of tasks during “space walks” outside the International Space Station (ISS) or future vehicles. The primary objective of the project is to automate and organize the creation of task lists used in space walks and ensure that they are easily accessed and updated by stakeholders. 
+This software intends to assist NASA personnel in the performance and management of tasks during “space walks” outside the International Space Station (ISS) or future vehicles. The primary objective of the project is to automate and organize the creation of task lists used in space walks and ensure that they are easily accessed and can be updated by stakeholders. 
 
 ## Build status
 
@@ -31,7 +31,7 @@ The software intends to assist NASA personnel in the performance and management 
 ![EVA Excecution](docs/qna/images/Successful_Execution.png)
 
 ## Installation
-The following are step by step instructions for how to get the NASA EVA Task Generator development environment running. The software can be run on Window, Linux, and Mac OS.
+The following are step by step instructions for how to get the NASA EVA Task Generator development environment installed and running. The software can be run on Window, Linux, and Mac OS.
 
 1. Install [node LTS version]( https://nodejs.org/en/download/).
 2. Install [Visual Studio Code]( https://code.visualstudio.com/download).
@@ -43,7 +43,7 @@ The following are step by step instructions for how to get the NASA EVA Task Gen
 7. Check the install is working by running help menu `node index.js -h` or the version `node index.js -v`
 
 ## How to Use \ User Instructions
-The following files demostrates how to use the application via console command line. 
+The following files demostrates how to use the application features via the console command line. 
 
 *EVA Task Generator CSS- Customizable & scalable CSS template*
 **docs/qna/images/CSS Demo.mp4**
@@ -59,9 +59,9 @@ The following files demostrates how to use the application via console command l
 
 ## API Reference
 
-Libraries used include nunjucks for CSS template customization and pandoc for HTML-to-Word file conversion.
+Libraries used include nunjucks for CSS template customization, chai assertion for unit testing, and pandoc for HTML-to-Word file conversion.
 
-See [YAML Definition]( docs/yamlDefinition.md) for details on how NASA JSC writes procedures in the YAML files format for EVA Tasks, and how the EVA Task Generator uses the data dictionary to parse YAML files. 
+See [YAML Definition]( docs/yamlDefinition.md) for an overview of YAML file syntax. This link also provides details on how NASA JSC writes procedures in the YAML files format for EVA Tasks and how the EVA Task Generator uses the data dictionary to parse YAML files. 
 
 ## Tests
 
