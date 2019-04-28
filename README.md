@@ -19,16 +19,16 @@ The software intends to assist NASA personnel in the performance and management 
 ## Screenshots
 
 *EVA Task Generator HTML Output Example*
-![EVA HTML_Output](/HTML_Output.png)
+![EVA HTML_Output](docs/qna/images/HTML_Output.png)
 
 *EVA Task Generator Help Feature*
-![EVA Help](/Help_Text.png)
+![EVA Help](docs/qna/images/Help_Text.png)
 
 *EVA Task Generator Input File Example*
-![EVA File Input](/Input_File.png)
+![EVA File Input](docs/qna/images/Input_File.png)
 
 *EVA Task Generator Successful Execution*
-![EVA Excecution](/Successful_Execution.png)
+![EVA Excecution](docs/qna/images/Successful_Execution.png)
 
 ## Installation
 The following are step by step instructions for how to get the NASA EVA Task Generator development environment running. The software can be run on Window, Linux, and Mac OS.
@@ -44,6 +44,8 @@ The following are step by step instructions for how to get the NASA EVA Task Gen
 
 ## How to Use \ User Instructions
 
+*EVA Task Generator Successful Execution*
+![EVA Excecution](docs/qna/images/Successful_Execution.png)
 
 ## API Reference
 
