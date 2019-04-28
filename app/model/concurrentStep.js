@@ -48,7 +48,9 @@ function getActorSteps(actorStepsYaml) {
 
     // Check if actorStepsYaml is a string
     if (typeof actorStepsYaml === "string") {
-        actorSteps.push(new Step(actorStepsYaml));
+        var step = new Step();
+        step.populateFromYaml(actorStepsYaml);
+        actorSteps.push(step);
     }
 
     // Check if actorStepsYaml is an array
@@ -58,7 +60,9 @@ function getActorSteps(actorStepsYaml) {
         for (var stepYaml of actorStepsYaml) {
 
             // Create the step, and add it to the array
-            actorSteps.push(new Step(stepYaml));
+            var step = new Step();
+            step.populateFromYaml(stepYaml);
+            actorSteps.push(step);
         }
 
     }

@@ -32,7 +32,8 @@ describe('Step constructor - Positive Testing', function() {
 
         it('should return a procedure for normal input', () => {
 
-            let step = new Step(yamlObject);
+            let step = new Step();
+            step.populateFromYaml(yamlObject);
 
             expect(step).to.exist;
 
@@ -113,7 +114,8 @@ describe('Step constructor - Positive Testing', function() {
 
         it('should return a procedure for normal input', () => {
 
-            let step = new Step(yamlObject);
+            let step = new Step();
+            step.populateFromYaml(yamlObject);
 
             expect(step).to.exist;
 
