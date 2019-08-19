@@ -1,0 +1,37 @@
+{
+    "type": "object",
+    "properties": {
+        "procedure_name": { "type": "string" },
+        "actors": {
+            "type": "array",
+            "items": { 
+                "type": "object",
+                "properties": {
+                    "role": { "type": "string"},
+                    "name": { "type": "string"}
+                },
+                "required": ["role"]
+            }
+        },
+        "tasks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "file": { "type": "string"},
+                    "url": {"type": "string"}
+                },
+                "anyOf": [
+                    {
+                        "required": ["file"]
+                    },
+                    {
+                        "required": ["url"]
+                    }
+                ]
+            }
+        },
+        "css": {"type": "string"}
+    },
+    "required": ["procedure_name", "actors", "tasks"]
+}

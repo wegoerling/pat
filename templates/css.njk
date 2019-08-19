@@ -1,0 +1,148 @@
+<style type="text/css">
+        @media print{@page {size: landscape}}
+
+        body {
+            font-family: Arial,sans-serif;
+            margin: auto;
+            max-width: 90%;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        table.gridtable {
+            /* font-family: verdana, arial, sans-serif; */
+            /* font-size: 16px; */
+            color: #333333;
+            border-width: 2px;
+            border-color: #666666;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            page-break-after: always;
+        }
+
+        table.gridtable th {
+            border-width: 2px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        table.gridtable td {
+            border-width: 2px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+            width: {{100 // procedure.actors.length}}%;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0px;
+            padding: 5px 5px 5px 20px;
+        }
+
+        ol {
+            margin: 0px;
+            margin-left: 10px;
+            padding: 5px;
+            padding-left: 10px;
+        }
+
+        li {
+            margin: 1px 0px;
+            padding: 0px;
+            line-height: 110%;
+        }
+
+        li p {
+            margin: 2px 0px;
+            padding: 0px;
+        }
+
+        div.ncw {
+            border: solid black 1px;
+            padding: 0px;
+            margin: 5px 0px;
+        }
+
+        div.ncw div {
+            border: solid black 1px;
+            margin: 0px;
+        }
+
+        div.ncw-head {
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        div.ncw-warning div.ncw-head {
+            background-color: red;
+            color: white;
+        }
+
+        div.ncw-caution div.ncw-head {
+            background-color: yellow;
+            color: black;
+        }
+
+        div.ncw-body {
+            padding: 5px;
+        }
+
+        .sizeable{
+            border: 1px solid;
+            display: inline-block;
+            resize: both;
+            overflow: hidden;
+            
+            max-height: 100%;
+            max-width: 100%;
+
+        }
+        
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+
+        /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            /*top: -5px;
+            left: 105%; */
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+
+        div.footer {
+            text-align: center;
+        }
+        
+        {{css}}
+
+        {{procedure.css}}
+</style>

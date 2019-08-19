@@ -1,0 +1,5 @@
+this isn't yaml.
+
+<test>neither is this</test>
+
+this: [{ 'also', 'is', 'not', 'yaml' }]

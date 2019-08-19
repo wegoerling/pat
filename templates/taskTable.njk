@@ -1,0 +1,26 @@
+{# Write the table name #}
+<h2>{{task.title}} ({{task.duration}})</h2>
+<table class="gridtable">
+    {# Create Headers for each Actor #}
+    <tr>
+        {% for actor in procedure.actors %}
+            {{ actor|stepIncrement(1) }}
+            <th>{{actor.role}}({{actor.name if actor.name}})</th>
+        {% endfor %}
+    </tr>
+
+    {# Cycle through the concurrent steps in the task #}
+    {% for concurrentStep in task.concurrentSteps %}
+        <tr>
+            {% for colActor in procedure.actors %}
+                <td>
+                    {% if concurrentStep[colActor.role] %}
+                        {{writeStepColumn(colActor, concurrentStep[colActor.role])}}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+

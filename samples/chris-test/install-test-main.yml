@@ -1,0 +1,11 @@
+procedure_name: NASA Tasks Installation Test File
+actors:
+  - role: IV
+    name: SSRMS
+  - role: EV1
+    name: Sam
+  - role: EV2
+    name: Alex
+
+tasks:
+  - file: install-test.yml
