@@ -17,6 +17,8 @@ const wiky = require('wiky');
  *          an error occurs
  */
 exports.convert = function (markdown) {
+	var regex;
+
 	if (markdown === null || (typeof markdown !== 'string')) {
 		return "";
 	}
@@ -34,11 +36,11 @@ exports.convert = function (markdown) {
 
 	//  Find and replace emphasis markdown?
 	if (markdown.includes("'''")) {
-		var regex = /([\'])+/gi
+		regex = /([\'])+/gi
 		markdown = markdown.replace(regex, '*');
 	}
 	if (markdown.includes('**')) {
-		var regex =  /([\*])+/gi;
+		regex =  /([\*])+/gi;
 		markdown = markdown.replace(regex, '*');
 	}
 

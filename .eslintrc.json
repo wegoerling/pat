@@ -17,9 +17,7 @@
 		"linebreak-style": "off",
 
 		// Variables, etc
-		"no-implicit-globals": "off",
 		"eqeqeq": "off",
-		"no-redeclare": "off",
 
 		// Braces
 		"curly": "off",

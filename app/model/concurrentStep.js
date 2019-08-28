@@ -3,13 +3,14 @@
 const Step = require("./step.js");
 
 function getActorSteps(actorStepsYaml) {
+	var step;
 
 	// Initiate the array of steps for the actor
 	const actorSteps = [];
 
 	// Check if actorStepsYaml is a string
 	if (typeof actorStepsYaml === "string") {
-		var step = new Step();
+		step = new Step();
 		step.populateFromYaml(actorStepsYaml);
 		actorSteps.push(step);
 	}
@@ -21,7 +22,7 @@ function getActorSteps(actorStepsYaml) {
 		for (var stepYaml of actorStepsYaml) {
 
 			// Create the step, and add it to the array
-			var step = new Step();
+			step = new Step();
 			step.populateFromYaml(stepYaml);
 			actorSteps.push(step);
 		}
@@ -40,15 +41,17 @@ function getActorSteps(actorStepsYaml) {
 module.exports = class ConcurrentStep {
 
 	constructor(concurrentStepYaml) {
+		var actorRole,
+			actorSteps;
 
 		// First, check if this is a simo
 		if(concurrentStepYaml.simo) {
 
 			// Iterate over they keys (which are actor roles)
-			for (var actorRole in concurrentStepYaml.simo) {
+			for (actorRole in concurrentStepYaml.simo) {
 
 				// Get the actor steps array
-				var actorSteps = getActorSteps(concurrentStepYaml.simo[actorRole]);
+				actorSteps = getActorSteps(concurrentStepYaml.simo[actorRole]);
 
 				// Set the actor and steps in the object
 				this[actorRole] = actorSteps;
@@ -64,10 +67,10 @@ module.exports = class ConcurrentStep {
 		if (Object.keys(concurrentStepYaml).length !== 1) {
 			throw new Error("Expected a single actor role, but instead got " + JSON.stringify(concurrentStepYaml));
 		}
-		var actorRole = Object.keys(concurrentStepYaml)[0];
+		actorRole = Object.keys(concurrentStepYaml)[0];
 
 		// get the actor steps
-		var actorSteps = getActorSteps(concurrentStepYaml[actorRole]);
+		actorSteps = getActorSteps(concurrentStepYaml[actorRole]);
 
 		// Set the actor and steps in the object
 		this[actorRole] = actorSteps;
