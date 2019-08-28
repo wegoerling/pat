@@ -23,7 +23,7 @@ describe('ConcurrentStep constructor - Positive Testing', function() {
 
 			const concurrentStep = new ConcurrentStep(fakeYamlObj);
 
-			expect(concurrentStep.EV1).to.exist;
+			expect(concurrentStep.EV1).to.exist; // eslint-disable-line no-unused-expressions
 			expect(concurrentStep.EV1).to.be.an('array');
 			expect(concurrentStep.EV1).to.have.all.keys(0);
 
@@ -46,13 +46,13 @@ describe('ConcurrentStep constructor - Positive Testing', function() {
 
 			const concurrentStep = new ConcurrentStep(fakeYamlObj);
 
-			expect(concurrentStep.EV1).to.exist;
+			expect(concurrentStep.EV1).to.exist; // eslint-disable-line no-unused-expressions
 			expect(concurrentStep.EV1).to.be.an('array');
 			expect(concurrentStep.EV1).to.have.all.keys(0);
 			expect(concurrentStep.EV1[0].text).to.be.a('string');
 			expect(concurrentStep.EV1[0].text).to.equal('Go Outside');
 
-			expect(concurrentStep.EV2).to.exist;
+			expect(concurrentStep.EV2).to.exist; // eslint-disable-line no-unused-expressions
 			expect(concurrentStep.EV2).to.be.an('array');
 			expect(concurrentStep.EV2).to.have.all.keys(0, 1);
 			expect(concurrentStep.EV2[0].text).to.be.a('string');

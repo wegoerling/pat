@@ -33,7 +33,7 @@ describe('Step constructor - Positive Testing', function() {
 			const step = new Step();
 			step.populateFromYaml(yamlObject);
 
-			expect(step).to.exist;
+			expect(step).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(step.title).to.be.a('string');
 			expect(step.title).to.equal('**Initial Configuration**');
@@ -115,7 +115,7 @@ describe('Step constructor - Positive Testing', function() {
 			const step = new Step();
 			step.populateFromYaml(yamlObject);
 
-			expect(step).to.exist;
+			expect(step).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(step.title).to.be.a('string');
 			expect(step.title).to.equal('**Initial Configuration**');

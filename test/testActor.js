@@ -25,7 +25,7 @@ describe('Actor constructor - Positive Testing', function() {
 
 			const actor = new Actor(fakeYamlObj);
 
-			expect(actor).to.exist;
+			expect(actor).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(actor.role).to.be.a('string');
 			expect(actor.role).to.equal('EV1');
@@ -48,7 +48,7 @@ describe('Actor constructor - Positive Testing', function() {
 
 			const actor = new Actor(fakeYamlObj);
 
-			expect(actor).to.exist;
+			expect(actor).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(actor.role).to.be.a('string');
 			expect(actor.role).to.equal('EV1');

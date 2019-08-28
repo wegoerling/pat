@@ -35,7 +35,7 @@ describe('Task constructor - Positive Testing', function() {
 			expect(task.concurrentSteps).to.be.an('array');
 			expect(task.concurrentSteps).to.have.all.keys(0);
 
-			expect(task.concurrentSteps[0].EV1).to.exist;
+			expect(task.concurrentSteps[0].EV1).to.exist; // eslint-disable-line no-unused-expressions
 			expect(task.concurrentSteps[0].EV1).to.be.an('array');
 			expect(task.concurrentSteps[0].EV1).to.have.all.keys(0);
 
