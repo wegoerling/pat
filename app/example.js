@@ -34,7 +34,7 @@ function startUp(fileLocation) {
 
 // Options
 
-//ex. node main.js -e docx f:\\code\\spacewalk_fork\\src\main.yml wordFile
+// ex. node main.js -e docx f:\\code\\spacewalk_fork\\src\main.yml wordFile
 // -e: option
 // docx: file type
 // f:\\code\\spacewalk_fork\\src\main.yml: path to file for parsing

@@ -137,7 +137,6 @@ describe('eva-tasklist.js', () => {
                             - '{{CHECKMARK}} Blank hook to EV1 R Waist Tether'
                 `;
 
-
 			//  Fake main and task YAML reads
 			existsSyncStub.withArgs('foo.yml').returns(true);
 			readFileSyncStub.withArgs('foo.yml').returns(mainYamlString);

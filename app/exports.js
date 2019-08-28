@@ -1,7 +1,6 @@
 const docx = require('docx');
 const fs = require('fs');
 
-
 exports.html = function (data, fileLocation) {
 	fs.writeFile(`${fileLocation}.html`, `<div style="color: blue;">${JSON.stringify(data)}</div>`, (err) => {
 		if (err) {

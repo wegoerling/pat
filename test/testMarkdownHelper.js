@@ -133,6 +133,5 @@ describe('markdownHelper.convert - Positive Testing', function() {
 			expect(actualhtml).to.equal(expectedhtml);
 		});
 
-
 	});
 });

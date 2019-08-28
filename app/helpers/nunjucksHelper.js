@@ -37,7 +37,6 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 	// Get the directory and main template name
 	var templatePath = path.resolve(htmlFileTemplate);
 
-
 	// Add custom nunjucks filter to test if variable is a string
 	var env = new nunjucks.Environment(
 		new nunjucks.FileSystemLoader(path.dirname(templatePath)),
@@ -90,7 +89,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 
 	// Add custom nunjucks filter for images
 	env.addFilter('imagePath', function(image) {
-		//const dir = path.dirname(outputPath);
+		// const dir = path.dirname(outputPath);
 		const dir = outputPath;
 		const imageName = path.basename(image);
 		fs.copyFile(`${inputPath}/${imageName}`, `${dir}/${imageName}`, (err) => {

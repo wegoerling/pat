@@ -10,7 +10,6 @@ const path = require('path');
 const fs = require('fs');
 const yj = require('yamljs');
 
-
 const Procedure = require('../app/model/procedure');
 
 /**
@@ -46,7 +45,6 @@ describe('Procedure constructor - Positive Testing', function() {
 
 		// not used anywhere, but keeping to make sure egressYamlString is valid
 		yj.parse(egressYamlString);
-
 
 		// Read some files in for schema checking prior to stubbing the readFileSync method
 		const procedureFile = path.join(__dirname, '../app/schema/procedureSchema.json');
@@ -107,7 +105,6 @@ describe('Procedure constructor - Positive Testing', function() {
 			expect(procedure.tasks[0].duration).to.be.a('string');
 			expect(procedure.tasks[0].duration).to.equal('00:25');
 
-
 			expect(procedure.tasks[0].concurrentSteps).to.be.an('array');
 			expect(procedure.tasks[0].concurrentSteps).to.have.all.keys(0);
 
@@ -138,7 +135,6 @@ describe('Procedure constructor - Negative Testing', function() {
 		const procedureSchema = fs.readFileSync(procedureFile, 'utf-8');
 		const taskSchema = fs.readFileSync(taskFile);
 
-
 		it('should throw error if file doesn\'t exist', async () => {
 
 			const procedure = new Procedure();
@@ -159,7 +155,6 @@ describe('Procedure constructor - Negative Testing', function() {
 			readFileSync.withArgs(sinon.match(filename)).returns(badYaml);
 			readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
 			readFileSync.withArgs(sinon.match('taskSchema.json')).returns(taskSchema);
-
 
 			const procedure = new Procedure();
 			const err = await procedure.populateFromFile(filename);
@@ -198,7 +193,6 @@ describe('Procedure constructor - Negative Testing', function() {
 			expect(err.validationErrors).to.exist;
 			expect(err.validationErrors).to.not.be.empty;
 			/* eslint-enable no-unused-expressions */
-
 
 		});
 

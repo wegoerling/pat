@@ -74,7 +74,6 @@ module.exports = class SpacewalkValidator {
 
 	}
 
-
 	/**
      * Validates a YAML file against the provided schema.
      *
