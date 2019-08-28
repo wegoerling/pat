@@ -17,7 +17,6 @@
 		"linebreak-style": "off",
 
 		// Braces
-		"curly": "off",
 		"brace-style": "off",
 
 		// Docs

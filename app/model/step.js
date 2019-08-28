@@ -24,47 +24,56 @@ module.exports = class Step {
 		}
 
 		// Check for the title
-		if (stepYaml.title) 
+		if (stepYaml.title) {
 			this.title = this.parseTitle(stepYaml.title);
+		}
 
 		// Check for the text
-		if (stepYaml.step) 
+		if (stepYaml.step) {
 			this.text = this.parseStepText(stepYaml.step);
+		}
 
 		// Check for images
-		if (stepYaml.images) 
+		if (stepYaml.images) {
 			this.images = this.parseArray(stepYaml.images);
+		}
 
 		// Check for checkboxes
-		if (stepYaml.checkboxes) 
+		if (stepYaml.checkboxes) {
 			this.checkboxes = this.parseArray(stepYaml.checkboxes);
+		}
 
 		// Check for warnings
-		if (stepYaml.warning) 
+		if (stepYaml.warning) {
 			this.warnings = this.parseArray(stepYaml.warning);
+		}
 
 		// Check for cautions
-		if (stepYaml.caution) 
+		if (stepYaml.caution) {
 			this.cautions = this.parseArray(stepYaml.caution);
+		}
 
 		// Check for comments
-		if (stepYaml.comment) 
+		if (stepYaml.comment) {
 			this.comments = this.parseArray(stepYaml.comment);
+		}
 
 		// Check for notes
-		if (stepYaml.note) 
+		if (stepYaml.note) {
 			this.notes = this.parseArray(stepYaml.note);
+		}
 
 		// Check for substeps
-		if (stepYaml.substeps) 
+		if (stepYaml.substeps) {
 			this.substeps = this.parseSubsteps(stepYaml.substeps);
+		}
 
 	}
 
 	/**
-     * 
+     *
      * Return the title
-     * 
+     *
      * @param titleYaml YAML for the title
      */
 	parseTitle(titleYaml) {
@@ -75,7 +84,7 @@ module.exports = class Step {
 
 	/**
      * Return the step text, or an empty string if does not exist.
-     * 
+     *
      * @param {*} stepYaml YAML for the step text
      */
 	parseStepText(stepTextYaml) {
@@ -85,11 +94,11 @@ module.exports = class Step {
 	}
 
 	/**
-     * Pasre yaml as either string or array, and return an array.  If the YAML was a simple string, 
-     * the array has a single element.  If the YAML was multiple elements, return an array with all 
+     * Pasre yaml as either string or array, and return an array.  If the YAML was a simple string,
+     * the array has a single element.  If the YAML was multiple elements, return an array with all
      * strings.
-     * 
-     * @param {*} yaml 
+     *
+     * @param {*} yaml
      */
 	parseArray(yaml) {
 
@@ -118,7 +127,7 @@ module.exports = class Step {
 
 	/**
      * Returns an array of substeps for the step, or an empty array if none are found.
-     * 
+     *
      * @param {*} substepsYaml YAML for the substeps.
      */
 	parseSubsteps(substepsYaml) {
@@ -147,6 +156,6 @@ module.exports = class Step {
 		}
 
 		return substeps;
-        
+
 	}
 }
