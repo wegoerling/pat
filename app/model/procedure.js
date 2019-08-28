@@ -90,7 +90,8 @@ module.exports = class Procedure {
 				// Check that the task is a file
 				if (taskYaml.file) {
 
-					// Since the task file is in relative path to the procedure file, need to translate it!
+					// Since the task file is in relative path to the procedure
+					// file, need to translate it!
 					const taskFileName = translatePath(fileName, taskYaml.file);
 					//path.join(path.dirname(fileName), taskYaml.file);
 

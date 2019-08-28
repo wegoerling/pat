@@ -19,9 +19,6 @@
 		// Docs
 		"valid-jsdoc": "off",
 
-		// Misc
-		"max-len": "off",
-
 		// Whitespace
 		"space-in-parens": "off",
 		"computed-property-spacing": "off",

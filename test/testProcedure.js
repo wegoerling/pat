@@ -111,7 +111,8 @@ describe('Procedure constructor - Positive Testing', function() {
 			expect(procedure.tasks[0].concurrentSteps).to.be.an('array');
 			expect(procedure.tasks[0].concurrentSteps).to.have.all.keys(0);
 
-			expect(procedure.tasks[0].concurrentSteps[0].EV1).to.exist; // eslint-disable-line no-unused-expressions
+			// eslint-disable-next-line no-unused-expressions
+			expect(procedure.tasks[0].concurrentSteps[0].EV1).to.exist;
 			expect(procedure.tasks[0].concurrentSteps[0].EV1).to.be.an('array');
 			expect(procedure.tasks[0].concurrentSteps[0].EV1).to.have.all.keys(0);
 
@@ -191,9 +192,12 @@ describe('Procedure constructor - Negative Testing', function() {
 
 			const procedure = new Procedure();
 			const err = await procedure.populateFromFile(filename);
-			expect(err).to.exist; // eslint-disable-line no-unused-expressions
-			expect(err.validationErrors).to.exist; // eslint-disable-line no-unused-expressions
-			expect(err.validationErrors).to.not.be.empty; // eslint-disable-line no-unused-expressions
+
+			/* eslint-disable no-unused-expressions */
+			expect(err).to.exist;
+			expect(err.validationErrors).to.exist;
+			expect(err.validationErrors).to.not.be.empty;
+			/* eslint-enable no-unused-expressions */
 
 
 		});
@@ -216,10 +220,12 @@ describe('Procedure constructor - Negative Testing', function() {
 
 			const procedure = new Procedure();
 			const err = await procedure.populateFromFile(filename);
-			expect(err).to.exist; // eslint-disable-line no-unused-expressions
-			expect(err.validationErrors).to.exist; // eslint-disable-line no-unused-expressions
-			expect(err.validationErrors).to.not.be.empty; // eslint-disable-line no-unused-expressions
 
+			/* eslint-disable no-unused-expressions */
+			expect(err).to.exist;
+			expect(err.validationErrors).to.exist;
+			expect(err.validationErrors).to.not.be.empty;
+			/* eslint-enable no-unused-expressions */
 
 		});
 
@@ -245,9 +251,12 @@ describe('Procedure constructor - Negative Testing', function() {
 
 			const procedure = new Procedure();
 			const err = await procedure.populateFromFile(filename);
-			expect(err).to.exist; // eslint-disable-line no-unused-expressions
-			expect(err.validationErrors).to.exist; // eslint-disable-line no-unused-expressions
-			expect(err.validationErrors).to.not.be.empty; // eslint-disable-line no-unused-expressions
+
+			/* eslint-disable no-unused-expressions */
+			expect(err).to.exist;
+			expect(err.validationErrors).to.exist;
+			expect(err.validationErrors).to.not.be.empty;
+			/* eslint-enable no-unused-expressions */
 
 		});
 	});
