@@ -31,10 +31,6 @@
 		"space-in-parens": ["error", "never"],
 		"computed-property-spacing": ["error", "never"],
 		"array-bracket-spacing": ["error", "never"],
-		"space-before-function-paren": ["error", "never"],
-
-		// Whitespace
-		"func-call-spacing": "off",
-		"space-before-blocks": "off"
+		"space-before-function-paren": ["error", "never"]
 	}
 }

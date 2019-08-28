@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const path = require ('path');
+const path = require('path');
 const YAML = require('yamljs');
 
 const Actor = require('./actor.js');
@@ -40,7 +40,7 @@ function readUrlPromise(url) {
 	});
 }
 
-function translatePath(fileName, file){
+function translatePath(fileName, file) {
 	const fullPath = path.join(path.dirname(fileName), file);
 	return fullPath;
 }
