@@ -7,24 +7,24 @@ const exp = require('./exports');
 // Run npm start to run this function
 function startUp(fileLocation) {
 
-    const doc = yaml.safeLoad(fs.readFileSync(fileLocation, 'utf8'));
-    const actors = _.get(doc, 'actors');
-    console.log('*actors from doc', actors);
-    const files = _.get(doc, 'tasks');
+	const doc = yaml.safeLoad(fs.readFileSync(fileLocation, 'utf8'));
+	const actors = _.get(doc, 'actors');
+	console.log('*actors from doc', actors);
+	const files = _.get(doc, 'tasks');
 
-    _.forEach(files, (file) => {
-        (_.get(file, 'file') && !_.get(file, 'repo')) ? console.log("Internal file"): console.log("External file");
-        if (_.get(file, 'file') && !_.get(file, 'repo')) {
-            if (_.get(file, 'actors')) {
-                console.log("File: " + file.file + " actor: " + file.actors);
-            } else {
-                console.log("File with no specified actors: " + file.file);
-            }
-        } else if (_.get(file, 'repo')) {
-            console.log("Repo: " + file.repo + " version: " + file.version + " file: " + file.file + " actors: " + file.actors + " vars: " + JSON.stringify(file.vars));
-        }
-    });
-    return doc;
+	_.forEach(files, (file) => {
+		(_.get(file, 'file') && !_.get(file, 'repo')) ? console.log("Internal file"): console.log("External file");
+		if (_.get(file, 'file') && !_.get(file, 'repo')) {
+			if (_.get(file, 'actors')) {
+				console.log("File: " + file.file + " actor: " + file.actors);
+			} else {
+				console.log("File with no specified actors: " + file.file);
+			}
+		} else if (_.get(file, 'repo')) {
+			console.log("Repo: " + file.repo + " version: " + file.version + " file: " + file.file + " actors: " + file.actors + " vars: " + JSON.stringify(file.vars));
+		}
+	});
+	return doc;
 };
 
 // to run this command, in the console run node main.js -e or --export. This will only work if it's ran soley by itself.
@@ -41,19 +41,19 @@ function startUp(fileLocation) {
 // wordFile: file path/name for exported file
 program.option('-e, --export [type]', 'Export yaml to specified file type', /^(html|doc|docx)$/i, 'html');
 program.on('option:export', () => {
-    const yamlFile = process.argv[process.argv.length - 2];
-    const fileLocation = process.argv[process.argv.length - 1];
-    switch (program.export) {
-        case 'html':
-            exp.html(startUp(yamlFile), fileLocation);
-            break;
-        case 'docx':
-        case 'doc':
-            exp.doc(startUp(yamlFile), fileLocation);
-            break;
-        default:
-            break;
-    }
+	const yamlFile = process.argv[process.argv.length - 2];
+	const fileLocation = process.argv[process.argv.length - 1];
+	switch (program.export) {
+		case 'html':
+			exp.html(startUp(yamlFile), fileLocation);
+			break;
+		case 'docx':
+		case 'doc':
+			exp.doc(startUp(yamlFile), fileLocation);
+			break;
+		default:
+			break;
+	}
 });
 
 program.parse(process.argv);

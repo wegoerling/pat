@@ -60,9 +60,6 @@
 		"space-before-blocks": "off",
 
 		// JS version
-		"no-restricted-syntax": "off",
-
-		// Definitely need to define something here
-		"indent": "off"
+		"no-restricted-syntax": "off"
 	}
 }

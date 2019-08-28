@@ -10,98 +10,98 @@ const SpacewalkValidator = require("../schema/spacewalkValidator");
 
 module.exports = class Procedure {
 
-    constructor() {
-        this.name = "";
-        this.actors = [];
-        this.tasks = [];
-        this.css = ""
-    }
+	constructor() {
+		this.name = "";
+		this.actors = [];
+		this.tasks = [];
+		this.css = ""
+	}
 
-    /**
+	/**
      * Populates data, reading in the specified file.
      * 
      * @param {*} fileName The full path to the YAML file
      * 
      * @throws {Error} if an error is encountered parsing the file.
      */
-    async populateFromFile(fileName) {
+	async populateFromFile(fileName) {
 
-        try {
+		try {
 
-            // Check if the file exists
-            if (!fs.existsSync(fileName)) {
-                throw new Error("Could not find file " + fileName);
-            }
+			// Check if the file exists
+			if (!fs.existsSync(fileName)) {
+				throw new Error("Could not find file " + fileName);
+			}
 
-            // Validate the input file
-            const spacewalkValidator = new SpacewalkValidator();
-            spacewalkValidator.validateProcedureSchemaFile(fileName);
+			// Validate the input file
+			const spacewalkValidator = new SpacewalkValidator();
+			spacewalkValidator.validateProcedureSchemaFile(fileName);
 
-            // Load the YAML File
-            const procedureYaml = YAML.load(fileName, null, true);
+			// Load the YAML File
+			const procedureYaml = YAML.load(fileName, null, true);
 
-            // Save the procedure Name
-            this.name = procedureYaml.procedure_name;
+			// Save the procedure Name
+			this.name = procedureYaml.procedure_name;
 
-            // Save the actors
-            for (var actorYaml of procedureYaml.actors) {
-                this.actors.push(new Actor(actorYaml));
-            }
-            // Save the tasks
-            for (var taskYaml of procedureYaml.tasks) {
+			// Save the actors
+			for (var actorYaml of procedureYaml.actors) {
+				this.actors.push(new Actor(actorYaml));
+			}
+			// Save the tasks
+			for (var taskYaml of procedureYaml.tasks) {
 
-                // Check that the task is a file
-                if (taskYaml.file) {
+				// Check that the task is a file
+				if (taskYaml.file) {
                     
-                    // Since the task file is in relative path to the procedure file, need to translate it!
-                    const taskFileName = translatePath(fileName, taskYaml.file);
-                    //path.join(path.dirname(fileName), taskYaml.file);
+					// Since the task file is in relative path to the procedure file, need to translate it!
+					const taskFileName = translatePath(fileName, taskYaml.file);
+					//path.join(path.dirname(fileName), taskYaml.file);
 
-                    // Validate & Load the yaml file!
-                    if (!fs.existsSync(taskFileName)) {
-                        throw new Error("Could not find task file " + taskFileName);
-                    }
-                    spacewalkValidator.validateTaskSchemaFile(taskFileName);
-                    const loadedTaskYaml = YAML.load(taskFileName, null, true);
+					// Validate & Load the yaml file!
+					if (!fs.existsSync(taskFileName)) {
+						throw new Error("Could not find task file " + taskFileName);
+					}
+					spacewalkValidator.validateTaskSchemaFile(taskFileName);
+					const loadedTaskYaml = YAML.load(taskFileName, null, true);
 
-                    // Save the task!
-                    this.tasks.push(new Task(loadedTaskYaml));
+					// Save the task!
+					this.tasks.push(new Task(loadedTaskYaml));
 
-                } 
+				} 
 
-                //  Is this a URL?
-                else if(taskYaml.url) {
+				//  Is this a URL?
+				else if(taskYaml.url) {
 
-                    //  Wait for URL fetch to complete
-                    // console.log('Reading task URL: ' + t.url);
-                    const yamlString = await readUrlPromise(taskYaml.url);
+					//  Wait for URL fetch to complete
+					// console.log('Reading task URL: ' + t.url);
+					const yamlString = await readUrlPromise(taskYaml.url);
 
-                    // Validate the data read from url
-                    spacewalkValidator.validateTaskSchemaString(yamlString);
+					// Validate the data read from url
+					spacewalkValidator.validateTaskSchemaString(yamlString);
 
-                    //  Parse the Task YAML
-                    const loadedTaskYaml = YAML.parse(yamlString);
+					//  Parse the Task YAML
+					const loadedTaskYaml = YAML.parse(yamlString);
                     
-                    // Save the task!
-                    this.tasks.push(new Task(loadedTaskYaml));
-                }
+					// Save the task!
+					this.tasks.push(new Task(loadedTaskYaml));
+				}
 
-            }
+			}
 
-            // Pull in css file if it is defined
-            if (procedureYaml.css) {
-                const cssFileName = translatePath(fileName, procedureYaml.css);
-                if (!fs.existsSync(cssFileName)) {
-                    throw new Error("Could not find css file " + cssFileName);
-                }
-                this.css = fs.readFileSync(cssFileName);
-            }
+			// Pull in css file if it is defined
+			if (procedureYaml.css) {
+				const cssFileName = translatePath(fileName, procedureYaml.css);
+				if (!fs.existsSync(cssFileName)) {
+					throw new Error("Could not find css file " + cssFileName);
+				}
+				this.css = fs.readFileSync(cssFileName);
+			}
 
-        } catch (err) {
-            return err;
-        }
+		} catch (err) {
+			return err;
+		}
 
-    }
+	}
 
 }
 
@@ -115,28 +115,28 @@ module.exports = class Procedure {
  * @returns         A promise
  */
 function readUrlPromise(url) {
-    const lib = url.startsWith('https') ? require('https') : require('http');
+	const lib = url.startsWith('https') ? require('https') : require('http');
 
-    return new Promise((resolve, reject) => {
-        const request = lib.get(url, (response) => {
-            const body = [];
-            response.setEncoding('utf8');
+	return new Promise((resolve, reject) => {
+		const request = lib.get(url, (response) => {
+			const body = [];
+			response.setEncoding('utf8');
 
-            response.on('data', (chunk) => {
-                body.push(chunk);
-            });
+			response.on('data', (chunk) => {
+				body.push(chunk);
+			});
 
-            response.on('end', () => {
-                resolve(body.toString());
-            });
-        });
+			response.on('end', () => {
+				resolve(body.toString());
+			});
+		});
 
-        request.on('error', (err) => {
-            reject(err)
-        });
-    });
+		request.on('error', (err) => {
+			reject(err)
+		});
+	});
 }
 function translatePath(fileName, file ){
-    const fullPath = path.join(path.dirname(fileName), file);
-    return fullPath;
+	const fullPath = path.join(path.dirname(fileName), file);
+	return fullPath;
 }

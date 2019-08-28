@@ -2,20 +2,20 @@
 
 module.exports = class Actor {
 
-    constructor(actorYaml) {
+	constructor(actorYaml) {
 
-        // Save the role (required)
-        if (!actorYaml.role) {
-            throw new Error("Input YAML missing actor Role: " + JSON.stringify(actorYaml));
-        }
-        this.role = actorYaml.role;
+		// Save the role (required)
+		if (!actorYaml.role) {
+			throw new Error("Input YAML missing actor Role: " + JSON.stringify(actorYaml));
+		}
+		this.role = actorYaml.role;
 
-        // Save the name (if it exists)
-        this.name = "";
-        if (actorYaml.name) {
-            this.name = actorYaml.name;
-        }
+		// Save the name (if it exists)
+		this.name = "";
+		if (actorYaml.name) {
+			this.name = actorYaml.name;
+		}
 
-    }
+	}
 
 }

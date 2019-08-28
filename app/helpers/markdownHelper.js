@@ -17,32 +17,32 @@ const wiky = require('wiky');
  *          an error occurs
  */
 exports.convert = function (markdown) {
-    if (markdown === null || (typeof markdown !== 'string')) {
-        return "";
-    }
+	if (markdown === null || (typeof markdown !== 'string')) {
+		return "";
+	}
 
-    //  Find and replace check marks
-    markdown = markdown.replace(/{{CHECK}}/gi, '&#10003;');
+	//  Find and replace check marks
+	markdown = markdown.replace(/{{CHECK}}/gi, '&#10003;');
 
-    //  Find and replace check boxes
-    markdown = markdown.replace(/{{CHECKBOX}}/gi, '&#10063;');
-    markdown = markdown.replace(/{{CHECK BOX}}/gi, '&#10063;');
+	//  Find and replace check boxes
+	markdown = markdown.replace(/{{CHECKBOX}}/gi, '&#10063;');
+	markdown = markdown.replace(/{{CHECK BOX}}/gi, '&#10063;');
 
-    //TODO: Why does checmkark actually mean checkbox?
-    markdown = markdown.replace(/{{CHECKMARK}}/gi, '&#10063;');
-    markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10063;');
+	//TODO: Why does checmkark actually mean checkbox?
+	markdown = markdown.replace(/{{CHECKMARK}}/gi, '&#10063;');
+	markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10063;');
 
-    //  Find and replace emphasis markdown?
-    if (markdown.includes("'''")) {
-        var regex = /([\'])+/gi
-        markdown = markdown.replace(regex, '*');
-    }
-    if (markdown.includes('**')) {
-        var regex =  /([\*])+/gi;
-        markdown = markdown.replace(regex, '*');
-    }
+	//  Find and replace emphasis markdown?
+	if (markdown.includes("'''")) {
+		var regex = /([\'])+/gi
+		markdown = markdown.replace(regex, '*');
+	}
+	if (markdown.includes('**')) {
+		var regex =  /([\*])+/gi;
+		markdown = markdown.replace(regex, '*');
+	}
 
-    const text = wiky.toHtml(markdown);
+	const text = wiky.toHtml(markdown);
 
-    return new showdown.Converter().makeHtml(text);
+	return new showdown.Converter().makeHtml(text);
 }

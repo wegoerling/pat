@@ -17,111 +17,111 @@ const TASK_SCHEMA_FILE = "./taskSchema.json";
  */
 module.exports = class SpacewalkValidator {
 
-    constructor() {}
+	constructor() {}
     
-    /**
+	/**
      * Validates a yaml file against the procedure schema
      * 
      * @param {*} procedureYamlFilePath YAML file to validate
      */
-    validateProcedureSchemaFile(procedureYamlFilePath) {
+	validateProcedureSchemaFile(procedureYamlFilePath) {
 
-        const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
+		const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
         
-        return this.validateFile(procedureYamlFilePath, procedureSchema);
+		return this.validateFile(procedureYamlFilePath, procedureSchema);
 
-    }
+	}
 
-    /**
+	/**
      * Validates a yaml string against the procedure schema
      * 
      * @param {*} procedureYamlString YAML string to validate
      */
-    validateProcedureSchemaString(procedureYamlString) {
+	validateProcedureSchemaString(procedureYamlString) {
         
-        const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
+		const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
         
-        return this.validateString(procedureYamlString, procedureSchema);
+		return this.validateString(procedureYamlString, procedureSchema);
 
-    }
+	}
 
-    /**
+	/**
      * Validates a yaml file against the task schema.
      * 
      * @param {*} taskYamlFilePath YAML file to validate
      */
-    validateTaskSchemaFile(taskYamlFilePath) {
+	validateTaskSchemaFile(taskYamlFilePath) {
         
-        const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
+		const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
         
-        return this.validateFile(taskYamlFilePath, taskSchema);
+		return this.validateFile(taskYamlFilePath, taskSchema);
 
-    }
+	}
 
-    /**
+	/**
      * Validates a yaml string against the task schema.
      * 
      * @param {*} taskYamlString YAML string to validate
      */
-    validateTaskSchemaString(taskYamlString) {
+	validateTaskSchemaString(taskYamlString) {
         
-        const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
+		const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
         
-        return this.validateString(taskYamlString, taskSchema);
+		return this.validateString(taskYamlString, taskSchema);
 
-    }
+	}
 
 
-    /**
+	/**
      * Validates a YAML file against the provided schema.
      * 
      * @param {*} yamlFile Yaml file to validate
      * @param {*} jsonSchemaFile Schema file to validate against
      */
-    validateFile(yamlFile, jsonSchemaFile) {
+	validateFile(yamlFile, jsonSchemaFile) {
         
-        // Parse the yaml file into json
-        const yaml = YAML.load(yamlFile);
+		// Parse the yaml file into json
+		const yaml = YAML.load(yamlFile);
 
-        // Validate the YAML
-        return this.validateYaml(yaml, jsonSchemaFile);
+		// Validate the YAML
+		return this.validateYaml(yaml, jsonSchemaFile);
 
-    }
+	}
 
-    /**
+	/**
      * Validates a YAML string against the provided schema.
      * 
      * @param {*} yamlString Yaml string to validate
      * @param {*} jsonSchemaFile Schema file to validate against
      */
-    validateString(yamlString, jsonSchemaFile) {
+	validateString(yamlString, jsonSchemaFile) {
 
-        // Parse the yaml string into json
-        const yaml = YAML.parse(yamlString);
+		// Parse the yaml string into json
+		const yaml = YAML.parse(yamlString);
 
-        return this.validateYaml(yaml, jsonSchemaFile);
+		return this.validateYaml(yaml, jsonSchemaFile);
 
-    }
+	}
 
-    /**
+	/**
      * Validates a parsed YAML against the provided schema.
      * 
      * @param {*} yamlString Yaml string to validate
      * @param {*} jsonSchemaFile Schema file to validate against
      */
-    validateYaml(yaml, jsonSchemaFile) {
+	validateYaml(yaml, jsonSchemaFile) {
 
-        // Load the json-schema
-        const schema = JSON.parse(fs.readFileSync(jsonSchemaFile));
+		// Load the json-schema
+		const schema = JSON.parse(fs.readFileSync(jsonSchemaFile));
 
-        // Validate the yaml
-        const ajv = new Ajv();
-        const valid = ajv.validate(schema, yaml);
-        if (!valid) {
-            throw new ValidationError("YAML Validation Failed", ajv.errors);
-        }
+		// Validate the yaml
+		const ajv = new Ajv();
+		const valid = ajv.validate(schema, yaml);
+		if (!valid) {
+			throw new ValidationError("YAML Validation Failed", ajv.errors);
+		}
 
-        return valid;
-    }
+		return valid;
+	}
 
 }
