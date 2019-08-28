@@ -7,13 +7,13 @@ module.exports = class Task {
 	constructor(taskYaml) {
 
 		// Get the title
-		if(!taskYaml.title) {
+		if (!taskYaml.title) {
 			throw new Error(`Input YAML task missing title: ${JSON.stringify(taskYaml)}`);
 		}
 		this.title = taskYaml.title;
 
 		// Get the duration
-		if(!taskYaml.duration) {
+		if (!taskYaml.duration) {
 			throw new Error(`Input YAML task missing duration: ${JSON.stringify(taskYaml)}`);
 		}
 		this.duration = taskYaml.duration;

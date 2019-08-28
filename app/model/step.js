@@ -18,7 +18,7 @@ module.exports = class Step {
 	populateFromYaml(stepYaml) {
 
 		// Check if the step is a simple string
-		if(typeof stepYaml === 'string') {
+		if (typeof stepYaml === 'string') {
 			this.text = stepYaml;
 			return;
 		}

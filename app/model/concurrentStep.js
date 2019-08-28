@@ -42,7 +42,7 @@ module.exports = class ConcurrentStep {
 			actorSteps;
 
 		// First, check if this is a simo
-		if(concurrentStepYaml.simo) {
+		if (concurrentStepYaml.simo) {
 
 			// Iterate over they keys (which are actor roles)
 			for (actorRole in concurrentStepYaml.simo) {

@@ -32,7 +32,7 @@ function run(args) {
 	const procedure = new Procedure();
 	procedure.populateFromFile(program.input).then((err) => {
 		// Check if an error occurred
-		if(err) {
+		if (err) {
 			console.error(`Error while deserializing YAML: ${err}`);
 			if (err.validationErrors) {
 				console.log('Validation Errors:');
@@ -56,7 +56,7 @@ function genHtml(program, procedure) {
 	// Generate the HTML output file
 	// eslint-disable-next-line no-use-before-define
 	generateHtmlChecklist(procedure, program, function () {
-		if(!fs.existsSync(program.output)) {
+		if (!fs.existsSync(program.output)) {
 			console.error('Failed to generate HTML output');
 			return;
 		}
@@ -76,7 +76,7 @@ function genHtml(program, procedure) {
 function genDoc(program) {
 
 	//  Perform HTML -> DOCX conversion, if requested
-	if(program.doc) {
+	if (program.doc) {
 
 		//  Figure out docx output filename
 		const p = path.parse(program.output);
@@ -88,7 +88,7 @@ function genDoc(program) {
 		const command = `pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
 		child.execSync(command);
 
-		if(!fs.existsSync(docfile)) {
+		if (!fs.existsSync(docfile)) {
 			console.error('Failed to generate DOCX output');
 			return;
 		}
@@ -130,8 +130,8 @@ function buildProgramArguments(program, args) {
 
 	try {
 		program.parse(args);
-	} catch(e) {
-		if(e instanceof TypeError) {
+	} catch (e) {
+		if (e instanceof TypeError) {
 			//  Commander.js will annoyingly throw a TypeError if an argument
 			//  that requires a parameter is missing its parameter.
 			program.help();
@@ -150,12 +150,12 @@ function validateProgramArguments(program) {
 
 	//  Minimum number of arguments is 4:
 	//  e.g. node index.js -i something
-	if(process.argv.length < 4) {
+	if (process.argv.length < 4) {
 		program.help();
 	}
 
 	//  If no output file was specified, use a default
-	if(!program.output) {
+	if (!program.output) {
 		const p = path.parse(program.input);
 		const fileWithoutPath = p.base;
 		const ext = p.ext;
@@ -168,13 +168,13 @@ function validateProgramArguments(program) {
 	}
 
 	//  If the input file doesn't exist, emit an error and quit
-	if(!fs.existsSync(program.input)) {
+	if (!fs.existsSync(program.input)) {
 		console.error(`Input YAML doesn't exist: ${program.input}`);
 		process.exit();
 	}
 
 	//  If this process can't write to the output location, emit an error and quit
-	if(!canWrite(program.output)) { // eslint-disable-line no-use-before-define
+	if (!canWrite(program.output)) { // eslint-disable-line no-use-before-define
 		console.error(`Can't write to output location: ${program.output}`);
 		process.exit();
 	}
@@ -211,12 +211,12 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
 function canWrite(pathToTest) {
 
 	//  Check whether the path exists
-	if(!fs.existsSync(pathToTest)) {
+	if (!fs.existsSync(pathToTest)) {
 		//  File doesn't exist - check permissions for the parent dir
 		const p = path.parse(pathToTest);
 		let dir = p.dir;
 
-		if(dir === '') {
+		if (dir === '') {
 			dir = '.';
 		}
 
@@ -228,7 +228,7 @@ function canWrite(pathToTest) {
 		fs.accessSync(pathToTest, fs.constants.W_OK);
 		//  Yes
 		return true;
-	} catch(err) {
+	} catch (err) {
 		//  No
 		return false;
 	}

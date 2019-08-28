@@ -29,11 +29,11 @@
 		// Don't follow WMF standard here because it would require so many
 		// changes to current codebase.
 		"space-in-parens": ["error", "never"],
+		"computed-property-spacing": ["error", "never"],
 
 		// Whitespace
-		"computed-property-spacing": "off",
 		"space-before-function-paren": "off",
-		"keyword-spacing": "off",
+		// "keyword-spacing": "off",
 		"space-infix-ops": "off",
 		"object-curly-spacing": "off",
 		"array-bracket-spacing": "off",
