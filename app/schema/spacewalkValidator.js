@@ -26,7 +26,7 @@ module.exports = class SpacewalkValidator {
      */
     validateProcedureSchemaFile(procedureYamlFilePath) {
 
-        let procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
+        const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
         
         return this.validateFile(procedureYamlFilePath, procedureSchema);
 
@@ -39,7 +39,7 @@ module.exports = class SpacewalkValidator {
      */
     validateProcedureSchemaString(procedureYamlString) {
         
-        let procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
+        const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
         
         return this.validateString(procedureYamlString, procedureSchema);
 
@@ -52,7 +52,7 @@ module.exports = class SpacewalkValidator {
      */
     validateTaskSchemaFile(taskYamlFilePath) {
         
-        let taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
+        const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
         
         return this.validateFile(taskYamlFilePath, taskSchema);
 
@@ -65,7 +65,7 @@ module.exports = class SpacewalkValidator {
      */
     validateTaskSchemaString(taskYamlString) {
         
-        let taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
+        const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
         
         return this.validateString(taskYamlString, taskSchema);
 
@@ -81,7 +81,7 @@ module.exports = class SpacewalkValidator {
     validateFile(yamlFile, jsonSchemaFile) {
         
         // Parse the yaml file into json
-        let yaml = YAML.load(yamlFile);
+        const yaml = YAML.load(yamlFile);
 
         // Validate the YAML
         return this.validateYaml(yaml, jsonSchemaFile);
@@ -97,7 +97,7 @@ module.exports = class SpacewalkValidator {
     validateString(yamlString, jsonSchemaFile) {
 
         // Parse the yaml string into json
-        let yaml = YAML.parse(yamlString);
+        const yaml = YAML.parse(yamlString);
 
         return this.validateYaml(yaml, jsonSchemaFile);
 
@@ -112,11 +112,11 @@ module.exports = class SpacewalkValidator {
     validateYaml(yaml, jsonSchemaFile) {
 
         // Load the json-schema
-        let schema = JSON.parse(fs.readFileSync(jsonSchemaFile));
+        const schema = JSON.parse(fs.readFileSync(jsonSchemaFile));
 
         // Validate the yaml
-        let ajv = new Ajv();
-        let valid = ajv.validate(schema, yaml);
+        const ajv = new Ajv();
+        const valid = ajv.validate(schema, yaml);
         if (!valid) {
             throw new ValidationError("YAML Validation Failed", ajv.errors);
         }

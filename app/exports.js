@@ -1,5 +1,5 @@
-let docx = require('docx');
-let fs = require('fs');
+const docx = require('docx');
+const fs = require('fs');
 
 
 exports.html = function (data, fileLocation) {
@@ -13,11 +13,11 @@ exports.html = function (data, fileLocation) {
 
 // https://docx.js.org/#/
 exports.doc = function (data, fileLocation) {
-    let doc = new docx.Document();
-    let paragraph = new docx.Paragraph(JSON.stringify(data));
+    const doc = new docx.Document();
+    const paragraph = new docx.Paragraph(JSON.stringify(data));
     doc.addParagraph(paragraph);
 
-    let exp = new docx.Packer();
+    const exp = new docx.Packer();
     exp.toBuffer(doc).then((buffer) => {
         fs.writeFileSync(fileLocation + ".docx", buffer);
     })

@@ -93,7 +93,7 @@ module.exports = class Step {
      */
     parseArray(yaml) {
 
-        let array = [];
+        const array = [];
 
         // Check for string
         if (typeof yaml === "string") {
@@ -123,11 +123,11 @@ module.exports = class Step {
      */
     parseSubsteps(substepsYaml) {
 
-        let substeps = [];
+        const substeps = [];
 
         // Check for string
         if (typeof substepsYaml === "string") {
-            let substep = new Step();
+            const substep = new Step();
             substep.populateFromYaml(substepsYaml);
             substeps.push(substep);
         }
@@ -135,7 +135,7 @@ module.exports = class Step {
         // Check for array
         else if (Array.isArray(substepsYaml)) {
             for (var substepYaml of substepsYaml) {
-                let substep = new Step();
+                const substep = new Step();
                 substep.populateFromYaml(substepYaml);
                 substeps.push(substep);
             }

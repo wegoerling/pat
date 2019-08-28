@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 "use strict";
 
 const expect = require('chai').expect;
@@ -16,7 +19,7 @@ const Step = require('../app/model/step');
 describe('Step constructor - Positive Testing', function() {
     describe('Normal Input without arrays', () => {
 
-        let yamlString = `
+        const yamlString = `
             step: '{{CHECK}} All gates closed & hooks locked'
             title: '**Initial Configuration**'
             checkboxes: '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
@@ -28,11 +31,11 @@ describe('Step constructor - Positive Testing', function() {
             note: this is a note
         `;
 
-        let yamlObject = yj.parse(yamlString);
+        const yamlObject = yj.parse(yamlString);
 
         it('should return a procedure for normal input', () => {
 
-            let step = new Step();
+            const step = new Step();
             step.populateFromYaml(yamlObject);
 
             expect(step).to.exist;
@@ -84,37 +87,37 @@ describe('Step constructor - Positive Testing', function() {
 
     describe('Normal Input with arrays', () => {
 
-        let yamlString = `
+        const yamlString = `
             step: '{{CHECK}} All gates closed & hooks locked'
             title: '**Initial Configuration**'
-            checkboxes: 
+            checkboxes:
                 - '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
                 - second checkbox
-            images: 
+            images:
                 - ./WVSRecorders.png
                 - ./secondImage.png
-            substeps: 
+            substeps:
                 - select page - RF camera.
                 - step: second substep
-            warning: 
+            warning:
                 - Do not touch the hinged side while closing the MISSE PECs (Pinch Point)
                 - second warning
-            caution: 
+            caution:
                 - Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA
                 - second caution
-            comment: 
+            comment:
                 - this is a comment
                 - second comment
-            note: 
+            note:
                 - this is a note
                 - second note
         `;
 
-        let yamlObject = yj.parse(yamlString);
+        const yamlObject = yj.parse(yamlString);
 
         it('should return a procedure for normal input', () => {
 
-            let step = new Step();
+            const step = new Step();
             step.populateFromYaml(yamlObject);
 
             expect(step).to.exist;

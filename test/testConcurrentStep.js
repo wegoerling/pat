@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 "use strict";
 
 const expect = require('chai').expect;
@@ -15,7 +18,7 @@ const ConcurrentStep = require('../app/model/concurrentStep');
  */
 describe('ConcurrentStep constructor - Positive Testing', function() {
     describe('Normal Input - non-simo', () => {
-        let yamlString = `
+        const yamlString = `
             EV1:
                 - step: "Go Outside"
         `;
@@ -23,7 +26,7 @@ describe('ConcurrentStep constructor - Positive Testing', function() {
 
         it('should return a task for normal input', () => {
 
-            let concurrentStep = new ConcurrentStep(fakeYamlObj);
+            const concurrentStep = new ConcurrentStep(fakeYamlObj);
 
             expect(concurrentStep.EV1).to.exist;
             expect(concurrentStep.EV1).to.be.an('array');
@@ -35,8 +38,8 @@ describe('ConcurrentStep constructor - Positive Testing', function() {
     });
 
     describe('Normal Input - simo', () => {
-        let yamlString = `
-            simo: 
+        const yamlString = `
+            simo:
                 EV1: "Go Outside"
                 EV2:
                     - step: "Stay Inside"
@@ -46,7 +49,7 @@ describe('ConcurrentStep constructor - Positive Testing', function() {
 
         it('should return a task for normal input', () => {
 
-            let concurrentStep = new ConcurrentStep(fakeYamlObj);
+            const concurrentStep = new ConcurrentStep(fakeYamlObj);
 
             expect(concurrentStep.EV1).to.exist;
             expect(concurrentStep.EV1).to.be.an('array');

@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 "use strict";
 
 const expect = require('chai').expect;
@@ -15,7 +18,7 @@ const Task = require('../app/model/task');
  */
 describe('Task constructor - Positive Testing', function() {
     describe('Normal Input', () => {
-        let yamlString = `
+        const yamlString = `
         title: Egress
         duration: 00:25
         steps:
@@ -26,7 +29,7 @@ describe('Task constructor - Positive Testing', function() {
 
         it('should return a task for normal input', () => {
 
-            let task = new Task(fakeYamlObj);
+            const task = new Task(fakeYamlObj);
 
             expect(task.title).to.be.a('string');
             expect(task.title).to.equal('Egress');
@@ -53,7 +56,7 @@ describe('Task constructor - Positive Testing', function() {
 describe('Task constructor - Negative Testing', function() {
     describe('No Title', () => {
 
-        let yamlString = `
+        const yamlString = `
         duration: 00:25
         steps:
             - EV1:
@@ -63,14 +66,14 @@ describe('Task constructor - Negative Testing', function() {
 
         it('should throw error if title doesn\'t exist', () => {
 
-            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing title: '); 
+            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing title: ');
 
         });
     });
 
     describe('No Duration', () => {
 
-        let yamlString = `
+        const yamlString = `
         title: Egress
         steps:
             - EV1:
@@ -80,14 +83,14 @@ describe('Task constructor - Negative Testing', function() {
 
         it('should throw error if duration doesn\'t exist', () => {
 
-            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing duration: '); 
+            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing duration: ');
 
         });
     });
 
     describe('No Steps', () => {
 
-        let yamlString = `
+        const yamlString = `
         title: Egress
         duration: 00:25
         `;
@@ -95,7 +98,7 @@ describe('Task constructor - Negative Testing', function() {
 
         it('should throw error if steps don\'t exist', () => {
 
-            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing steps: '); 
+            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing steps: ');
 
         });
     });

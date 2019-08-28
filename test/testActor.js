@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 "use strict";
 
 const expect = require('chai').expect;
@@ -15,7 +18,7 @@ const Actor = require('../app/model/actor');
  */
 describe('Actor constructor - Positive Testing', function() {
     describe('Normal Input', () => {
-        let yamlString = `
+        const yamlString = `
             role: EV1
             name: Drew
             `;
@@ -25,7 +28,7 @@ describe('Actor constructor - Positive Testing', function() {
 
         it('should return an actor for normal input', () => {
 
-            let actor = new Actor(fakeYamlObj);
+            const actor = new Actor(fakeYamlObj);
 
             expect(actor).to.exist;
 
@@ -39,7 +42,7 @@ describe('Actor constructor - Positive Testing', function() {
     });
 
     describe('No Name', () => {
-        let yamlString = `
+        const yamlString = `
             role: EV1
             `;
         var fakeYamlObj = yj.parse(yamlString);
@@ -48,7 +51,7 @@ describe('Actor constructor - Positive Testing', function() {
 
         it('should return an actor for no name', () => {
 
-            let actor = new Actor(fakeYamlObj);
+            const actor = new Actor(fakeYamlObj);
 
             expect(actor).to.exist;
 
@@ -67,7 +70,7 @@ describe('Actor constructor - Positive Testing', function() {
  */
 describe('Actor constructor - Positive Testing', function() {
     describe('No Role', () => {
-        let yamlString = `
+        const yamlString = `
             name: Drew
             `;
         var fakeYamlObj = yj.parse(yamlString);
