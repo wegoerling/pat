@@ -1,11 +1,10 @@
 # EVA-Task-Generator
-**Last Updated by Ebony Christian 4/28/2019**
 
 ## User Guide for Phase II EVA Task Generator Project
 The purpose of the EVA Task Generator project is to replace the manual procedure creation process for Extravehicular Activities (EVAs) by NASA, Johnson Space Center personnel. The goal of the application is to take an EVA checklist in a YAML file format as input, and output a Word document in the standard procedure format with minimal post processing required.
 
 ## Motivation
-This software intends to assist NASA personnel in the performance and management of tasks during “space walks” outside the International Space Station (ISS) or future vehicles. The primary objective of the project is to automate and organize the creation of task lists used in space walks and ensure that they are easily accessed and can be updated by stakeholders. 
+This software intends to assist NASA personnel in the performance and management of tasks during “space walks” outside the International Space Station (ISS) or future vehicles. The primary objective of the project is to automate and organize the creation of task lists used in space walks and ensure that they are easily accessed and can be updated by stakeholders.
 
 ## Build status
 
@@ -14,8 +13,8 @@ This software intends to assist NASA personnel in the performance and management
 
 ## Code style
 
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
- 
+TBD. First-semester UMUC team _may_ have used [Standard](https://github.com/standard/standard) but lack of semicolons doesn't seem right. Perhaps [Semistandard](https://github.com/standard/semistandard) is a better option. Alternatively use eslint.
+
 ## Screenshots
 
 *EVA Task Generator HTML Output Example*
@@ -33,17 +32,17 @@ This software intends to assist NASA personnel in the performance and management
 ## Installation
 The following are step by step instructions for how to get the NASA EVA Task Generator development environment installed and running. The software can be run on Window, Linux, and Mac OS.
 
-1. Install [node LTS version]( https://nodejs.org/en/download/). 
-2. Install [Visual Studio Code]( https://code.visualstudio.com/download). 
-3. _(Optional) For conversion to .docx format, install [Pandoc](https://pandoc.org/).  **In order for .docx conversion to work, the pandoc command must be on the PATH**_ 
+1. Install [node LTS version]( https://nodejs.org/en/download/).
+2. Install [Visual Studio Code]( https://code.visualstudio.com/download).
+3. _(Optional) For conversion to .docx format, install [Pandoc](https://pandoc.org/).  **In order for .docx conversion to work, the pandoc command must be on the PATH**_
 4. Clone the NASA EVA Task Generator “spacewalk” repository from GitHub
- ```git clone https://github.com/jamesmontalvo3/spacewalk.git``` 
-5. Navigate into the project directory, using command `cd spacewalk`  
-6. Use NPM to install the module, using command `npm install`  
-7. Check the install is working by running help menu `node index.js -h` or the version `node index.js -v` 
+ ```git clone https://github.com/jamesmontalvo3/spacewalk.git```
+5. Navigate into the project directory, using command `cd spacewalk`
+6. Use NPM to install the module, using command `npm install`
+7. Check the install is working by running help menu `node index.js -h` or the version `node index.js -v`
 
-## How to Use \ User Instructions
-The following files demostrates how to use the application features via the console command line. 
+## Videos
+The following videos demostrate how to use the application features via the console command line.
 
 *EVA Task Generator CSS- Customizable & scalable CSS template*
 **docs/qna/images/CSS Demo.mp4**
@@ -61,9 +60,9 @@ The following files demostrates how to use the application features via the cons
 
 Libraries used include nunjucks for HTML/CSS template customization, chai assertion for unit testing, and pandoc for HTML-to-Word file conversion.
 
-Installation of Pandoc is required for HTML-to-Word file conversion.  The ```pandoc``` command must be on the user’s path. 
+Installation of Pandoc is required for HTML-to-Word file conversion.  The ```pandoc``` command must be on the user’s path.
 
-See [YAML Definition]( docs/yamlDefinition.md) for an overview of YAML file syntax. This link also provides details on how NASA JSC writes procedures in the YAML files format for EVA Tasks and how the EVA Task Generator uses the data dictionary to parse YAML files. 
+See [YAML Definition]( docs/yamlDefinition.md) for an overview of YAML file syntax. This link also provides details on how NASA JSC writes procedures in the YAML files format for EVA Tasks and how the EVA Task Generator uses the data dictionary to parse YAML files.
 
 ## Tests
 
@@ -91,7 +90,7 @@ Mocha will generate a nice test report for you.
 
 Run the program with sample YAML files.
 The following samples may be run from within the spacewalk directory
-- Sample using local files 
+- Sample using local files
 `node index.js --input samples/sta-134-eva/main.yml --output sta-134-aqua.html’
 - Sample with CSS on command line
 `node index.js --input samples/sta-134-eva/main.yml --css samples/sta-134-eva/custom.css --output sta-134-aqua.html`
@@ -106,25 +105,25 @@ Or
 
 ## Credits
 
-*NASA Project Sponsor*  
+*NASA Project Sponsor*
 James Montalvo
 
-*UMUC Phase II Development Team, Spring 2019*  
-Akruthi Shetty  
-Christopher Redding  
-Ebony Christian  
-Joe Bidinger  
-Ted Deloggio  
+*UMUC Phase II Development Team, Spring 2019*
+Akruthi Shetty
+Christopher Redding
+Ebony Christian
+Joe Bidinger
+Ted Deloggio
 
-*UMUC Phase I Development Team, Fall 2018*  
-Jose De la Cruz  
-Jason Foley  
-Alexandra Kuntz  
-Engedawork Befekadu  
-Timothy Smith  
-Christopher Drury  
-Kevin Terry  
-John-Carlo Babin  
+*UMUC Phase I Development Team, Fall 2018*
+Jose De la Cruz
+Jason Foley
+Alexandra Kuntz
+Engedawork Befekadu
+Timothy Smith
+Christopher Drury
+Kevin Terry
+John-Carlo Babin
 
 
 ## License
