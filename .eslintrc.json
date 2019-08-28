@@ -1,0 +1,70 @@
+{
+	"extends": [
+		// Ref: https://github.com/wikimedia/eslint-config-wikimedia
+		// Base options are "wikimedia/server" and "wikimedia/client"
+		// Per ref above, wikimedia/server = wikimedia, wikimedia/node, wikimedia/language/es6
+		// Below switches wikimedia/language/es6 for wikimedia/language/es2016
+		// IN ORDER TO SUPPORT BROWSER-BASED RENDERING, MAY NEED TO SWITCH TO wikimedia/client
+		"wikimedia",
+		"wikimedia/node",
+		"wikimedia/language/es2016"
+	],
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
+	"rules": {
+		// can't have this without causing headaches on Windows
+		"linebreak-style": "off",
+
+		// Variables, etc
+		"prefer-const": "off",
+		"no-undef": "off",
+		"no-unused-vars": "off",
+		"no-unused-expressions": "off",
+		"no-implicit-globals": "off",
+		"no-use-before-define": "off",
+		"eqeqeq": "off",
+		"no-redeclare": "off",
+
+		// Braces
+		"curly": "off",
+		"brace-style": "off",
+
+		// Docs
+		"valid-jsdoc": "off",
+
+		// Misc
+		"prefer-template": "off",
+		"semi": "off",
+		"no-extra-semi": "off",
+		"no-useless-escape": "off",
+		"max-len": "off",
+		"camelcase": "off",
+		"arrow-parens": "off",
+		"wrap-iife": "off",
+		"quotes": "off",
+		"no-extra-boolean-cast": "off",
+
+		// Whitespace
+		"space-in-parens": "off",
+		"computed-property-spacing": "off",
+		"no-trailing-spaces": "off",
+		"space-before-function-paren": "off",
+		"eol-last": "off",
+		"no-multiple-empty-lines": "off",
+		"keyword-spacing": "off",
+		"space-infix-ops": "off",
+		"spaced-comment": "off",
+		"no-multi-spaces": "off",
+		"object-curly-spacing": "off",
+		"array-bracket-spacing": "off",
+		"func-call-spacing": "off",
+		"space-before-blocks": "off",
+
+		// JS version
+		"no-restricted-syntax": "off",
+
+		// Definitely need to define something here
+		"indent": "off"
+	}
+}
