@@ -16,7 +16,7 @@ const html = require('./app/helpers/nunjucksHelper').generators;
 /**
  * Surrogate program entry point
  *
- * @param args      Command line arguments
+ * @param   {*} args Command line arguments
  */
 function run(args) {
 	console.log(`\nNASA EVA Tasklist Generator version ${ver.currentVersion}\n`);
@@ -48,8 +48,8 @@ function run(args) {
 /**
  * High level function to generate HTML output
  *
- * @param program       Program arguments and stuff
- * @param procedure     The procedure to generate HTML for
+ * @param   {*} program       Program arguments and stuff
+ * @param   {*} procedure     The procedure to generate HTML for
  */
 function genHtml(program, procedure) {
 
@@ -71,7 +71,7 @@ function genHtml(program, procedure) {
 /**
  * High level function to generate DOCX output
  *
- * @param program       Program arguments and stuff
+ * @param   {*} program       Program arguments and stuff
  */
 function genDoc(program) {
 
@@ -103,8 +103,9 @@ function genDoc(program) {
  * This function configures commander.js for this application's command line
  * arguments, and attemps to parse the arguments passed to this process.
  *
- * @param program   A commander.js object for this function to use
- * @param args      Command line argument array (e.g. process.argv)
+ * @param   {*} program     A commander.js object for this function to use
+ * @param   {*} args        Command line argument array (e.g. process.argv)
+ * @return  {*} TBD FIXME
  */
 function buildProgramArguments(program, args) {
 	const DEFAULT_TEMPLATE = 'templates/spacewalk.njk';
@@ -142,6 +143,8 @@ function buildProgramArguments(program, args) {
 
 /**
  * Validates the arguments...
+ *
+ * @param   {*} program   TBD
  */
 function validateProgramArguments(program) {
 
@@ -180,6 +183,11 @@ function validateProgramArguments(program) {
 /**
  * This function generates a checklist in HTML format and calls the callback
  * when complete.
+ *
+ * @param   {*} evaTaskList  TBD
+ * @param   {*} program      TBD
+ * @param   {*} callback     TBD
+ * @return  {*} TBD FIXME
  */
 async function generateHtmlChecklist(evaTaskList, program, callback) {
 	const outputFile = path.resolve(program.output);
@@ -197,8 +205,8 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
 /**
  * Tests whether the specified path can be written to by this process
  *
- * @param pathToTest    The path to test
- * @returns             True if path can be written to, false otherwise
+ * @param   {string} pathToTest The path to test
+ * @return  {boolean} True if path can be written to, false otherwise
  */
 function canWrite(pathToTest) {
 

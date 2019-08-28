@@ -12,61 +12,64 @@ const PROCEDURE_SCHEMA_FILE = './procedureSchema.json';
 const TASK_SCHEMA_FILE = './taskSchema.json';
 
 /**
- * Validates a file against a YAML schema.  
+ * Validates a file against a YAML schema.
  * Provides helper methods for procedure and task schemas.
  */
 module.exports = class SpacewalkValidator {
 
 	constructor() {}
-    
+
 	/**
      * Validates a yaml file against the procedure schema
-     * 
-     * @param {*} procedureYamlFilePath YAML file to validate
+     *
+     * @param   {string} procedureYamlFilePath YAML file to validate
+     * @return  {*} TBD FIXME
      */
 	validateProcedureSchemaFile(procedureYamlFilePath) {
 
 		const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
-        
-		return this.validateFile(procedureYamlFilePath, procedureSchema);
 
+		return this.validateFile(procedureYamlFilePath, procedureSchema);
 	}
 
 	/**
      * Validates a yaml string against the procedure schema
-     * 
-     * @param {*} procedureYamlString YAML string to validate
+     *
+     * @param   {*} procedureYamlString YAML string to validate
+     * @return  {*} TBD FIXME
      */
 	validateProcedureSchemaString(procedureYamlString) {
-        
+
 		const procedureSchema = path.join(__dirname, PROCEDURE_SCHEMA_FILE);
-        
+
 		return this.validateString(procedureYamlString, procedureSchema);
 
 	}
 
 	/**
      * Validates a yaml file against the task schema.
-     * 
-     * @param {*} taskYamlFilePath YAML file to validate
+     *
+     * @param   {*} taskYamlFilePath YAML file to validate
+     * @return  {*} TBD FIXME
      */
 	validateTaskSchemaFile(taskYamlFilePath) {
-        
+
 		const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
-        
+
 		return this.validateFile(taskYamlFilePath, taskSchema);
 
 	}
 
 	/**
      * Validates a yaml string against the task schema.
-     * 
-     * @param {*} taskYamlString YAML string to validate
+     *
+     * @param   {*} taskYamlString YAML string to validate
+     * @return  {*} TBD FIXME
      */
 	validateTaskSchemaString(taskYamlString) {
-        
+
 		const taskSchema = path.join(__dirname, TASK_SCHEMA_FILE);
-        
+
 		return this.validateString(taskYamlString, taskSchema);
 
 	}
@@ -74,12 +77,13 @@ module.exports = class SpacewalkValidator {
 
 	/**
      * Validates a YAML file against the provided schema.
-     * 
-     * @param {*} yamlFile Yaml file to validate
-     * @param {*} jsonSchemaFile Schema file to validate against
+     *
+     * @param   {*} yamlFile Yaml file to validate
+     * @param   {*} jsonSchemaFile Schema file to validate against
+     * @return  {*} TBD FIXME
      */
 	validateFile(yamlFile, jsonSchemaFile) {
-        
+
 		// Parse the yaml file into json
 		const yaml = YAML.load(yamlFile);
 
@@ -90,9 +94,10 @@ module.exports = class SpacewalkValidator {
 
 	/**
      * Validates a YAML string against the provided schema.
-     * 
-     * @param {*} yamlString Yaml string to validate
-     * @param {*} jsonSchemaFile Schema file to validate against
+     *
+     * @param   {*} yamlString Yaml string to validate
+     * @param   {*} jsonSchemaFile Schema file to validate against
+     * @return  {*} TBD FIXME
      */
 	validateString(yamlString, jsonSchemaFile) {
 
@@ -105,9 +110,10 @@ module.exports = class SpacewalkValidator {
 
 	/**
      * Validates a parsed YAML against the provided schema.
-     * 
-     * @param {*} yamlString Yaml string to validate
-     * @param {*} jsonSchemaFile Schema file to validate against
+     *
+     * @param   {*} yaml Yaml string to validate
+     * @param   {*} jsonSchemaFile Schema file to validate against
+     * @return  {*} TBD FIXME
      */
 	validateYaml(yaml, jsonSchemaFile) {
 

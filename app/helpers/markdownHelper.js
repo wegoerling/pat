@@ -12,9 +12,9 @@ const wiky = require('wiky');
  * Convert markdown to HTML and replace special indicators (like {{CHECKBOX}})
  * with unicode symbols
  *
- * @param markdown Markdown input
- * @returns HTML with unicode characters, or an empty string if
- *          an error occurs
+ * @param   {string} markdown Markdown input
+ * @return  {string} HTML with unicode characters, or an empty string if
+ *                    an error occurs
  */
 exports.convert = function (markdown) {
 	var regex;

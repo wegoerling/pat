@@ -14,8 +14,8 @@ const SpacewalkValidator = require('../schema/spacewalkValidator');
  *
  * @see: https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies
  *
- * @param url       The URL to read
- * @returns         A promise
+ * @param   {string} url The URL to read
+ * @return  {Promise} A promise
  */
 function readUrlPromise(url) {
 	const lib = url.startsWith('https') ? require('https') : require('http');

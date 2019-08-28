@@ -16,9 +16,6 @@
 		// can't have this without causing headaches on Windows
 		"linebreak-style": "off",
 
-		// Docs
-		"valid-jsdoc": "off",
-
 		// Whitespace
 		"space-in-parens": "off",
 		"computed-property-spacing": "off",

@@ -71,34 +71,34 @@ module.exports = class Step {
 	}
 
 	/**
+     * Return the title. FFIXME: what's the point of this?
      *
-     * Return the title
-     *
-     * @param titleYaml YAML for the title
+     * @param   {*} titleYaml YAML for the title
+     * @return  {*} array of substeps
      */
 	parseTitle(titleYaml) {
-
 		return titleYaml;
-
 	}
 
 	/**
      * Return the step text, or an empty string if does not exist.
      *
-     * @param {*} stepYaml YAML for the step text
+     * FIXME: should this be `return stepTextYaml || "";` ???
+     *
+     * @param   {*} stepTextYaml YAML for the step text
+     * @return  {Array} array of substeps
      */
 	parseStepText(stepTextYaml) {
-
 		return stepTextYaml;
-
 	}
 
 	/**
-     * Pasre yaml as either string or array, and return an array.  If the YAML was a simple string,
-     * the array has a single element.  If the YAML was multiple elements, return an array with all
-     * strings.
+     * Parse yaml as either string or array, and return an array. If the YAML
+     * was a simple string, the array has a single element. If the YAML was
+     * multiple elements, return an array with all strings.
      *
-     * @param {*} yaml
+     * @param   {*} yaml yaml string or array
+     * @return  {Array} array of substeps
      */
 	parseArray(yaml) {
 
@@ -120,13 +120,13 @@ module.exports = class Step {
 		}
 
 		return array;
-
 	}
 
 	/**
      * Returns an array of substeps for the step, or an empty array if none are found.
      *
-     * @param {*} substepsYaml YAML for the substeps.
+     * @param   {*} substepsYaml YAML for the substeps
+     * @return  {Array} array of substeps
      */
 	parseSubsteps(substepsYaml) {
 
