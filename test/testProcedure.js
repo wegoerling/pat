@@ -1,7 +1,7 @@
 /* Specify environment to include mocha globals */
 /* eslint-env node, mocha */
 
-"use strict";
+'use strict';
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
@@ -31,7 +31,7 @@ describe('Procedure constructor - Positive Testing', function() {
             tasks:
                 - file: egress.yml
             `;
-		const filename = "foo.yml";
+		const filename = 'foo.yml';
 
 		// not used anywhere, but keeping to make sure yamlString is valid
 		yj.parse(yamlString);
@@ -49,8 +49,8 @@ describe('Procedure constructor - Positive Testing', function() {
 
 
 		// Read some files in for schema checking prior to stubbing the readFileSync method
-		const procedureFile = path.join(__dirname, "../app/schema/procedureSchema.json");
-		const taskFile = path.join(__dirname, "../app/schema/taskSchema.json");
+		const procedureFile = path.join(__dirname, '../app/schema/procedureSchema.json');
+		const taskFile = path.join(__dirname, '../app/schema/taskSchema.json');
 		const procedureSchema = fs.readFileSync(procedureFile, 'utf-8');
 		const taskSchema = fs.readFileSync(taskFile);
 
@@ -132,8 +132,8 @@ describe('Procedure constructor - Negative Testing', function() {
 		});
 
 		// Read some files in for schema checking prior to stubbing the readFileSync method
-		const procedureFile = path.join(__dirname, "../app/schema/procedureSchema.json");
-		const taskFile = path.join(__dirname, "../app/schema/taskSchema.json");
+		const procedureFile = path.join(__dirname, '../app/schema/procedureSchema.json');
+		const taskFile = path.join(__dirname, '../app/schema/taskSchema.json');
 		const procedureSchema = fs.readFileSync(procedureFile, 'utf-8');
 		const taskSchema = fs.readFileSync(taskFile);
 
@@ -148,7 +148,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
 		it('should throw error if file contains invalid YAML', async () => {
 
-			const filename = "foo.yml";
+			const filename = 'foo.yml';
 			const badYaml = `
                 THIS IS NOT YAML.
                 `;
@@ -168,7 +168,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
 		it('should throw error if yaml is missing procedure_name', async () => {
 
-			const filename = "foo.yml";
+			const filename = 'foo.yml';
 			const yamlString = `
 
                 actors:
@@ -199,7 +199,7 @@ describe('Procedure constructor - Negative Testing', function() {
 		});
 
 		it('should throw error if yaml is missing actors', async () => {
-			const filename = "foo.yml";
+			const filename = 'foo.yml';
 			const yamlString = `
                 procedure_name: Foo Procedure 1
 
@@ -224,7 +224,7 @@ describe('Procedure constructor - Negative Testing', function() {
 		});
 
 		it('should throw error if yaml is missing tasks', async () => {
-			const filename = "foo.yml";
+			const filename = 'foo.yml';
 			const yamlString = `
                 procedure_name: Foo Procedure 1
 

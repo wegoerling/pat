@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 module.exports = class Step {
 
 	constructor() {
 		// Initiate the vars as empty.
-		this.title = "";
-		this.text = "";
+		this.title = '';
+		this.text = '';
 		this.images = [];
 		this.checkboxes = [];
 		this.warnings = [];
@@ -18,7 +18,7 @@ module.exports = class Step {
 	populateFromYaml(stepYaml) {
 
 		// Check if the step is a simple string
-		if(typeof stepYaml === "string") {
+		if(typeof stepYaml === 'string') {
 			this.text = stepYaml;
 			return;
 		}
@@ -105,7 +105,7 @@ module.exports = class Step {
 		const array = [];
 
 		// Check for string
-		if (typeof yaml === "string") {
+		if (typeof yaml === 'string') {
 			array.push(yaml);
 
 		// Check for array
@@ -133,7 +133,7 @@ module.exports = class Step {
 		const substeps = [];
 
 		// Check for string
-		if (typeof substepsYaml === "string") {
+		if (typeof substepsYaml === 'string') {
 			const substep = new Step();
 			substep.populateFromYaml(substepsYaml);
 			substeps.push(substep);

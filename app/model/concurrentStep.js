@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const Step = require("./step.js");
+const Step = require('./step.js');
 
 function getActorSteps(actorStepsYaml) {
 	var step;
@@ -9,7 +9,7 @@ function getActorSteps(actorStepsYaml) {
 	const actorSteps = [];
 
 	// Check if actorStepsYaml is a string
-	if (typeof actorStepsYaml === "string") {
+	if (typeof actorStepsYaml === 'string') {
 		step = new Step();
 		step.populateFromYaml(actorStepsYaml);
 		actorSteps.push(step);

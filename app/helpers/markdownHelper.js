@@ -3,7 +3,7 @@
  * This helper converts markdown to html.
  */
 
-"use strict";
+'use strict';
 
 const showdown = require('showdown');
 const wiky = require('wiky');
@@ -20,7 +20,7 @@ exports.convert = function (markdown) {
 	var regex;
 
 	if (markdown === null || (typeof markdown !== 'string')) {
-		return "";
+		return '';
 	}
 
 	//  Find and replace check marks

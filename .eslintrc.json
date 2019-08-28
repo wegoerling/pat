@@ -23,7 +23,6 @@
 		"max-len": "off",
 		"arrow-parens": "off",
 		"wrap-iife": "off",
-		"quotes": "off",
 		"no-extra-boolean-cast": "off",
 
 		// Whitespace

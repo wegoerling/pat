@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-"use strict";
-const nunjucks = require("nunjucks");
-const formatter = require("./markdownHelper");
-const fs = require("fs");
+'use strict';
+const nunjucks = require('nunjucks');
+const formatter = require('./markdownHelper');
+const fs = require('fs');
 const path = require('path');
 const beautifyHtml = require('js-beautify').html;
 const ver = require('./versionHelper');
@@ -51,8 +51,8 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 
 		// Check if actor exists
 		if (!actor) {
-			console.log("Actor does not exist!");
-			return "";
+			console.log('Actor does not exist!');
+			return '';
 		}
 
 		// If the stepNum does not exist, set it to one
@@ -68,7 +68,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		} else {
 			actor.stepNum = actor.stepNum+1;
 		}
-		return "";
+		return '';
 	});
 
 	// Add custom nunjucks filter to pass the content through the markdown helper
@@ -127,7 +127,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 
 	fs.writeFile(outputFilename, prettyHtml, err => {
 		if (!!err) {
-			console.log("Unable to save file:");
+			console.log('Unable to save file:');
 			console.log(err);
 		} else {
 			callback();

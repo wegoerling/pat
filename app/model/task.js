@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const ConcurrentStep = require("./concurrentStep.js");
+const ConcurrentStep = require('./concurrentStep.js');
 
 module.exports = class Task {
 

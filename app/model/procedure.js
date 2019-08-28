@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const path = require ("path");
-const YAML = require("yamljs");
+const fs = require('fs');
+const path = require ('path');
+const YAML = require('yamljs');
 
-const Actor = require("./actor.js");
-const Task = require("./task.js");
-const SpacewalkValidator = require("../schema/spacewalkValidator");
+const Actor = require('./actor.js');
+const Task = require('./task.js');
+const SpacewalkValidator = require('../schema/spacewalkValidator');
 
 /**
  * This function returns a Promise that provides the contents of a fetched URL
@@ -48,10 +48,10 @@ function translatePath(fileName, file ){
 module.exports = class Procedure {
 
 	constructor() {
-		this.name = "";
+		this.name = '';
 		this.actors = [];
 		this.tasks = [];
-		this.css = "";
+		this.css = '';
 	}
 
 	/**

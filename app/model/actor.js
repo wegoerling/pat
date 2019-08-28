@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = class Actor {
 
@@ -11,7 +11,7 @@ module.exports = class Actor {
 		this.role = actorYaml.role;
 
 		// Save the name (if it exists)
-		this.name = "";
+		this.name = '';
 		if (actorYaml.name) {
 			this.name = actorYaml.name;
 		}

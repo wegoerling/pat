@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = class ValidationError extends Error {
 	constructor(message, errors) {

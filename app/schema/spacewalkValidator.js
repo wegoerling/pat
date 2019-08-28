@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const fs = require("fs");
+const path = require('path');
+const fs = require('fs');
 
-const YAML = require("yamljs");
-const Ajv = require("ajv");
+const YAML = require('yamljs');
+const Ajv = require('ajv');
 
-const ValidationError = require("./validationError");
+const ValidationError = require('./validationError');
 
-const PROCEDURE_SCHEMA_FILE = "./procedureSchema.json";
-const TASK_SCHEMA_FILE = "./taskSchema.json";
+const PROCEDURE_SCHEMA_FILE = './procedureSchema.json';
+const TASK_SCHEMA_FILE = './taskSchema.json';
 
 /**
  * Validates a file against a YAML schema.  
@@ -118,7 +118,7 @@ module.exports = class SpacewalkValidator {
 		const ajv = new Ajv();
 		const valid = ajv.validate(schema, yaml);
 		if (!valid) {
-			throw new ValidationError("YAML Validation Failed", ajv.errors);
+			throw new ValidationError('YAML Validation Failed', ajv.errors);
 		}
 
 		return valid;

@@ -10,7 +10,7 @@ const fs = require('fs');
 const child = require('child_process');
 
 const ver = require('./app/helpers/versionHelper');
-const Procedure = require("./app/model/procedure");
+const Procedure = require('./app/model/procedure');
 const html = require('./app/helpers/nunjucksHelper').generators;
 
 /**
@@ -35,7 +35,7 @@ function run(args) {
 		if(err) {
 			console.error(`Error while deserializing YAML: ${err}`);
 			if (err.validationErrors) {
-				console.log("Validation Errors:");
+				console.log('Validation Errors:');
 				console.log(err.validationErrors);
 			}
 			return;
