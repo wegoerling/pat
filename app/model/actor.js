@@ -6,7 +6,7 @@ module.exports = class Actor {
 
 		// Save the role (required)
 		if (!actorYaml.role) {
-			throw new Error("Input YAML missing actor Role: " + JSON.stringify(actorYaml));
+			throw new Error(`Input YAML missing actor Role: ${JSON.stringify(actorYaml)}`);
 		}
 		this.role = actorYaml.role;
 

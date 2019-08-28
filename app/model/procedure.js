@@ -67,7 +67,7 @@ module.exports = class Procedure {
 
 			// Check if the file exists
 			if (!fs.existsSync(fileName)) {
-				throw new Error("Could not find file " + fileName);
+				throw new Error(`Could not find file ${fileName}`);
 			}
 
 			// Validate the input file
@@ -96,7 +96,7 @@ module.exports = class Procedure {
 
 					// Validate & Load the yaml file!
 					if (!fs.existsSync(taskFileName)) {
-						throw new Error("Could not find task file " + taskFileName);
+						throw new Error(`Could not find task file ${taskFileName}`);
 					}
 					spacewalkValidator.validateTaskSchemaFile(taskFileName);
 					const loadedTaskYaml = YAML.load(taskFileName, null, true);
@@ -127,7 +127,7 @@ module.exports = class Procedure {
 			if (procedureYaml.css) {
 				const cssFileName = translatePath(fileName, procedureYaml.css);
 				if (!fs.existsSync(cssFileName)) {
-					throw new Error("Could not find css file " + cssFileName);
+					throw new Error(`Could not find css file ${cssFileName}`);
 				}
 				this.css = fs.readFileSync(cssFileName);
 			}

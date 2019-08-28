@@ -19,21 +19,21 @@ const html = require('./app/helpers/nunjucksHelper').generators;
  * @param args      Command line arguments
  */
 function run(args) {
-	console.log('\nNASA EVA Tasklist Generator version ' + ver.currentVersion + '\n');
+	console.log(`\nNASA EVA Tasklist Generator version ${ver.currentVersion}\n`);
 
 	// Use Commander to process command line arguments
 	buildProgramArguments(program, args); // eslint-disable-line no-use-before-define
 
 	validateProgramArguments(program); // eslint-disable-line no-use-before-define
 
-	console.log('Input YAML file: \t\t' + program.input);
+	console.log(`Input YAML file: \t\t${program.input}`);
 
 	// Parse the input file
 	const procedure = new Procedure();
 	procedure.populateFromFile(program.input).then( (err) => {
 		// Check if an error occurred
 		if(err) {
-			console.error('Error while deserializing YAML: ' + err);
+			console.error(`Error while deserializing YAML: ${err}`);
 			if (err.validationErrors) {
 				console.log("Validation Errors:");
 				console.log(err.validationErrors);
@@ -60,8 +60,8 @@ function genHtml(program, procedure) {
 			return;
 		}
 
-		console.log('HTML output written to: \t' + program.output);
-		console.log('HTML url for browser: \t\tfile://' + path.resolve(program.output));
+		console.log(`HTML output written to: \t${program.output}`);
+		console.log(`HTML url for browser: \t\tfile://${path.resolve(program.output)}`);
 
 		genDoc(program); // eslint-disable-line no-use-before-define
 	});
@@ -92,7 +92,7 @@ function genDoc(program) {
 			return;
 		}
 
-		console.log('DOCX output written to: \t' + docfile);
+		console.log(`DOCX output written to: \t${docfile}`);
 	}
 
 	console.log('\nDone!');
@@ -165,13 +165,13 @@ function validateProgramArguments(program) {
 
 	//  If the input file doesn't exist, emit an error and quit
 	if(!fs.existsSync(program.input)) {
-		console.error('Input YAML doesn\'t exist: ' + program.input);
+		console.error(`Input YAML doesn't exist: ${program.input}`);
 		process.exit();
 	}
 
 	//  If this process can't write to the output location, emit an error and quit
 	if(!canWrite(program.output)) {  // eslint-disable-line no-use-before-define
-		console.error('Can\'t write to output location: ' + program.output);
+		console.error(`Can't write to output location: ${program.output}`);
 		process.exit();
 	}
 }

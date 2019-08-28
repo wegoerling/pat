@@ -28,7 +28,7 @@ function getActorSteps(actorStepsYaml) {
 
 	// Don't know how to process this
 	} else {
-		throw new Error("Was expecting either steps or string for actor.  Instead found: " + JSON.stringify(actorStepsYaml));
+		throw new Error(`Was expecting either steps or string for actor.  Instead found: ${JSON.stringify(actorStepsYaml)}`);
 	}
 
 	return actorSteps;
@@ -62,7 +62,7 @@ module.exports = class ConcurrentStep {
 
 		// Get the actor role
 		if (Object.keys(concurrentStepYaml).length !== 1) {
-			throw new Error("Expected a single actor role, but instead got " + JSON.stringify(concurrentStepYaml));
+			throw new Error(`Expected a single actor role, but instead got ${JSON.stringify(concurrentStepYaml)}`);
 		}
 		actorRole = Object.keys(concurrentStepYaml)[0];
 

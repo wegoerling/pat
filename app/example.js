@@ -16,13 +16,13 @@ function startUp(fileLocation) {
 		if (_.get(file, 'file') && !_.get(file, 'repo')) {
 			console.log("Internal file");
 			if (_.get(file, 'actors')) {
-				console.log("File: " + file.file + " actor: " + file.actors);
+				console.log(`File: ${file.file} actor: ${file.actors}`);
 			} else {
-				console.log("File with no specified actors: " + file.file);
+				console.log(`File with no specified actors: ${file.file}`);
 			}
 		} else if (_.get(file, 'repo')) {
 			console.log("External file");
-			console.log("Repo: " + file.repo + " version: " + file.version + " file: " + file.file + " actors: " + file.actors + " vars: " + JSON.stringify(file.vars));
+			console.log(`Repo: ${file.repo} version: ${file.version} file: ${file.file} actors: ${file.actors} vars: ${JSON.stringify(file.vars)}`);
 		}
 	});
 	return doc;

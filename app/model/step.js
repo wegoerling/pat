@@ -116,7 +116,7 @@ module.exports = class Step {
 
 		// Don't know how to process
 		} else {
-			throw new Error("Expected string or array.  Instead got: " + JSON.stringify(yaml));
+			throw new Error(`Expected string or array.  Instead got: ${JSON.stringify(yaml)}`);
 		}
 
 		return array;
@@ -148,7 +148,7 @@ module.exports = class Step {
 
 		// Don't know how to process
 		} else {
-			throw new Error("Expected substeps to be string or array.  Instead got: " + JSON.stringify(substepsYaml));
+			throw new Error(`Expected substeps to be string or array.  Instead got: ${JSON.stringify(substepsYaml)}`);
 		}
 
 		return substeps;
