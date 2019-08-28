@@ -40,10 +40,10 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 	// Add custom nunjucks filter to test if variable is a string
 	var env = new nunjucks.Environment(
 		new nunjucks.FileSystemLoader(path.dirname(templatePath)),
-		{autoescape: false}
+		{ autoescape: false }
 	);
 
-	env.addFilter('isString', function (obj) {
+	env.addFilter('isString', function(obj) {
 		return typeof obj === 'string';
 	});
 

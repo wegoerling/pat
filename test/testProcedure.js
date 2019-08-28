@@ -73,7 +73,7 @@ describe('Procedure constructor - Positive Testing', function() {
 			sinon.restore();
 		});
 
-		it('should return a procedure for normal input', async () => {
+		it('should return a procedure for normal input', async() => {
 
 			const procedure = new Procedure();
 
@@ -135,7 +135,7 @@ describe('Procedure constructor - Negative Testing', function() {
 		const procedureSchema = fs.readFileSync(procedureFile, 'utf-8');
 		const taskSchema = fs.readFileSync(taskFile);
 
-		it('should throw error if file doesn\'t exist', async () => {
+		it('should throw error if file doesn\'t exist', async() => {
 
 			const procedure = new Procedure();
 			const err = await procedure.populateFromFile('wrong.txt');
@@ -143,7 +143,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
 		});
 
-		it('should throw error if file contains invalid YAML', async () => {
+		it('should throw error if file contains invalid YAML', async() => {
 
 			const filename = 'foo.yml';
 			const badYaml = `
@@ -162,7 +162,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
 		});
 
-		it('should throw error if yaml is missing procedure_name', async () => {
+		it('should throw error if yaml is missing procedure_name', async() => {
 
 			const filename = 'foo.yml';
 			const yamlString = `
@@ -196,7 +196,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
 		});
 
-		it('should throw error if yaml is missing actors', async () => {
+		it('should throw error if yaml is missing actors', async() => {
 			const filename = 'foo.yml';
 			const yamlString = `
                 procedure_name: Foo Procedure 1
@@ -223,7 +223,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
 		});
 
-		it('should throw error if yaml is missing tasks', async () => {
+		it('should throw error if yaml is missing tasks', async() => {
 			const filename = 'foo.yml';
 			const yamlString = `
                 procedure_name: Foo Procedure 1

@@ -84,7 +84,7 @@ describe('eva-tasklist.js', () => {
 			readFileSyncStub.withArgs(spacewalkNjkFile).returns(spacewalkNjk);
 
 			//  Don't let tests kill the process
-			exitStub.callsFake(function () {});
+			exitStub.callsFake(function() {});
 		});
 
 		afterEach(() => {
@@ -197,8 +197,8 @@ describe('eva-tasklist.js', () => {
 		let helpStub, exitStub;
 
 		beforeEach(() => {
-			helpStub = sinon.stub(program, 'help').callsFake(function () {});
-			exitStub = sinon.stub(process, 'exit').callsFake(function () {});
+			helpStub = sinon.stub(program, 'help').callsFake(function() {});
+			exitStub = sinon.stub(process, 'exit').callsFake(function() {});
 		});
 
 		afterEach(() => {

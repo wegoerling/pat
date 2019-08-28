@@ -16,7 +16,7 @@ const wiky = require('wiky');
  * @return  {string} HTML with unicode characters, or an empty string if
  *                    an error occurs
  */
-exports.convert = function (markdown) {
+exports.convert = function(markdown) {
 	var regex;
 
 	if (markdown === null || (typeof markdown !== 'string')) {

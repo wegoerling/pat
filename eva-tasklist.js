@@ -55,7 +55,7 @@ function genHtml(program, procedure) {
 
 	// Generate the HTML output file
 	// eslint-disable-next-line no-use-before-define
-	generateHtmlChecklist(procedure, program, function () {
+	generateHtmlChecklist(procedure, program, function() {
 		if (!fs.existsSync(program.output)) {
 			console.error('Failed to generate HTML output');
 			return;
