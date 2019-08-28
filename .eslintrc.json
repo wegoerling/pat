@@ -30,13 +30,11 @@
 		// changes to current codebase.
 		"space-in-parens": ["error", "never"],
 		"computed-property-spacing": ["error", "never"],
+		"array-bracket-spacing": ["error", "never"],
 
 		// Whitespace
 		"space-before-function-paren": "off",
-		// "keyword-spacing": "off",
-		"space-infix-ops": "off",
 		"object-curly-spacing": "off",
-		"array-bracket-spacing": "off",
 		"func-call-spacing": "off",
 		"space-before-blocks": "off"
 	}

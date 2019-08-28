@@ -183,7 +183,7 @@ describe('eva-tasklist.js', () => {
 	describe('buildProgramArguments - Positive Testing', () => {
 		it('should process normal arguments normally', () => {
 
-			const args = [ 'foo', 'bar', '-i', 'foo.yml', '-o', 'foo.html' ];
+			const args = ['foo', 'bar', '-i', 'foo.yml', '-o', 'foo.html'];
 
 			et.buildProgramArguments(program, args);
 
@@ -206,7 +206,7 @@ describe('eva-tasklist.js', () => {
 		});
 
 		it('should display help if input an unknown argument is provided', () => {
-			const args = [ 'foo', 'bar', '-z' ];
+			const args = ['foo', 'bar', '-z'];
 
 			et.buildProgramArguments(program, args);
 
@@ -214,7 +214,7 @@ describe('eva-tasklist.js', () => {
 		});
 
 		it('should exit if the -i argument has no parameter', () => {
-			const args = [ 'foo', 'bar', '-i' ];
+			const args = ['foo', 'bar', '-i'];
 
 			et.buildProgramArguments(program, args);
 
@@ -222,7 +222,7 @@ describe('eva-tasklist.js', () => {
 		});
 
 		it('should exit if the -o argument has no parameter', () => {
-			const args = [ 'foo', 'bar', '-o' ];
+			const args = ['foo', 'bar', '-o'];
 
 			et.buildProgramArguments(program, args);
 

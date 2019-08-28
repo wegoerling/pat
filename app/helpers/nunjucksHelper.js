@@ -69,7 +69,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 
 		// Increment the step if no value was sent
 		} else {
-			actor.stepNum = actor.stepNum+1;
+			actor.stepNum = actor.stepNum + 1;
 		}
 		return '';
 	});
