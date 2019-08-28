@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 /**
  * Unit tests for eva-tasklist.js
  */
@@ -99,7 +102,7 @@ describe('eva-tasklist.js', () => {
                       name: Drew
                     - role: EV2
                       name: Taz
-                
+
                 tasks:
                     - file: egress.yml
                 `;

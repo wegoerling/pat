@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 "use strict";
 
 const expect = require('chai').expect;
@@ -63,7 +66,7 @@ describe('Task constructor - Negative Testing', function() {
 
         it('should throw error if title doesn\'t exist', () => {
 
-            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing title: '); 
+            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing title: ');
 
         });
     });
@@ -80,7 +83,7 @@ describe('Task constructor - Negative Testing', function() {
 
         it('should throw error if duration doesn\'t exist', () => {
 
-            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing duration: '); 
+            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing duration: ');
 
         });
     });
@@ -95,7 +98,7 @@ describe('Task constructor - Negative Testing', function() {
 
         it('should throw error if steps don\'t exist', () => {
 
-            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing steps: '); 
+            expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing steps: ');
 
         });
     });

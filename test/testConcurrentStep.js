@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 "use strict";
 
 const expect = require('chai').expect;
@@ -36,7 +39,7 @@ describe('ConcurrentStep constructor - Positive Testing', function() {
 
     describe('Normal Input - simo', () => {
         const yamlString = `
-            simo: 
+            simo:
                 EV1: "Go Outside"
                 EV2:
                     - step: "Stay Inside"

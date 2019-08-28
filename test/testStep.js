@@ -1,3 +1,6 @@
+/* Specify environment to include mocha globals */
+/* eslint-env node, mocha */
+
 "use strict";
 
 const expect = require('chai').expect;
@@ -87,25 +90,25 @@ describe('Step constructor - Positive Testing', function() {
         const yamlString = `
             step: '{{CHECK}} All gates closed & hooks locked'
             title: '**Initial Configuration**'
-            checkboxes: 
+            checkboxes:
                 - '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
                 - second checkbox
-            images: 
+            images:
                 - ./WVSRecorders.png
                 - ./secondImage.png
-            substeps: 
+            substeps:
                 - select page - RF camera.
                 - step: second substep
-            warning: 
+            warning:
                 - Do not touch the hinged side while closing the MISSE PECs (Pinch Point)
                 - second warning
-            caution: 
+            caution:
                 - Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA
                 - second caution
-            comment: 
+            comment:
                 - this is a comment
                 - second comment
-            note: 
+            note:
                 - this is a note
                 - second note
         `;
