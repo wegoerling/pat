@@ -26,8 +26,11 @@
 		// can't have this without causing headaches on Windows
 		"linebreak-style": "off",
 
+		// Don't follow WMF standard here because it would require so many
+		// changes to current codebase.
+		"space-in-parens": ["error", "never"],
+
 		// Whitespace
-		"space-in-parens": "off",
 		"computed-property-spacing": "off",
 		"space-before-function-paren": "off",
 		"keyword-spacing": "off",

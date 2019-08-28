@@ -30,7 +30,7 @@ function run(args) {
 
 	// Parse the input file
 	const procedure = new Procedure();
-	procedure.populateFromFile(program.input).then( (err) => {
+	procedure.populateFromFile(program.input).then((err) => {
 		// Check if an error occurred
 		if(err) {
 			console.error(`Error while deserializing YAML: ${err}`);

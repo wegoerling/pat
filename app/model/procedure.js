@@ -40,7 +40,7 @@ function readUrlPromise(url) {
 	});
 }
 
-function translatePath(fileName, file ){
+function translatePath(fileName, file){
 	const fullPath = path.join(path.dirname(fileName), file);
 	return fullPath;
 }
