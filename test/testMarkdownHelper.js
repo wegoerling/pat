@@ -5,10 +5,7 @@
  * Unit tests for markdownHelper.js
  */
 const markdownHelper = require('../app/helpers/markdownHelper.js'),
-	expect = require('chai').expect,
-	sinon = require('sinon'),
-	_ = require('lodash'),
-	path = require('path');
+	expect = require('chai').expect;
 
 /**
  * Negative testing for the markdownHelper.convert function

@@ -13,7 +13,6 @@ const fs = require('fs');
 const path = require('path');
 
 const et = require('../eva-tasklist.js');
-const procedure = require('../app/model/procedure.js');
 
 describe('eva-tasklist.js', () => {
 

@@ -4,11 +4,6 @@
 "use strict";
 
 const expect = require('chai').expect;
-const sinon = require('sinon');
-const _ = require('lodash');
-const path = require('path');
-
-const fs = require('fs');
 const yj = require('yamljs');
 
 const Task = require('../app/model/task');

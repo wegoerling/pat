@@ -5,14 +5,11 @@
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const _ = require('lodash');
 const path = require('path');
 
 const fs = require('fs');
 const yj = require('yamljs');
 
-const SpacewalkValidator = require('../app/schema/spacewalkValidator');
-const ajv = require('ajv');
 
 const Procedure = require('../app/model/procedure');
 
@@ -35,7 +32,9 @@ describe('Procedure constructor - Positive Testing', function() {
                 - file: egress.yml
             `;
 		const filename = "foo.yml";
-		var fakeYamlObj = yj.parse(yamlString);
+
+		// not used anywhere, but keeping to make sure yamlString is valid
+		yj.parse(yamlString);
 
 		const egressYamlString = `
             title: Egress
@@ -44,7 +43,9 @@ describe('Procedure constructor - Positive Testing', function() {
                 - EV1:
                     - step: "Go Outside"
             `;
-		var fakeEgressYamlObj = yj.parse(egressYamlString);
+
+		// not used anywhere, but keeping to make sure egressYamlString is valid
+		yj.parse(egressYamlString);
 
 
 		// Read some files in for schema checking prior to stubbing the readFileSync method

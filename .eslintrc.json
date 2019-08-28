@@ -17,7 +17,6 @@
 		"linebreak-style": "off",
 
 		// Variables, etc
-		"no-unused-vars": "off",
 		"no-unused-expressions": "off",
 		"no-implicit-globals": "off",
 		"no-use-before-define": "off",
@@ -57,9 +56,6 @@
 		"object-curly-spacing": "off",
 		"array-bracket-spacing": "off",
 		"func-call-spacing": "off",
-		"space-before-blocks": "off",
-
-		// JS version
-		"no-restricted-syntax": "off"
+		"space-before-blocks": "off"
 	}
 }
