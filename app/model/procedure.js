@@ -104,10 +104,8 @@ module.exports = class Procedure {
 					// Save the task!
 					this.tasks.push(new Task(loadedTaskYaml));
 
-				}
-
 				//  Is this a URL?
-				else if(taskYaml.url) {
+				} else if(taskYaml.url) {
 
 					//  Wait for URL fetch to complete
 					// console.log('Reading task URL: ' + t.url);

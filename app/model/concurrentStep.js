@@ -13,10 +13,9 @@ function getActorSteps(actorStepsYaml) {
 		step = new Step();
 		step.populateFromYaml(actorStepsYaml);
 		actorSteps.push(step);
-	}
 
 	// Check if actorStepsYaml is an array
-	else if (Array.isArray(actorStepsYaml)) {
+	} else if (Array.isArray(actorStepsYaml)) {
 
 		// This gets the values of each step in the array
 		for (var stepYaml of actorStepsYaml) {
@@ -27,10 +26,8 @@ function getActorSteps(actorStepsYaml) {
 			actorSteps.push(step);
 		}
 
-	}
-
 	// Don't know how to process this
-	else {
+	} else {
 		throw new Error("Was expecting either steps or string for actor.  Instead found: " + JSON.stringify(actorStepsYaml));
 	}
 

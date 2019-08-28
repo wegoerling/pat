@@ -16,9 +16,6 @@
 		// can't have this without causing headaches on Windows
 		"linebreak-style": "off",
 
-		// Braces
-		"brace-style": "off",
-
 		// Docs
 		"valid-jsdoc": "off",
 

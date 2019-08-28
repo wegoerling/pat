@@ -63,10 +63,9 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		// If the value was passed in, set to the specified value
 		if (typeof value !== 'undefined') {
 			actor.stepNum = value;
-		}
 
 		// Increment the step if no value was sent
-		else {
+		} else {
 			actor.stepNum = actor.stepNum+1;
 		}
 		return "";

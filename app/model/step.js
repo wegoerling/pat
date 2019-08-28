@@ -107,17 +107,15 @@ module.exports = class Step {
 		// Check for string
 		if (typeof yaml === "string") {
 			array.push(yaml);
-		}
 
 		// Check for array
-		else if (Array.isArray(yaml)) {
+		} else if (Array.isArray(yaml)) {
 			for (var element of yaml) {
 				array.push(element);
 			}
-		}
 
 		// Don't know how to process
-		else {
+		} else {
 			throw new Error("Expected string or array.  Instead got: " + JSON.stringify(yaml));
 		}
 
@@ -139,19 +137,17 @@ module.exports = class Step {
 			const substep = new Step();
 			substep.populateFromYaml(substepsYaml);
 			substeps.push(substep);
-		}
 
 		// Check for array
-		else if (Array.isArray(substepsYaml)) {
+		} else if (Array.isArray(substepsYaml)) {
 			for (var substepYaml of substepsYaml) {
 				const substep = new Step();
 				substep.populateFromYaml(substepYaml);
 				substeps.push(substep);
 			}
-		}
 
 		// Don't know how to process
-		else {
+		} else {
 			throw new Error("Expected substeps to be string or array.  Instead got: " + JSON.stringify(substepsYaml));
 		}
 
