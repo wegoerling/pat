@@ -36,11 +36,11 @@ exports.convert = function (markdown) {
 
 	//  Find and replace emphasis markdown?
 	if (markdown.includes("'''")) {
-		regex = /([\'])+/gi;
+		regex = /(['])+/gi;
 		markdown = markdown.replace(regex, '*');
 	}
 	if (markdown.includes('**')) {
-		regex =  /([\*])+/gi;
+		regex =  /([*])+/gi;
 		markdown = markdown.replace(regex, '*');
 	}
 

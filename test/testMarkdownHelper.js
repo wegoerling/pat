@@ -112,7 +112,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 		//  Test '''
 		it('should turn \'\'\' into *', () => {
 			//  Fake HTML
-			var fakemarkdown = "asdf\'\'\'jkl";
+			var fakemarkdown = "asdf'''jkl";
 
 			//  Expected HTML
 			var expectedhtml = "<p>asdf*jkl</p>";
