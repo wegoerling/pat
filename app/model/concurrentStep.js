@@ -44,7 +44,7 @@ module.exports = class ConcurrentStep {
 function getActorSteps(actorStepsYaml) {
 
     // Initiate the array of steps for the actor
-    let actorSteps = [];
+    const actorSteps = [];
 
     // Check if actorStepsYaml is a string
     if (typeof actorStepsYaml === "string") {

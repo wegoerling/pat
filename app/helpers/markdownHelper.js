@@ -42,7 +42,7 @@ exports.convert = function (markdown) {
         markdown = markdown.replace(regex, '*');
     }
 
-    let text = wiky.toHtml(markdown);
+    const text = wiky.toHtml(markdown);
 
     return new showdown.Converter().makeHtml(text);
 }

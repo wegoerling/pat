@@ -35,7 +35,7 @@ function run(args) {
     console.log('Input YAML file: \t\t' + program.input);
 
     // Parse the input file
-    let procedure = new Procedure();
+    const procedure = new Procedure();
     procedure.populateFromFile(program.input).then( (err) => {
         // Check if an error occurred
         if(err) {
@@ -84,13 +84,13 @@ function genDoc(program) {
     if(program.doc) {
 
         //  Figure out docx output filename
-        let p = path.parse(program.output);
-        let ext = p.ext;
-        let docfile = program.output.replace(ext, '.docx');
+        const p = path.parse(program.output);
+        const ext = p.ext;
+        const docfile = program.output.replace(ext, '.docx');
 
         //  Outsource the conversion to pandoc
         //  WARNING: NEVER USE THIS ON A WEB SERVER!
-        let command = `pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
+        const command = `pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
         child.execSync(command);
 
         if(!fs.existsSync(docfile)) {
@@ -158,13 +158,13 @@ function validateProgramArguments(program) {
 
     //  If no output file was specified, use a default
     if(!program.output) {
-        let p = path.parse(program.input);
-        let file_without_path = p.base;
-        let ext = p.ext;
+        const p = path.parse(program.input);
+        const file_without_path = p.base;
+        const ext = p.ext;
 
         //  Use input file name with .html extension
         //  e.g. test.yml becomes test.html
-        let name = file_without_path.replace(ext, '.html');
+        const name = file_without_path.replace(ext, '.html');
 
         program.output = name;
     }
@@ -187,7 +187,7 @@ function validateProgramArguments(program) {
  * when complete.
  */
 async function generateHtmlChecklist(evaTaskList, program, callback) {
-    let outputFile = path.resolve(program.output);
+    const outputFile = path.resolve(program.output);
 
     html.params.inputDir(path.resolve(path.dirname(program.input)));
     html.params.outputDir(path.resolve(path.dirname(program.output)));
@@ -210,7 +210,7 @@ function canWrite(pathToTest) {
     //  Check whether the path exists
     if(!fs.existsSync(pathToTest)) {
         //  File doesn't exist - check permissions for the parent dir
-        let p = path.parse(pathToTest);
+        const p = path.parse(pathToTest);
         let dir = p.dir;
 
         if(dir === '') {

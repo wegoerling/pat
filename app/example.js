@@ -1,18 +1,16 @@
-let yaml = require('js-yaml');
-let fs = require('fs');
-let _ = require('lodash');
-let program = require('commander');
-let exp = require('./exports');
+const yaml = require('js-yaml');
+const fs = require('fs');
+const _ = require('lodash');
+const program = require('commander');
+const exp = require('./exports');
 
 // Run npm start to run this function
 function startUp(fileLocation) {
-    let actors;
-    let files;
 
-    let doc = yaml.safeLoad(fs.readFileSync(fileLocation, 'utf8'));
-    actors = _.get(doc, 'actors');
+    const doc = yaml.safeLoad(fs.readFileSync(fileLocation, 'utf8'));
+    const actors = _.get(doc, 'actors');
     console.log('*actors from doc', actors);
-    files = _.get(doc, 'tasks');
+    const files = _.get(doc, 'tasks');
 
     _.forEach(files, (file) => {
         (_.get(file, 'file') && !_.get(file, 'repo')) ? console.log("Internal file"): console.log("External file");
@@ -43,8 +41,8 @@ function startUp(fileLocation) {
 // wordFile: file path/name for exported file
 program.option('-e, --export [type]', 'Export yaml to specified file type', /^(html|doc|docx)$/i, 'html');
 program.on('option:export', () => {
-    let yamlFile = process.argv[process.argv.length - 2];
-    let fileLocation = process.argv[process.argv.length - 1];
+    const yamlFile = process.argv[process.argv.length - 2];
+    const fileLocation = process.argv[process.argv.length - 1];
     switch (program.export) {
         case 'html':
             exp.html(startUp(yamlFile), fileLocation);

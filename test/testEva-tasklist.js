@@ -148,7 +148,7 @@ describe('eva-tasklist.js', () => {
             existsSyncStub.withArgs(outputFile).returns(true);
             readFileSyncStub.withArgs(outputFile).returns('test');
 
-            let fakeArgs = ['node', 'index.js', '-i', 'foo.yml'];
+            const fakeArgs = ['node', 'index.js', '-i', 'foo.yml'];
             process.argv = fakeArgs;
 
             et.run(fakeArgs);
@@ -158,7 +158,7 @@ describe('eva-tasklist.js', () => {
 
         it('should exit if missing input argument', () => {
 
-            let fakeArgs = ['node', 'index.js'];
+            const fakeArgs = ['node', 'index.js'];
             process.argv = fakeArgs;
 
             et.run(fakeArgs);
@@ -170,7 +170,7 @@ describe('eva-tasklist.js', () => {
 
             existsSyncStub.withArgs('foo.yml').returns(false);
 
-            let fakeArgs = ['node', 'index.js', '-i', 'foo.yml'];
+            const fakeArgs = ['node', 'index.js', '-i', 'foo.yml'];
             process.argv = fakeArgs;
 
             et.run(fakeArgs);
@@ -182,7 +182,7 @@ describe('eva-tasklist.js', () => {
     describe('buildProgramArguments - Positive Testing', () => {
         it('should process normal arguments normally', () => {
 
-            let args = [ "foo", "bar", "-i", "foo.yml", "-o", "foo.html" ];
+            const args = [ "foo", "bar", "-i", "foo.yml", "-o", "foo.html" ];
 
             et.buildProgramArguments(program, args);
 
@@ -205,7 +205,7 @@ describe('eva-tasklist.js', () => {
         });
 
         it('should display help if input an unknown argument is provided', () => {
-            let args = [ "foo", "bar", "-z" ];
+            const args = [ "foo", "bar", "-z" ];
 
             et.buildProgramArguments(program, args);
 
@@ -213,7 +213,7 @@ describe('eva-tasklist.js', () => {
         });
 
         it('should exit if the -i argument has no parameter', () => {
-            let args = [ "foo", "bar", "-i" ];
+            const args = [ "foo", "bar", "-i" ];
 
             et.buildProgramArguments(program, args);
 
@@ -221,7 +221,7 @@ describe('eva-tasklist.js', () => {
         });
 
         it('should exit if the -o argument has no parameter', () => {
-            let args = [ "foo", "bar", "-o" ];
+            const args = [ "foo", "bar", "-o" ];
 
             et.buildProgramArguments(program, args);
 

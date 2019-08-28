@@ -102,7 +102,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
     env.addFilter('imagePath', function(image) {
         //const dir = path.dirname(outputPath);
         const dir = outputPath;
-        let imageName = path.basename(image);
+        const imageName = path.basename(image);
         fs.copyFile(`${inputPath}/${imageName}`, `${dir}/${imageName}`, (err) => {
             if (err) {
                 console.log('could not move an image from the source YAML file', err);

@@ -34,11 +34,11 @@ module.exports = class Procedure {
             }
 
             // Validate the input file
-            let spacewalkValidator = new SpacewalkValidator();
+            const spacewalkValidator = new SpacewalkValidator();
             spacewalkValidator.validateProcedureSchemaFile(fileName);
 
             // Load the YAML File
-            let procedureYaml = YAML.load(fileName, null, true);
+            const procedureYaml = YAML.load(fileName, null, true);
 
             // Save the procedure Name
             this.name = procedureYaml.procedure_name;
@@ -54,7 +54,7 @@ module.exports = class Procedure {
                 if (taskYaml.file) {
                     
                     // Since the task file is in relative path to the procedure file, need to translate it!
-                    let taskFileName = translatePath(fileName, taskYaml.file);
+                    const taskFileName = translatePath(fileName, taskYaml.file);
                     //path.join(path.dirname(fileName), taskYaml.file);
 
                     // Validate & Load the yaml file!
@@ -62,7 +62,7 @@ module.exports = class Procedure {
                         throw new Error("Could not find task file " + taskFileName);
                     }
                     spacewalkValidator.validateTaskSchemaFile(taskFileName);
-                    let loadedTaskYaml = YAML.load(taskFileName, null, true);
+                    const loadedTaskYaml = YAML.load(taskFileName, null, true);
 
                     // Save the task!
                     this.tasks.push(new Task(loadedTaskYaml));
@@ -74,13 +74,13 @@ module.exports = class Procedure {
 
                     //  Wait for URL fetch to complete
                     // console.log('Reading task URL: ' + t.url);
-                    let yamlString = await readUrlPromise(taskYaml.url);
+                    const yamlString = await readUrlPromise(taskYaml.url);
 
                     // Validate the data read from url
                     spacewalkValidator.validateTaskSchemaString(yamlString);
 
                     //  Parse the Task YAML
-                    let loadedTaskYaml = YAML.parse(yamlString);
+                    const loadedTaskYaml = YAML.parse(yamlString);
                     
                     // Save the task!
                     this.tasks.push(new Task(loadedTaskYaml));
@@ -90,7 +90,7 @@ module.exports = class Procedure {
 
             // Pull in css file if it is defined
             if (procedureYaml.css) {
-                let cssFileName = translatePath(fileName, procedureYaml.css);
+                const cssFileName = translatePath(fileName, procedureYaml.css);
                 if (!fs.existsSync(cssFileName)) {
                     throw new Error("Could not find css file " + cssFileName);
                 }
@@ -137,6 +137,6 @@ function readUrlPromise(url) {
     });
 }
 function translatePath(fileName, file ){
-    let fullPath = path.join(path.dirname(fileName), file);
+    const fullPath = path.join(path.dirname(fileName), file);
     return fullPath;
 }

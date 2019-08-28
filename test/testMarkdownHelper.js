@@ -1,7 +1,7 @@
 /**
  * Unit tests for markdownHelper.js
  */
-let markdownHelper = require('../app/helpers/markdownHelper.js'),
+const markdownHelper = require('../app/helpers/markdownHelper.js'),
   expect = require('chai').expect,
   sinon = require('sinon'),
   _ = require('lodash'),

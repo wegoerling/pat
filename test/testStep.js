@@ -16,7 +16,7 @@ const Step = require('../app/model/step');
 describe('Step constructor - Positive Testing', function() {
     describe('Normal Input without arrays', () => {
 
-        let yamlString = `
+        const yamlString = `
             step: '{{CHECK}} All gates closed & hooks locked'
             title: '**Initial Configuration**'
             checkboxes: '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
@@ -28,11 +28,11 @@ describe('Step constructor - Positive Testing', function() {
             note: this is a note
         `;
 
-        let yamlObject = yj.parse(yamlString);
+        const yamlObject = yj.parse(yamlString);
 
         it('should return a procedure for normal input', () => {
 
-            let step = new Step();
+            const step = new Step();
             step.populateFromYaml(yamlObject);
 
             expect(step).to.exist;
@@ -84,7 +84,7 @@ describe('Step constructor - Positive Testing', function() {
 
     describe('Normal Input with arrays', () => {
 
-        let yamlString = `
+        const yamlString = `
             step: '{{CHECK}} All gates closed & hooks locked'
             title: '**Initial Configuration**'
             checkboxes: 
@@ -110,11 +110,11 @@ describe('Step constructor - Positive Testing', function() {
                 - second note
         `;
 
-        let yamlObject = yj.parse(yamlString);
+        const yamlObject = yj.parse(yamlString);
 
         it('should return a procedure for normal input', () => {
 
-            let step = new Step();
+            const step = new Step();
             step.populateFromYaml(yamlObject);
 
             expect(step).to.exist;
