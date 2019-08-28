@@ -1,14 +1,9 @@
 /* Specify environment to include mocha globals */
 /* eslint-env node, mocha */
 
-"use strict";
+'use strict';
 
 const expect = require('chai').expect;
-const sinon = require('sinon');
-const _ = require('lodash');
-const path = require('path');
-
-const fs = require('fs');
 const yj = require('yamljs');
 
 const Actor = require('../app/model/actor');
@@ -30,7 +25,7 @@ describe('Actor constructor - Positive Testing', function() {
 
 			const actor = new Actor(fakeYamlObj);
 
-			expect(actor).to.exist;
+			expect(actor).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(actor.role).to.be.a('string');
 			expect(actor.role).to.equal('EV1');
@@ -53,7 +48,7 @@ describe('Actor constructor - Positive Testing', function() {
 
 			const actor = new Actor(fakeYamlObj);
 
-			expect(actor).to.exist;
+			expect(actor).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(actor.role).to.be.a('string');
 			expect(actor.role).to.equal('EV1');

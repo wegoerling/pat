@@ -6,6 +6,6 @@
 
 const et = require('./eva-tasklist.js');
 
-(function () {
+(function() {
 	et.run(process.argv);
-})();
+}());

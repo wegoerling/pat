@@ -1,27 +1,64 @@
-"use strict"
+'use strict';
 
-const fs = require("fs");
-const path = require ("path");
-const YAML = require("yamljs");
+const fs = require('fs');
+const path = require('path');
+const YAML = require('yamljs');
 
-const Actor = require("./actor.js");
-const Task = require("./task.js");
-const SpacewalkValidator = require("../schema/spacewalkValidator");
+const Actor = require('./actor.js');
+const Task = require('./task.js');
+const SpacewalkValidator = require('../schema/spacewalkValidator');
+
+/**
+ * This function returns a Promise that provides the contents of a fetched URL
+ * as a UTF-8 string.
+ *
+ * @see: https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies
+ *
+ * @param   {string} url The URL to read
+ * @return  {Promise} A promise
+ */
+function readUrlPromise(url) {
+	const lib = url.startsWith('https') ? require('https') : require('http');
+
+	return new Promise((resolve, reject) => {
+		const request = lib.get(url, (response) => {
+			const body = [];
+			response.setEncoding('utf8');
+
+			response.on('data', (chunk) => {
+				body.push(chunk);
+			});
+
+			response.on('end', () => {
+				resolve(body.toString());
+			});
+		});
+
+		request.on('error', (err) => {
+			reject(err);
+		});
+	});
+}
+
+function translatePath(fileName, file) {
+	const fullPath = path.join(path.dirname(fileName), file);
+	return fullPath;
+}
 
 module.exports = class Procedure {
 
 	constructor() {
-		this.name = "";
+		this.name = '';
 		this.actors = [];
 		this.tasks = [];
-		this.css = ""
+		this.css = '';
 	}
 
 	/**
      * Populates data, reading in the specified file.
-     * 
+     *
      * @param {*} fileName The full path to the YAML file
-     * 
+     *
      * @throws {Error} if an error is encountered parsing the file.
      */
 	async populateFromFile(fileName) {
@@ -30,7 +67,7 @@ module.exports = class Procedure {
 
 			// Check if the file exists
 			if (!fs.existsSync(fileName)) {
-				throw new Error("Could not find file " + fileName);
+				throw new Error(`Could not find file ${fileName}`);
 			}
 
 			// Validate the input file
@@ -52,14 +89,15 @@ module.exports = class Procedure {
 
 				// Check that the task is a file
 				if (taskYaml.file) {
-                    
-					// Since the task file is in relative path to the procedure file, need to translate it!
+
+					// Since the task file is in relative path to the procedure
+					// file, need to translate it!
 					const taskFileName = translatePath(fileName, taskYaml.file);
-					//path.join(path.dirname(fileName), taskYaml.file);
+					// path.join(path.dirname(fileName), taskYaml.file);
 
 					// Validate & Load the yaml file!
 					if (!fs.existsSync(taskFileName)) {
-						throw new Error("Could not find task file " + taskFileName);
+						throw new Error(`Could not find task file ${taskFileName}`);
 					}
 					spacewalkValidator.validateTaskSchemaFile(taskFileName);
 					const loadedTaskYaml = YAML.load(taskFileName, null, true);
@@ -67,10 +105,8 @@ module.exports = class Procedure {
 					// Save the task!
 					this.tasks.push(new Task(loadedTaskYaml));
 
-				} 
-
 				//  Is this a URL?
-				else if(taskYaml.url) {
+				} else if (taskYaml.url) {
 
 					//  Wait for URL fetch to complete
 					// console.log('Reading task URL: ' + t.url);
@@ -81,7 +117,7 @@ module.exports = class Procedure {
 
 					//  Parse the Task YAML
 					const loadedTaskYaml = YAML.parse(yamlString);
-                    
+
 					// Save the task!
 					this.tasks.push(new Task(loadedTaskYaml));
 				}
@@ -92,7 +128,7 @@ module.exports = class Procedure {
 			if (procedureYaml.css) {
 				const cssFileName = translatePath(fileName, procedureYaml.css);
 				if (!fs.existsSync(cssFileName)) {
-					throw new Error("Could not find css file " + cssFileName);
+					throw new Error(`Could not find css file ${cssFileName}`);
 				}
 				this.css = fs.readFileSync(cssFileName);
 			}
@@ -103,40 +139,4 @@ module.exports = class Procedure {
 
 	}
 
-}
-
-/**
- * This function returns a Promise that provides the contents of a fetched URL
- * as a UTF-8 string.
- *
- * @see: https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies
- *
- * @param url       The URL to read
- * @returns         A promise
- */
-function readUrlPromise(url) {
-	const lib = url.startsWith('https') ? require('https') : require('http');
-
-	return new Promise((resolve, reject) => {
-		const request = lib.get(url, (response) => {
-			const body = [];
-			response.setEncoding('utf8');
-
-			response.on('data', (chunk) => {
-				body.push(chunk);
-			});
-
-			response.on('end', () => {
-				resolve(body.toString());
-			});
-		});
-
-		request.on('error', (err) => {
-			reject(err)
-		});
-	});
-}
-function translatePath(fileName, file ){
-	const fullPath = path.join(path.dirname(fileName), file);
-	return fullPath;
-}
+};

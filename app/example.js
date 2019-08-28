@@ -13,28 +13,28 @@ function startUp(fileLocation) {
 	const files = _.get(doc, 'tasks');
 
 	_.forEach(files, (file) => {
-		(_.get(file, 'file') && !_.get(file, 'repo')) ? console.log("Internal file"): console.log("External file");
 		if (_.get(file, 'file') && !_.get(file, 'repo')) {
+			console.log('Internal file');
 			if (_.get(file, 'actors')) {
-				console.log("File: " + file.file + " actor: " + file.actors);
+				console.log(`File: ${file.file} actor: ${file.actors}`);
 			} else {
-				console.log("File with no specified actors: " + file.file);
+				console.log(`File with no specified actors: ${file.file}`);
 			}
 		} else if (_.get(file, 'repo')) {
-			console.log("Repo: " + file.repo + " version: " + file.version + " file: " + file.file + " actors: " + file.actors + " vars: " + JSON.stringify(file.vars));
+			console.log('External file');
+			console.log(`Repo: ${file.repo} version: ${file.version} file: ${file.file} actors: ${file.actors} vars: ${JSON.stringify(file.vars)}`);
 		}
 	});
 	return doc;
-};
+}
 
-// to run this command, in the console run node main.js -e or --export. This will only work if it's ran soley by itself.
-// We need to talk about how to refactor the code to make more sense.
-
-
+// To run this command, in the console run node main.js -e or --export. This
+// will only work if it's ran soley by itself. We need to talk about how to
+// refactor the code to make more sense.
 
 // Options
 
-//ex. node main.js -e docx f:\\code\\spacewalk_fork\\src\main.yml wordFile
+// ex. node main.js -e docx f:\\code\\spacewalk_fork\\src\main.yml wordFile
 // -e: option
 // docx: file type
 // f:\\code\\spacewalk_fork\\src\main.yml: path to file for parsing

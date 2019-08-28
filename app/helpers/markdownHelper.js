@@ -3,7 +3,7 @@
  * This helper converts markdown to html.
  */
 
-"use strict";
+'use strict';
 
 const showdown = require('showdown');
 const wiky = require('wiky');
@@ -12,13 +12,15 @@ const wiky = require('wiky');
  * Convert markdown to HTML and replace special indicators (like {{CHECKBOX}})
  * with unicode symbols
  *
- * @param markdown Markdown input
- * @returns HTML with unicode characters, or an empty string if
- *          an error occurs
+ * @param   {string} markdown Markdown input
+ * @return  {string} HTML with unicode characters, or an empty string if
+ *                    an error occurs
  */
-exports.convert = function (markdown) {
+exports.convert = function(markdown) {
+	var regex;
+
 	if (markdown === null || (typeof markdown !== 'string')) {
-		return "";
+		return '';
 	}
 
 	//  Find and replace check marks
@@ -28,21 +30,21 @@ exports.convert = function (markdown) {
 	markdown = markdown.replace(/{{CHECKBOX}}/gi, '&#10063;');
 	markdown = markdown.replace(/{{CHECK BOX}}/gi, '&#10063;');
 
-	//TODO: Why does checmkark actually mean checkbox?
+	// TODO: Why does checmkark actually mean checkbox?
 	markdown = markdown.replace(/{{CHECKMARK}}/gi, '&#10063;');
 	markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10063;');
 
 	//  Find and replace emphasis markdown?
 	if (markdown.includes("'''")) {
-		var regex = /([\'])+/gi
+		regex = /(['])+/gi;
 		markdown = markdown.replace(regex, '*');
 	}
 	if (markdown.includes('**')) {
-		var regex =  /([\*])+/gi;
+		regex = /([*])+/gi;
 		markdown = markdown.replace(regex, '*');
 	}
 
 	const text = wiky.toHtml(markdown);
 
 	return new showdown.Converter().makeHtml(text);
-}
+};

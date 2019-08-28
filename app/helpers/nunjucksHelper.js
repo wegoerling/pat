@@ -1,30 +1,17 @@
 #!/usr/bin/env node
 
-"use strict"
-const nunjucks = require("nunjucks");
-const formatter = require("./markdownHelper");
-const fs = require("fs");
+'use strict';
+const nunjucks = require('nunjucks');
+const formatter = require('./markdownHelper');
+const fs = require('fs');
 const path = require('path');
-const beautify_html = require('js-beautify').html;
+const beautifyHtml = require('js-beautify').html;
 const ver = require('./versionHelper');
 
 let inputPath = '';
 let outputPath = '';
 let outputFilename = '';
 let cssFilename = '';
-
-exports.generators = {
-	create: createHtml,
-	params: {
-		inputDir: setInputPath,
-		outputDir: setOutputPath,
-		htmlFile: setOutputFilename,
-		cssFile: setCssFilename
-	}
-};
-
-
-
 
 function setInputPath(input) {
 	inputPath = input;
@@ -50,24 +37,27 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 	// Get the directory and main template name
 	var templatePath = path.resolve(htmlFileTemplate);
 
-
 	// Add custom nunjucks filter to test if variable is a string
-	var env = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.dirname(templatePath)), {autoescape: false});
-	env.addFilter('isString', function (obj) {
-		return typeof obj == 'string';
+	var env = new nunjucks.Environment(
+		new nunjucks.FileSystemLoader(path.dirname(templatePath)),
+		{ autoescape: false }
+	);
+
+	env.addFilter('isString', function(obj) {
+		return typeof obj === 'string';
 	});
 
-	// Add custom nunjucks filter to control ordered lists for each actor.  Adds a variable 
+	// Add custom nunjucks filter to control ordered lists for each actor.  Adds a variable
 	// called stepNum to each actor which keeps track of the ordered list number for the next step.
 	// The value can be reset by passing in a number into the filter.
 	env.addFilter('stepIncrement', function(actor, value) {
-        
+
 		// Check if actor exists
 		if (!actor) {
-			console.log("Actor does not exist!");
-			return "";
+			console.log('Actor does not exist!');
+			return '';
 		}
-        
+
 		// If the stepNum does not exist, set it to one
 		if (!actor.stepNum) {
 			actor.stepNum = 1;
@@ -76,13 +66,12 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		// If the value was passed in, set to the specified value
 		if (typeof value !== 'undefined') {
 			actor.stepNum = value;
-		} 
-        
+
 		// Increment the step if no value was sent
-		else {
-			actor.stepNum = actor.stepNum+1;
+		} else {
+			actor.stepNum = actor.stepNum + 1;
 		}
-		return "";
+		return '';
 	});
 
 	// Add custom nunjucks filter to pass the content through the markdown helper
@@ -100,7 +89,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 
 	// Add custom nunjucks filter for images
 	env.addFilter('imagePath', function(image) {
-		//const dir = path.dirname(outputPath);
+		// const dir = path.dirname(outputPath);
 		const dir = outputPath;
 		const imageName = path.basename(image);
 		fs.copyFile(`${inputPath}/${imageName}`, `${dir}/${imageName}`, (err) => {
@@ -117,7 +106,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 	var nunjucksObject = {
 		procedure: evaTask,
 		version: ver.currentVersion
-	}
+	};
 
 	// If the css file exists, read it in and add it to the nunjucksObject
 	if (cssFilename !== '') {
@@ -130,14 +119,31 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 	var html = env.render(path.basename(templatePath), nunjucksObject);
 
 	// Beautify the html
-	var prettyHtml = beautify_html(html, { indent_size: 2, space_in_empty_paren: true, preserve_newlines: false });
+	var prettyHtml = beautifyHtml(
+		html,
+		{
+			indent_size: 2, // eslint-disable-line camelcase
+			space_in_empty_paren: true, // eslint-disable-line camelcase
+			preserve_newlines: false // eslint-disable-line camelcase
+		}
+	);
 
-	fs.writeFile(outputFilename, prettyHtml, err => {
-		if (!!err) {
-			console.log("Unable to save file:");
+	fs.writeFile(outputFilename, prettyHtml, (err) => {
+		if (err) {
+			console.log('Unable to save file:');
 			console.log(err);
 		} else {
 			callback();
 		}
 	});
 }
+
+exports.generators = {
+	create: createHtml,
+	params: {
+		inputDir: setInputPath,
+		outputDir: setOutputPath,
+		htmlFile: setOutputFilename,
+		cssFile: setCssFilename
+	}
+};

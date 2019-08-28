@@ -1,14 +1,9 @@
 /* Specify environment to include mocha globals */
 /* eslint-env node, mocha */
 
-"use strict";
+'use strict';
 
 const expect = require('chai').expect;
-const sinon = require('sinon');
-const _ = require('lodash');
-const path = require('path');
-
-const fs = require('fs');
 const yj = require('yamljs');
 
 const Step = require('../app/model/step');
@@ -38,7 +33,7 @@ describe('Step constructor - Positive Testing', function() {
 			const step = new Step();
 			step.populateFromYaml(yamlObject);
 
-			expect(step).to.exist;
+			expect(step).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(step.title).to.be.a('string');
 			expect(step.title).to.equal('**Initial Configuration**');
@@ -120,7 +115,7 @@ describe('Step constructor - Positive Testing', function() {
 			const step = new Step();
 			step.populateFromYaml(yamlObject);
 
-			expect(step).to.exist;
+			expect(step).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(step.title).to.be.a('string');
 			expect(step.title).to.equal('**Initial Configuration**');

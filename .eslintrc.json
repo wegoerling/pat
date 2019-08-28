@@ -1,10 +1,20 @@
 {
 	"extends": [
-		// Ref: https://github.com/wikimedia/eslint-config-wikimedia
+		// Based upon Wikimedia Foundation guidelines [1]. Why WMF? It's
+		// maintained by a good-enough democracy that will probably make better
+		// decisions than any dictator will, and is highly focused on inclusion
+		// and what works best for the widest range of people.
+		//
 		// Base options are "wikimedia/server" and "wikimedia/client"
-		// Per ref above, wikimedia/server = wikimedia, wikimedia/node, wikimedia/language/es6
-		// Below switches wikimedia/language/es6 for wikimedia/language/es2016
-		// IN ORDER TO SUPPORT BROWSER-BASED RENDERING, MAY NEED TO SWITCH TO wikimedia/client
+		// Per [1], wikimedia/server = wikimedia, wikimedia/node, and
+		// wikimedia/language/es6. The config below switches
+		// wikimedia/language/es6 for wikimedia/language/es2016, but otherwise
+		// is equivalent to wikimedia/server.
+		//
+		// IN ORDER TO SUPPORT BROWSER-BASED RENDERING, MAY NEED TO SWITCH TO
+		// wikimedia/client. Or just don't support older browsers.
+		//
+		// [1] https://github.com/wikimedia/eslint-config-wikimedia
 		"wikimedia",
 		"wikimedia/node",
 		"wikimedia/language/es2016"
@@ -16,50 +26,11 @@
 		// can't have this without causing headaches on Windows
 		"linebreak-style": "off",
 
-		// Variables, etc
-		"no-unused-vars": "off",
-		"no-unused-expressions": "off",
-		"no-implicit-globals": "off",
-		"no-use-before-define": "off",
-		"eqeqeq": "off",
-		"no-redeclare": "off",
-
-		// Braces
-		"curly": "off",
-		"brace-style": "off",
-
-		// Docs
-		"valid-jsdoc": "off",
-
-		// Misc
-		"prefer-template": "off",
-		"semi": "off",
-		"no-extra-semi": "off",
-		"no-useless-escape": "off",
-		"max-len": "off",
-		"camelcase": "off",
-		"arrow-parens": "off",
-		"wrap-iife": "off",
-		"quotes": "off",
-		"no-extra-boolean-cast": "off",
-
-		// Whitespace
-		"space-in-parens": "off",
-		"computed-property-spacing": "off",
-		"no-trailing-spaces": "off",
-		"space-before-function-paren": "off",
-		"eol-last": "off",
-		"no-multiple-empty-lines": "off",
-		"keyword-spacing": "off",
-		"space-infix-ops": "off",
-		"spaced-comment": "off",
-		"no-multi-spaces": "off",
-		"object-curly-spacing": "off",
-		"array-bracket-spacing": "off",
-		"func-call-spacing": "off",
-		"space-before-blocks": "off",
-
-		// JS version
-		"no-restricted-syntax": "off"
+		// Don't follow WMF standard here because it would require so many
+		// changes to current codebase.
+		"space-in-parens": ["error", "never"],
+		"computed-property-spacing": ["error", "never"],
+		"array-bracket-spacing": ["error", "never"],
+		"space-before-function-paren": ["error", "never"]
 	}
 }

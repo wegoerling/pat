@@ -13,7 +13,6 @@ const fs = require('fs');
 const path = require('path');
 
 const et = require('../eva-tasklist.js');
-const procedure = require('../app/model/procedure.js');
 
 describe('eva-tasklist.js', () => {
 
@@ -41,8 +40,8 @@ describe('eva-tasklist.js', () => {
 		let exitStub;
 
 		before(() => {
-			procedureSchemaFile = path.join(__dirname, "../app/schema/procedureSchema.json");
-			taskSchemaFile = path.join(__dirname, "../app/schema/taskSchema.json");
+			procedureSchemaFile = path.join(__dirname, '../app/schema/procedureSchema.json');
+			taskSchemaFile = path.join(__dirname, '../app/schema/taskSchema.json');
 			baseNjkFile = path.join(__dirname, '../templates/base.njk');
 			macroNjkFile = path.join(__dirname, '../templates/macro.njk');
 			taskTableNjkFile = path.join(__dirname, '../templates/taskTable.njk');
@@ -85,7 +84,7 @@ describe('eva-tasklist.js', () => {
 			readFileSyncStub.withArgs(spacewalkNjkFile).returns(spacewalkNjk);
 
 			//  Don't let tests kill the process
-			exitStub.callsFake(function () {});
+			exitStub.callsFake(function() {});
 		});
 
 		afterEach(() => {
@@ -138,7 +137,6 @@ describe('eva-tasklist.js', () => {
                             - '{{CHECKMARK}} Blank hook to EV1 R Waist Tether'
                 `;
 
-
 			//  Fake main and task YAML reads
 			existsSyncStub.withArgs('foo.yml').returns(true);
 			readFileSyncStub.withArgs('foo.yml').returns(mainYamlString);
@@ -185,12 +183,12 @@ describe('eva-tasklist.js', () => {
 	describe('buildProgramArguments - Positive Testing', () => {
 		it('should process normal arguments normally', () => {
 
-			const args = [ "foo", "bar", "-i", "foo.yml", "-o", "foo.html" ];
+			const args = ['foo', 'bar', '-i', 'foo.yml', '-o', 'foo.html'];
 
 			et.buildProgramArguments(program, args);
 
-			expect(program.input).to.equal("foo.yml");
-			expect(program.output).to.equal("foo.html");
+			expect(program.input).to.equal('foo.yml');
+			expect(program.output).to.equal('foo.html');
 		});
 	});
 
@@ -199,8 +197,8 @@ describe('eva-tasklist.js', () => {
 		let helpStub, exitStub;
 
 		beforeEach(() => {
-			helpStub = sinon.stub(program, 'help').callsFake(function () {});
-			exitStub = sinon.stub(process, 'exit').callsFake(function () {});
+			helpStub = sinon.stub(program, 'help').callsFake(function() {});
+			exitStub = sinon.stub(process, 'exit').callsFake(function() {});
 		});
 
 		afterEach(() => {
@@ -208,7 +206,7 @@ describe('eva-tasklist.js', () => {
 		});
 
 		it('should display help if input an unknown argument is provided', () => {
-			const args = [ "foo", "bar", "-z" ];
+			const args = ['foo', 'bar', '-z'];
 
 			et.buildProgramArguments(program, args);
 
@@ -216,7 +214,7 @@ describe('eva-tasklist.js', () => {
 		});
 
 		it('should exit if the -i argument has no parameter', () => {
-			const args = [ "foo", "bar", "-i" ];
+			const args = ['foo', 'bar', '-i'];
 
 			et.buildProgramArguments(program, args);
 
@@ -224,7 +222,7 @@ describe('eva-tasklist.js', () => {
 		});
 
 		it('should exit if the -o argument has no parameter', () => {
-			const args = [ "foo", "bar", "-o" ];
+			const args = ['foo', 'bar', '-o'];
 
 			et.buildProgramArguments(program, args);
 

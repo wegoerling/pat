@@ -1,14 +1,9 @@
 /* Specify environment to include mocha globals */
 /* eslint-env node, mocha */
 
-"use strict";
+'use strict';
 
 const expect = require('chai').expect;
-const sinon = require('sinon');
-const _ = require('lodash');
-const path = require('path');
-
-const fs = require('fs');
 const yj = require('yamljs');
 
 const Task = require('../app/model/task');
@@ -40,6 +35,7 @@ describe('Task constructor - Positive Testing', function() {
 			expect(task.concurrentSteps).to.be.an('array');
 			expect(task.concurrentSteps).to.have.all.keys(0);
 
+			// eslint-disable-next-line no-unused-expressions
 			expect(task.concurrentSteps[0].EV1).to.exist;
 			expect(task.concurrentSteps[0].EV1).to.be.an('array');
 			expect(task.concurrentSteps[0].EV1).to.have.all.keys(0);

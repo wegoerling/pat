@@ -5,10 +5,7 @@
  * Unit tests for markdownHelper.js
  */
 const markdownHelper = require('../app/helpers/markdownHelper.js'),
-	expect = require('chai').expect,
-	sinon = require('sinon'),
-	_ = require('lodash'),
-	path = require('path');
+	expect = require('chai').expect;
 
 /**
  * Negative testing for the markdownHelper.convert function
@@ -18,14 +15,14 @@ describe('markdownHelper.convert - Negative Testing', function() {
 		//  Test empty string
 		it('should return an empty string if input is emtpy', () => {
 			//  Fake markdown
-			var fakemarkdown = "";
+			var fakemarkdown = '';
 
 			//  Expected HTML
-			var expectedhtml = "";
+			var expectedhtml = '';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test input not a string
 		it('should return an empty string if input is not a string', () => {
@@ -33,11 +30,11 @@ describe('markdownHelper.convert - Negative Testing', function() {
 			var fakemarkdown = 500;
 
 			//  Expected HTML
-			var expectedhtml = "";
+			var expectedhtml = '';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 	});
 });
 
@@ -49,38 +46,38 @@ describe('markdownHelper.convert - Positive Testing', function() {
 	describe('Checkmarks', () => {
 		it('should turn CHECKMARK into unicode #10003', () => {
 			//  Fake HTML
-			var fakemarkdown = "{{CHECKMARK}}";
+			var fakemarkdown = '{{CHECKMARK}}';
 
 			//  Expected HTML
-			var expectedhtml = "<p>&#10063;</p>";
+			var expectedhtml = '<p>&#10063;</p>';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test {{CHECK MARK}}
 		it('should turn {{CHECK MARK}} into unicode #10003', () => {
 			//  Fake HTML
-			var fakemarkdown = "{{CHECK MARK}}";
+			var fakemarkdown = '{{CHECK MARK}}';
 
 			//  Expected HTML
-			var expectedhtml = "<p>&#10063;</p>";
+			var expectedhtml = '<p>&#10063;</p>';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test {{CHECK}}
 		it('should turn {{CHECK}} into unicode #10003', () => {
 			//  Fake HTML
-			var fakemarkdown = "{{CHECK}}";
+			var fakemarkdown = '{{CHECK}}';
 
 			//  Expected HTML
-			var expectedhtml = "<p>&#10003;</p>";
+			var expectedhtml = '<p>&#10003;</p>';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 	});
 
 	//  Test checkbox converters
@@ -88,26 +85,26 @@ describe('markdownHelper.convert - Positive Testing', function() {
 		//  Test {{CHECKBOX}}
 		it('should turn {{CHECKBOX}} into unicode #10063', () => {
 			//  Fake HTML
-			var fakemarkdown = "{{CHECKBOX}}";
+			var fakemarkdown = '{{CHECKBOX}}';
 
 			//  Expected HTML
-			var expectedhtml = "<p>&#10063;</p>";
+			var expectedhtml = '<p>&#10063;</p>';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test {{CHECK BOX}}
 		it('should turn {{CHECK BOX}} into unicode #10063', () => {
 			//  Fake HTML
-			var fakemarkdown = "{{CHECK BOX}}";
+			var fakemarkdown = '{{CHECK BOX}}';
 
 			//  Expected HTML
-			var expectedhtml = "<p>&#10063;</p>";
+			var expectedhtml = '<p>&#10063;</p>';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 	});
 
 	//  Test emphasis converters
@@ -115,27 +112,26 @@ describe('markdownHelper.convert - Positive Testing', function() {
 		//  Test '''
 		it('should turn \'\'\' into *', () => {
 			//  Fake HTML
-			var fakemarkdown = "asdf\'\'\'jkl";
+			var fakemarkdown = "asdf'''jkl";
 
 			//  Expected HTML
-			var expectedhtml = "<p>asdf*jkl</p>";
+			var expectedhtml = '<p>asdf*jkl</p>';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test **
 		it('should turn ** into *', () => {
 			//  Fake HTML
-			var fakemarkdown = "abcd**efgh";
+			var fakemarkdown = 'abcd**efgh';
 
 			//  Expected HTML
-			var expectedhtml = "<p>abcd*efgh</p>";
+			var expectedhtml = '<p>abcd*efgh</p>';
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
-
+		});
 
 	});
 });
