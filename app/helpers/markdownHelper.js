@@ -40,7 +40,7 @@ exports.convert = function (markdown) {
 		markdown = markdown.replace(regex, '*');
 	}
 	if (markdown.includes('**')) {
-		regex =  /([*])+/gi;
+		regex = /([*])+/gi;
 		markdown = markdown.replace(regex, '*');
 	}
 

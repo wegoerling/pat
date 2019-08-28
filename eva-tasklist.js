@@ -174,7 +174,7 @@ function validateProgramArguments(program) {
 	}
 
 	//  If this process can't write to the output location, emit an error and quit
-	if(!canWrite(program.output)) {  // eslint-disable-line no-use-before-define
+	if(!canWrite(program.output)) { // eslint-disable-line no-use-before-define
 		console.error(`Can't write to output location: ${program.output}`);
 		process.exit();
 	}
