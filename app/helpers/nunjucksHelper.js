@@ -5,7 +5,7 @@ const nunjucks = require("nunjucks");
 const formatter = require("./markdownHelper");
 const fs = require("fs");
 const path = require('path');
-const beautify_html = require('js-beautify').html;
+const beautifyHtml = require('js-beautify').html;
 const ver = require('./versionHelper');
 
 let inputPath = '';
@@ -116,7 +116,14 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 	var html = env.render(path.basename(templatePath), nunjucksObject);
 
 	// Beautify the html
-	var prettyHtml = beautify_html(html, { indent_size: 2, space_in_empty_paren: true, preserve_newlines: false });
+	var prettyHtml = beautifyHtml(
+		html,
+		{
+			indent_size: 2, // eslint-disable-line camelcase
+			space_in_empty_paren: true, // eslint-disable-line camelcase
+			preserve_newlines: false // eslint-disable-line camelcase
+		}
+	);
 
 	fs.writeFile(outputFilename, prettyHtml, err => {
 		if (!!err) {

@@ -153,12 +153,12 @@ function validateProgramArguments(program) {
 	//  If no output file was specified, use a default
 	if(!program.output) {
 		const p = path.parse(program.input);
-		const file_without_path = p.base;
+		const fileWithoutPath = p.base;
 		const ext = p.ext;
 
 		//  Use input file name with .html extension
 		//  e.g. test.yml becomes test.html
-		const name = file_without_path.replace(ext, '.html');
+		const name = fileWithoutPath.replace(ext, '.html');
 
 		program.output = name;
 	}

@@ -21,7 +21,6 @@
 
 		// Misc
 		"max-len": "off",
-		"camelcase": "off",
 		"arrow-parens": "off",
 		"wrap-iife": "off",
 		"quotes": "off",
