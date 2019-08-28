@@ -13,12 +13,6 @@ const ver = require('./app/helpers/versionHelper');
 const Procedure = require("./app/model/procedure");
 const html = require('./app/helpers/nunjucksHelper').generators;
 
-module.exports = {
-	run: run,
-	buildProgramArguments: buildProgramArguments,
-	validateProgramArguments: validateProgramArguments
-}
-
 /**
  * Surrogate program entry point
  *
@@ -27,10 +21,10 @@ module.exports = {
 function run(args) {
 	console.log('\nNASA EVA Tasklist Generator version ' + ver.currentVersion + '\n');
 
-	//  Use Commander to process command line arguments
-	buildProgramArguments(program, args);
+	// Use Commander to process command line arguments
+	buildProgramArguments(program, args); // eslint-disable-line no-use-before-define
 
-	validateProgramArguments(program);
+	validateProgramArguments(program); // eslint-disable-line no-use-before-define
 
 	console.log('Input YAML file: \t\t' + program.input);
 
@@ -47,7 +41,7 @@ function run(args) {
 			return;
 		}
 
-		genHtml(program, procedure);
+		genHtml(program, procedure); // eslint-disable-line no-use-before-define
 	});
 }
 
@@ -60,7 +54,7 @@ function run(args) {
 function genHtml(program, procedure) {
 
 	// Generate the HTML output file
-	generateHtmlChecklist(procedure, program, function () {
+	generateHtmlChecklist(procedure, program, function () {  // eslint-disable-line no-use-before-define
 		if(!fs.existsSync(program.output)) {
 			console.error('Failed to generate HTML output');
 			return;
@@ -69,7 +63,7 @@ function genHtml(program, procedure) {
 		console.log('HTML output written to: \t' + program.output);
 		console.log('HTML url for browser: \t\tfile://' + path.resolve(program.output));
 
-		genDoc(program);
+		genDoc(program); // eslint-disable-line no-use-before-define
 	});
 }
 
@@ -176,7 +170,7 @@ function validateProgramArguments(program) {
 	}
 
 	//  If this process can't write to the output location, emit an error and quit
-	if(!canWrite(program.output)) {
+	if(!canWrite(program.output)) {  // eslint-disable-line no-use-before-define
 		console.error('Can\'t write to output location: ' + program.output);
 		process.exit();
 	}
@@ -195,7 +189,7 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
 	if (program.css) {
 		html.params.cssFile(path.resolve(program.css));
 	}
-    
+
 	html.create(evaTaskList, program.template, callback);
 }
 
@@ -229,4 +223,10 @@ function canWrite(pathToTest) {
 		//  No
 		return false;
 	}
+}
+
+module.exports = {
+	run: run,
+	buildProgramArguments: buildProgramArguments,
+	validateProgramArguments: validateProgramArguments
 }

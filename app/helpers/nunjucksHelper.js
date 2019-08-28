@@ -13,19 +13,6 @@ let outputPath = '';
 let outputFilename = '';
 let cssFilename = '';
 
-exports.generators = {
-	create: createHtml,
-	params: {
-		inputDir: setInputPath,
-		outputDir: setOutputPath,
-		htmlFile: setOutputFilename,
-		cssFile: setCssFilename
-	}
-};
-
-
-
-
 function setInputPath(input) {
 	inputPath = input;
 }
@@ -57,17 +44,17 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		return typeof obj == 'string';
 	});
 
-	// Add custom nunjucks filter to control ordered lists for each actor.  Adds a variable 
+	// Add custom nunjucks filter to control ordered lists for each actor.  Adds a variable
 	// called stepNum to each actor which keeps track of the ordered list number for the next step.
 	// The value can be reset by passing in a number into the filter.
 	env.addFilter('stepIncrement', function(actor, value) {
-        
+
 		// Check if actor exists
 		if (!actor) {
 			console.log("Actor does not exist!");
 			return "";
 		}
-        
+
 		// If the stepNum does not exist, set it to one
 		if (!actor.stepNum) {
 			actor.stepNum = 1;
@@ -76,8 +63,8 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		// If the value was passed in, set to the specified value
 		if (typeof value !== 'undefined') {
 			actor.stepNum = value;
-		} 
-        
+		}
+
 		// Increment the step if no value was sent
 		else {
 			actor.stepNum = actor.stepNum+1;
@@ -141,3 +128,13 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		}
 	});
 }
+
+exports.generators = {
+	create: createHtml,
+	params: {
+		inputDir: setInputPath,
+		outputDir: setOutputPath,
+		htmlFile: setOutputFilename,
+		cssFile: setCssFilename
+	}
+};

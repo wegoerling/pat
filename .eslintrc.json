@@ -19,7 +19,6 @@
 		// Variables, etc
 		"no-unused-expressions": "off",
 		"no-implicit-globals": "off",
-		"no-use-before-define": "off",
 		"eqeqeq": "off",
 		"no-redeclare": "off",
 
