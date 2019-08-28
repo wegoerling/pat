@@ -26,7 +26,7 @@ function startUp(fileLocation) {
 		}
 	});
 	return doc;
-};
+}
 
 // to run this command, in the console run node main.js -e or --export. This will only work if it's ran soley by itself.
 // We need to talk about how to refactor the code to make more sense.
