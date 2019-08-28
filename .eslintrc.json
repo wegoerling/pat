@@ -21,7 +21,6 @@
 
 		// Misc
 		"max-len": "off",
-		"wrap-iife": "off",
 
 		// Whitespace
 		"space-in-parens": "off",
