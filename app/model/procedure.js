@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const fs = require("fs");
 const path = require ("path");
@@ -35,7 +35,7 @@ function readUrlPromise(url) {
 		});
 
 		request.on('error', (err) => {
-			reject(err)
+			reject(err);
 		});
 	});
 }
@@ -51,7 +51,7 @@ module.exports = class Procedure {
 		this.name = "";
 		this.actors = [];
 		this.tasks = [];
-		this.css = ""
+		this.css = "";
 	}
 
 	/**
@@ -138,4 +138,4 @@ module.exports = class Procedure {
 
 	}
 
-}
+};

@@ -154,4 +154,4 @@ module.exports = class Step {
 		return substeps;
 
 	}
-}
+};

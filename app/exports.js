@@ -9,7 +9,7 @@ exports.html = function (data, fileLocation) {
 		}
 		console.log("The file was saved!");
 	});
-}
+};
 
 // https://docx.js.org/#/
 exports.doc = function (data, fileLocation) {
@@ -20,5 +20,5 @@ exports.doc = function (data, fileLocation) {
 	const exp = new docx.Packer();
 	exp.toBuffer(doc).then((buffer) => {
 		fs.writeFileSync(`${fileLocation}.docx`, buffer);
-	})
-}
+	});
+};

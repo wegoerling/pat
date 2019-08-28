@@ -124,4 +124,4 @@ module.exports = class SpacewalkValidator {
 		return valid;
 	}
 
-}
+};

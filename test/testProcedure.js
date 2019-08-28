@@ -129,7 +129,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
 		afterEach(() => {
 			sinon.restore();
-		})
+		});
 
 		// Read some files in for schema checking prior to stubbing the readFileSync method
 		const procedureFile = path.join(__dirname, "../app/schema/procedureSchema.json");
@@ -153,7 +153,7 @@ describe('Procedure constructor - Negative Testing', function() {
                 THIS IS NOT YAML.
                 `;
 
-			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
+			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true);
 			const readFileSync = sinon.stub(fs, 'readFileSync');
 			readFileSync.withArgs(sinon.match(filename)).returns(badYaml);
 			readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
@@ -183,7 +183,7 @@ describe('Procedure constructor - Negative Testing', function() {
                     - file: misse7.yml
                 `;
 
-			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
+			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true);
 			const readFileSync = sinon.stub(fs, 'readFileSync');
 			readFileSync.withArgs(sinon.match(filename)).returns(yamlString);
 			readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
@@ -208,7 +208,7 @@ describe('Procedure constructor - Negative Testing', function() {
                     - file: misse7.yml
                 `;
 
-			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
+			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true);
 			const readFileSync = sinon.stub(fs, 'readFileSync');
 			readFileSync.withArgs(sinon.match(filename)).returns(yamlString);
 			readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);
@@ -237,7 +237,7 @@ describe('Procedure constructor - Negative Testing', function() {
 
                 `;
 
-			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true)
+			sinon.stub(fs, 'existsSync').withArgs(filename).returns(true);
 			const readFileSync = sinon.stub(fs, 'readFileSync');
 			readFileSync.withArgs(sinon.match(filename)).returns(yamlString);
 			readFileSync.withArgs(sinon.match('procedureSchema.json')).returns(procedureSchema);

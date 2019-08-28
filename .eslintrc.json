@@ -20,7 +20,6 @@
 		"valid-jsdoc": "off",
 
 		// Misc
-		"semi": "off",
 		"no-extra-semi": "off",
 		"no-useless-escape": "off",
 		"max-len": "off",

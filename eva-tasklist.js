@@ -124,7 +124,7 @@ function buildProgramArguments(program, args) {
 	program.unknownOption = function() {
 		//  An invalid option has been received. Print usage and exit.
 		program.help();
-	}
+	};
 
 	try {
 		program.parse(args);
@@ -229,4 +229,4 @@ module.exports = {
 	run: run,
 	buildProgramArguments: buildProgramArguments,
 	validateProgramArguments: validateProgramArguments
-}
+};

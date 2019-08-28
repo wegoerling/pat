@@ -5,4 +5,4 @@ module.exports = class ValidationError extends Error {
 		super(message);
 		this.validationErrors = errors;
 	}
-}
+};

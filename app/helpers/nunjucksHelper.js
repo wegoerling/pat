@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-"use strict"
+"use strict";
 const nunjucks = require("nunjucks");
 const formatter = require("./markdownHelper");
 const fs = require("fs");
@@ -103,7 +103,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 	var nunjucksObject = {
 		procedure: evaTask,
 		version: ver.currentVersion
-	}
+	};
 
 	// If the css file exists, read it in and add it to the nunjucksObject
 	if (cssFilename !== '') {

@@ -22,7 +22,7 @@ describe('markdownHelper.convert - Negative Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test input not a string
 		it('should return an empty string if input is not a string', () => {
@@ -34,7 +34,7 @@ describe('markdownHelper.convert - Negative Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 	});
 });
 
@@ -53,7 +53,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test {{CHECK MARK}}
 		it('should turn {{CHECK MARK}} into unicode #10003', () => {
@@ -65,7 +65,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test {{CHECK}}
 		it('should turn {{CHECK}} into unicode #10003', () => {
@@ -77,7 +77,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 	});
 
 	//  Test checkbox converters
@@ -92,7 +92,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test {{CHECK BOX}}
 		it('should turn {{CHECK BOX}} into unicode #10063', () => {
@@ -104,7 +104,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 	});
 
 	//  Test emphasis converters
@@ -119,7 +119,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 		//  Test **
 		it('should turn ** into *', () => {
@@ -131,7 +131,7 @@ describe('markdownHelper.convert - Positive Testing', function() {
 
 			var actualhtml = markdownHelper.convert(fakemarkdown);
 			expect(actualhtml).to.equal(expectedhtml);
-		})
+		});
 
 
 	});
