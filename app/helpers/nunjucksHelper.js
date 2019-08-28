@@ -125,7 +125,7 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		}
 	);
 
-	fs.writeFile(outputFilename, prettyHtml, err => {
+	fs.writeFile(outputFilename, prettyHtml, (err) => {
 		if (err) {
 			console.log('Unable to save file:');
 			console.log(err);

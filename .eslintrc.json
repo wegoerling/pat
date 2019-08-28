@@ -21,7 +21,6 @@
 
 		// Misc
 		"max-len": "off",
-		"arrow-parens": "off",
 		"wrap-iife": "off",
 
 		// Whitespace
