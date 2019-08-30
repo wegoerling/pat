@@ -12,6 +12,7 @@ const child = require('child_process');
 const ver = require('./app/helpers/versionHelper');
 const Procedure = require('./app/model/procedure');
 const html = require('./app/helpers/nunjucksHelper').generators;
+const ThreeColDocx = require('./app/writer/ThreeColDocx');
 
 /**
  * Surrogate program entry point
@@ -40,6 +41,13 @@ function run(args) {
 			}
 			return;
 		}
+
+		// genDocx...
+
+		console.log(procedure);
+		console.log(procedure.tasks[1].concurrentSteps);
+		const threecoldocx = new ThreeColDocx(program, procedure);
+		threecoldocx.writeFile('./test.docx');
 
 		genHtml(program, procedure); // eslint-disable-line no-use-before-define
 	});
