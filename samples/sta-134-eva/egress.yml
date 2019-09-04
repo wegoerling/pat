@@ -33,7 +33,7 @@ steps:
   # EV1's step "open thermal cover" should really drive the IV's step to start a
   # clock. The steps below show the YAML equivalent to the STS-134 procedure.
   - simo:
-      EV1: 
+      EV1:
         - step: Open hatch thermal cover
           title: EGRESS/SETUP (00:25)
         - step: Egress A/L
@@ -59,6 +59,14 @@ steps:
         - step: Transfer EWC ORU Bag to EV1
           checkboxes:
             - Position CETA ORU bag near hatch
+        - step: This is a step
+          note:
+            - "this is a note"
+          caution: "this is a caution"
+          warning:
+            - "a warning"
+          comment:
+            - "a comment"
 
       EV2: Egress A/L
 
