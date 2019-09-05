@@ -43,16 +43,16 @@
   },
   "homepage": "https://github.com/jamesmontalvo3/spacewalk#readme",
   "dependencies": {
-    "ajv": "^6.10.0",
+    "ajv": "^6.10.2",
     "bootstrap": "^4.3.1",
-    "commander": "^2.19.0",
-    "docx": "^4.3.0",
+    "commander": "^2.20.0",
+    "docx": "^5.0.0-rc5",
     "jquery": "^3.4.1",
-    "js-beautify": "^1.9.0",
+    "js-beautify": "^1.10.2",
     "lodash": "^4.17.15",
     "nunjucks": "^3.2.0",
     "path": "^0.12.7",
-    "popper.js": "^1.14.5",
+    "popper.js": "^1.15.0",
     "showdown": "1.9.0",
     "wait.for": "^0.6.6",
     "wiky": "^0.95.1",
@@ -62,8 +62,8 @@
     "chai": "^4.2.0",
     "eslint-config-wikimedia": "^0.14.0",
     "mocha": "^5.2.0",
-    "mocha-junit-reporter": "^1.18.0",
+    "mocha-junit-reporter": "^1.23.1",
     "nyc": "^14.1.1",
-    "sinon": "^7.1.1"
+    "sinon": "^7.4.1"
   }
 }
