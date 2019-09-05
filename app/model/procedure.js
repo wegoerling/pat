@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yamljs');
+const filenamify = require('filenamify');
 
 const Actor = require('./actor.js');
 const Task = require('./task.js');
@@ -49,6 +50,7 @@ module.exports = class Procedure {
 
 	constructor() {
 		this.name = '';
+		this.filename = '';
 		this.actors = [];
 		this.tasks = [];
 		this.css = '';
@@ -79,6 +81,7 @@ module.exports = class Procedure {
 
 			// Save the procedure Name
 			this.name = procedureYaml.procedure_name;
+			this.filename = filenamify(this.name.replace(/\s+/g, '_'));
 
 			// Save the actors
 			for (var actorYaml of procedureYaml.actors) {

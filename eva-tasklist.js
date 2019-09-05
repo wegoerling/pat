@@ -42,11 +42,9 @@ function run(args) {
 			return;
 		}
 
-		console.log(procedure);
-
 		// genDocx...
 		const threecoldocx = new ThreeColDocx(program, procedure);
-		threecoldocx.writeFile(`./${procedure.name}.docx`);
+		threecoldocx.writeFile(`./${procedure.filename}.docx`);
 
 		if (program.html) {
 			genHtml(program, procedure); // eslint-disable-line no-use-before-define
@@ -91,7 +89,7 @@ function genPandocDocx(program) {
 	//  Figure out docx output filename
 	const p = path.parse(program.output);
 	const ext = p.ext;
-	const docfile = program.output.replace(ext, '.docx');
+	const docfile = program.output.replace(ext, '.pandoc.docx');
 
 	//  Outsource the conversion to pandoc
 	//  WARNING: NEVER USE THIS ON A WEB SERVER!
