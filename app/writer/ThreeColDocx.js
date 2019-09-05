@@ -4,21 +4,30 @@ const fs = require('fs');
 const docx = require('docx');
 // const childProcess = require('child_process');
 
+var doc;
+var taskNumbering;
 
-//
-//    FIXME FIXME FIXME FIXME FIXME
-//
-//    FIXME  F  F   E  F   E  FIXME
-//    I      I   I M   II MM  I
-//    XME    X    X    X X X  XME
-//    M      M   I M   M   I  M
-//    E      E  F   E  E   F  EMXIF
-//
-//    FIXME FIXME FIXME FIXME FIXME
-//
-//    1. Make a way to map actors to columns. EV1-->EV1, EV2-->EV2, *-->IV/SSRMS
-
-
+// NOTE: 720 = 1/2 inch
+//       360 = 1/4
+//       180 = 1/8
+//       90  = 1/16
+const initialIndent = 45;
+const indentStep = 360;
+// const tabOffset = 360;
+const hanging = 360; // how far left of the up-pointing arrow the down-pointing arrow should be
+const levelTypes = [
+	'decimal',
+	'lowerLetter',
+	'decimal',
+	'lowerLetter',
+	'decimal',
+	'lowerLetter',
+	'decimal',
+	'lowerLetter',
+	'decimal',
+	'lowerLetter'
+];
+var levels = [];
 
 function getGitHash(repoPath) {
 	// FIXME: This needs update to point to a repoPath rather than using the
@@ -95,14 +104,74 @@ function markupFilter(procedureMarkup) {
 	return procedureMarkup;
 }
 
+function addParagraphToCell(cell, params = {}) {
+	if (!params.text) {
+		params.text = '';
+	}
+	if (!params.style) {
+		params.style = 'normal';
+	}
+	cell.add(new docx.Paragraph(params));
+}
+
+function addBlockToCell(taskCell, blockType, blockLines) {
+	const blockTable = new docx.Table({
+		rows: 2,
+		columns: 1
+	});
+
+	const fillColors = {
+		comment: '00FF00',
+		note: 'FFFFFF',
+		caution: 'FFFF00',
+		warning: 'FF0000'
+	};
+
+	const textColors = {
+		comment: '000000',
+		note: '000000',
+		caution: '000000',
+		warning: 'FFFFFF'
+	};
+
+	// FIXME add logic for formatting based upon type
+	blockTable.getCell(0, 0).add(new docx.Paragraph({
+		children: [new docx.TextRun({
+			text: blockType.toUpperCase(),
+			color: textColors[blockType]
+		})],
+		alignment: docx.AlignmentType.CENTER
+	})).setShading({
+		fill: fillColors[blockType],
+		val: docx.ShadingType.CLEAR,
+		color: 'auto'
+	});
+	const contentCell = blockTable.getCell(1, 0);
+
+	for (const line of blockLines) {
+		contentCell.add(new docx.Paragraph({
+			text: markupFilter(line),
+			numbering: {
+				num: taskNumbering.concrete,
+				level: 0
+			}
+
+		}));
+	}
+
+	// taskCell.add(new docx.Paragraph(blockTable));
+	taskCell.add(blockTable);
+	// taskCell.add(new docx.Table(1, 1));
+}
+
 function insertStep(cell, step, level = 0) {
 
 	// writeStep:
-	// 	step.text via markdownformatter
-	// 	loop over step.checkboxes via markdownformatter
-	// 	loop over step.substeps, do writeStep
-	// 	loop over images ... do nothing but print for now
-	// 	loop over comments...what is this?
+	// step.text via markdownformatter
+	// loop over step.checkboxes via markdownformatter
+	// loop over step.substeps, do writeStep
+	// loop over images ... do nothing but print for now
+	// loop over comments...what is this?
 
 	if (step.title) {
 		addParagraphToCell(cell, {
@@ -111,74 +180,34 @@ function insertStep(cell, step, level = 0) {
 	}
 
 	if (step.warnings.length) {
-		let warnings = step.warnings.join(', ');
-		// addParagraphToCell(cell, {
-		// 	text: `WARNING: ${warnings}` // FIXME: format this as a block
-		// });
-
-		addBlockToCell(cell, 'warning', warnings);
+		addBlockToCell(cell, 'warning', step.warnings);
 	}
 	if (step.cautions.length) {
-		let cautions = step.cautions.join(', ');
-		addParagraphToCell(cell, {
-			text: `CAUTION: ${cautions}` // FIXME: format this as a block
-		});
+		addBlockToCell(cell, 'caution', step.cautions);
 	}
 	if (step.notes.length) {
-		let notes = step.notes.join(', ');
-		addParagraphToCell(cell, {
-			text: `NOTE: ${notes}` // FIXME: format this as a block
-		});
+		addBlockToCell(cell, 'note', step.notes);
 	}
 	if (step.comments.length) {
-		let comments = step.comments.join(', ');
-		addParagraphToCell(cell, {
-			text: `COMMENT: ${comments}` // FIXME: format this as a block
-		});
-	}
-
-	if (step.substeps.length) {
-		for (let substep of step.substeps) {
-			insertStep(cell, substep, level + 1);
-		}
+		addBlockToCell(cell, 'comment', step.comments);
 	}
 
 	if (step.text) {
 		addParagraphToCell(cell, {
-			text: step.text,
+			text: markupFilter(step.text),
 			numbering: {
 				num: taskNumbering.concrete,
 				level: level
 			}
 		});
 	}
-}
 
-function addParagraphToCell(cell, params = {}) {
-	if (!params.text) {
-		params.text = "";
+	if (step.substeps.length) {
+		for (const substep of step.substeps) {
+			insertStep(cell, substep, level + 1);
+		}
 	}
-	if (!params.style) {
-		params.style = 'normalsteps';
-	}
-	cell.add(new docx.Paragraph(params));
-}
 
-function addBlockToCell(taskCell, blockType, text) {
-	const blockTable = new docx.Table({
-		rows: 2,
-		columns: 1
-	});
-
-	// FIXME add logic for formatting based upon type
-
-	blockTable.getCell(0, 0).add(new docx.Paragraph(blockType.toUpperCase()));
-	blockTable.getCell(1, 0).add(new docx.Paragraph(text));
-
-
-	// taskCell.add(new docx.Paragraph(blockTable));
-	taskCell.add(blockTable);
-	// taskCell.add(new docx.Table(1, 1));
 }
 
 function genHeader(procedure, task) {
@@ -217,7 +246,7 @@ function genFooter() {
 		tabStop: {
 			right: { position: 14400 }
 		},
-		style: 'normalsteps'
+		style: 'normal'
 	}); // / .allCaps();
 
 	const procFooter = new docx.Footer({
@@ -249,11 +278,12 @@ function renderTask(procedure, task) {
 		columns: taskCols.length
 	});
 
-	for(c = 0; c < taskCols.length; c++) {
+	for (c = 0; c < taskCols.length; c++) {
 		cell = table.getCell(0, c);
 		cell.add(new docx.Paragraph({
-			text: taskCols[c]
-			// style: "SOMETHING BOLD!"
+			text: taskCols[c],
+			alignment: docx.AlignmentType.CENTER,
+			style: 'strong'
 		}));
 	}
 
@@ -304,8 +334,8 @@ function renderTask(procedure, task) {
 	});
 }
 
-function getDoc (program, procedure) {
-	let doc = new docx.Document({
+function getDoc(program, procedure) {
+	const doc = new docx.Document({
 		title: procedure.procudure_name,
 		description: 'FIXME: Get from procedure yaml',
 		// creator: Get from git? What if multiple committers to a proc?
@@ -313,7 +343,7 @@ function getDoc (program, procedure) {
 		lastModifiedBy: 'FIXME-InsertFromGit'
 		// revision: ??? ref: https://github.com/dolanmiu/docx/blob/552580bc47b09898d5b5793e656c27ebaf54e06f/docs/usage/document.md
 	});
-	doc.Styles.createParagraphStyle('normalsteps', 'Normal Steps')
+	doc.Styles.createParagraphStyle('normal', 'Normal')
 		.basedOn('Normal')
 		.next('Normal')
 		.font('Arial')
@@ -324,40 +354,39 @@ function getDoc (program, procedure) {
 			before: 0, // 20 * 72 * 0.05,
 			after: 0 // 20 * 72 * 0.05
 		});
+
+	doc.Styles.createParagraphStyle('listparagraph', 'List Paragraph')
+		.basedOn('List Paragraph')
+		.next('List Paragraph')
+		.font('Arial')
+		.quickFormat()
+		.size(20)
+		.spacing({
+			// line: 276,
+			before: 0, // 20 * 72 * 0.05,
+			after: 0 // 20 * 72 * 0.05
+		});
+
+	doc.Styles.createParagraphStyle('strong', 'Strong')
+		.basedOn('Normal')
+		.next('Normal')
+		.font('Arial')
+		.bold()
+		.quickFormat()
+		.size(20)
+		.spacing({
+			// line: 276,
+			before: 0, // 20 * 72 * 0.05,
+			after: 0 // 20 * 72 * 0.05
+		});
+
 	return doc;
 }
 
-var doc;
-var taskNumbering;
-var concrete;
-
-
-// NOTE: 720 = 1/2 inch
-//       360 = 1/4
-//       180 = 1/8
-//       90  = 1/16
-const initialIndent = 45;
-const indentStep = 360;
-// const tabOffset = 360;
-const hanging = 360; // how far left of the up-pointing arrow the down-pointing arrow should be
-const levelTypes = [
-	'decimal',
-	'lowerLetter',
-	'decimal',
-	'lowerLetter',
-	'decimal',
-	'lowerLetter',
-	'decimal',
-	'lowerLetter',
-	'decimal',
-	'lowerLetter'
-];
-var levels = [];
-
-function getIndents (levelIndex) {
-	let left = initialIndent + (levelIndex * indentStep) + hanging;
-	let tab = left;
-	let output = {
+function getIndents(levelIndex) {
+	const left = initialIndent + (levelIndex * indentStep) + hanging;
+	const tab = left;
+	const output = {
 		left: left,
 		tab: tab,
 		hanging: hanging
@@ -366,18 +395,13 @@ function getIndents (levelIndex) {
 	return output;
 }
 
-function getNumbering () {
+function getNumbering() {
 	taskNumbering = {};
 
 	// const numbering = new docx.Numbering();
 	// const abstractNum = numbering.createAbstractNumbering();
 	// const abstractNum = doc.Numbering.createAbstractNumbering();
 	taskNumbering.abstract = doc.Numbering.createAbstractNumbering();
-
-	// taskNumbering.abstract.createLevel(0, 'decimal', '%1.', 'start').addParagraphProperty(new docx.Indent(360, 130));
-
-
-	// levels[0] = taskNumbering.abstract.createLevel(0, 'decimal', '%1.', 'start').indent({ left: 360, hanging: 130 });
 
 	for (let i = 0; i < 3; i++) {
 		// var stepText = getLongStepString(i);
@@ -387,17 +411,6 @@ function getNumbering () {
 		levels[i].leftTabStop(indents.tab);
 	}
 
-	// taskNumbering.abstract.createLevel(1, 'lowerLetter', '%2.', 'start').addParagraphProperty(new docx.Indent(720, 620));
-	// taskNumbering.abstract.createLevel(2, 'decimal', '%3)', 'start').addParagraphProperty(new docx.Indent(1080, 980));
-
-	// taskNumbering.levels = [];
-	// for (let i = 1; i < levelTypes.length; i++) {
-	// 	taskNumbering.levels[i] = taskNumbering.abstract.createLevel(i, levelTypes[i], stepText, "left");
-	// 	// var indents = getIndents(i);
-	// 	// levels[i].indent({ left: indents.left, hanging: indents.hanging });
-	// }
-
-	// taskNumbering.concrete = doc.Numbering.createConcreteNumbering(abstractNum);
 	taskNumbering.concrete = doc.Numbering.createConcreteNumbering(taskNumbering.abstract);
 }
 
@@ -426,8 +439,6 @@ module.exports = class ThreeColDocx {
 			renderTask(procedure, task, this.doc);
 		}
 	}
-
-
 
 	writeFile(filepath) {
 		docx.Packer.toBuffer(doc).then((buffer) => {

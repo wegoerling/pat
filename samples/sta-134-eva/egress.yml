@@ -61,10 +61,16 @@ steps:
             - Position CETA ORU bag near hatch
         - step: This is a step
           note:
-            - "this is a note"
-          caution: "this is a caution"
-          warning:
-            - "a warning"
+            - "Connector ops may be done in any order. Defer moving toaster and AM radio as desired"
+          caution:
+            - |
+              Avoid contact with: Tires and Car mirrors, blue paint on zenith side of Rear View Mirror
+              (RVM), Door Handle petals, trailer hitches alignment guide and attachement shaft,
+              exposed bolts of underside of the hood latch restraint, radio antenna and back up
+              camera, and in-car Bluetooth and forward lights (translation on base of radio antenna
+              and lower half of lights is acceptable).
+            - Avoid imparting any loads in the forward direction into car until brakes are engaged.
+          warning: "If Portable Wireless Toaster will not power on, avoid inadvertent contact (may fall below touch temp limits)"
           comment:
             - "a comment"
 

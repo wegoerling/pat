@@ -42,14 +42,15 @@ function run(args) {
 			return;
 		}
 
-		// genDocx...
-
 		console.log(procedure);
-		console.log(procedure.tasks[1].concurrentSteps);
-		const threecoldocx = new ThreeColDocx(program, procedure);
-		threecoldocx.writeFile('./test.docx');
 
-		genHtml(program, procedure); // eslint-disable-line no-use-before-define
+		// genDocx...
+		const threecoldocx = new ThreeColDocx(program, procedure);
+		threecoldocx.writeFile(`./${procedure.name}.docx`);
+
+		if (program.html) {
+			genHtml(program, procedure); // eslint-disable-line no-use-before-define
+		}
 	});
 }
 
@@ -72,39 +73,38 @@ function genHtml(program, procedure) {
 		console.log(`HTML output written to: \t${program.output}`);
 		console.log(`HTML url for browser: \t\tfile://${path.resolve(program.output)}`);
 
-		genDoc(program); // eslint-disable-line no-use-before-define
+		if (program.pandoc) {
+			genPandocDocx(program); // eslint-disable-line no-use-before-define
+		}
 	});
 }
 
 /**
- * High level function to generate DOCX output
+ * High level function to generate DOCX output using Pandoc
  *
  * @param   {*} program       Program arguments and stuff
  */
-function genDoc(program) {
+function genPandocDocx(program) {
 
-	//  Perform HTML -> DOCX conversion, if requested
-	if (program.doc) {
+	//  Perform HTML -> DOCX conversion
 
-		//  Figure out docx output filename
-		const p = path.parse(program.output);
-		const ext = p.ext;
-		const docfile = program.output.replace(ext, '.docx');
+	//  Figure out docx output filename
+	const p = path.parse(program.output);
+	const ext = p.ext;
+	const docfile = program.output.replace(ext, '.docx');
 
-		//  Outsource the conversion to pandoc
-		//  WARNING: NEVER USE THIS ON A WEB SERVER!
-		const command = `pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
-		child.execSync(command);
+	//  Outsource the conversion to pandoc
+	//  WARNING: NEVER USE THIS ON A WEB SERVER!
+	const command = `pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
+	child.execSync(command);
 
-		if (!fs.existsSync(docfile)) {
-			console.error('Failed to generate DOCX output');
-			return;
-		}
-
-		console.log(`DOCX output written to: \t${docfile}`);
+	if (!fs.existsSync(docfile)) {
+		console.error('Failed to generate DOCX output');
+		return;
 	}
 
-	console.log('\nDone!');
+	console.log(`DOCX output written to: \t${docfile}`);
+
 }
 
 /**
@@ -125,7 +125,8 @@ function buildProgramArguments(program, args) {
 		.option('-i, --input <input.yml>', 'name the YAML file for this EVA')
 		.option('-o, --output <.html>', 'name of output HTML file')
 		.option('-t, --template <.html>', 'specify a template to use', DEFAULT_TEMPLATE)
-		.option('-d, --doc', 'Also generate Word doc output', null)
+		.option('--html', 'Generate HTML file', null)
+		.option('-p, --pandoc', 'Generate Word doc from HTML using Pandoc (requires --html option)', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
 		.allowUnknownOption();
 
