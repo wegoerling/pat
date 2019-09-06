@@ -391,7 +391,6 @@ function getIndents(levelIndex) {
 		tab: tab,
 		hanging: hanging
 	};
-	console.log(output);
 	return output;
 }
 
