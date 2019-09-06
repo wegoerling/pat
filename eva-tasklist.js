@@ -197,6 +197,21 @@ function buildProgramArguments(program, args) {
 	return program;
 }
 
+function pathMustExist (path, createIfMissing = false) {
+	try {
+		fs.statSync(path);
+	} catch(e) {
+		if (createIfMissing) {
+			fs.mkdirSync(path); // catch here, too?
+		}
+		else {
+			console.error(`Path ${path} does not exist`);
+			process.exit();
+		}
+	}
+	return true;
+}
+
 /**
  * Validates the arguments...
  *
@@ -204,14 +219,16 @@ function buildProgramArguments(program, args) {
  */
 function validateProgramArguments(program) {
 
-	//  Minimum number of arguments is 3:
-	//  e.g. node index.js build
-	if (process.argv.length < 4) {
-		program.help();
-	}
-
 	program.procedurePath = path.join(program.projectPath, 'procedures');
+	program.tasksPath = path.join(program.projectPath, 'tasks');
 	program.outputPath = path.join(program.projectPath, 'build');
+
+	pathMustExist(program.procedurePath);
+	pathMustExist(program.tasksPath);
+
+	// at this point tasks and procedures paths exist. Reasonably certain this
+	// is an xOPS project. Allow forcing creation of outputPath with `true`.
+	pathMustExist(program.outputPath, true);
 
 	//  If this process can't write to the output location, emit an error and quit
 	if (!canWrite(program.outputPath)) {
