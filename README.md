@@ -1,47 +1,24 @@
-# EVA-Task-Generator
+# xOPS
 
-## User Guide for Phase II EVA Task Generator Project
-The purpose of the EVA Task Generator project is to replace the manual procedure creation process for Extravehicular Activities (EVAs) by NASA, Johnson Space Center personnel. The goal of the application is to take an EVA checklist in a YAML file format as input, and output a Word document in the standard procedure format with minimal post processing required.
+[![Build Status](https://travis-ci.org/xoperations/xops.svg?branch=master)](https://travis-ci.org/xoperations/xops)
 
-## Motivation
-This software intends to assist NASA personnel in the performance and management of tasks during “space walks” outside the International Space Station (ISS) or future vehicles. The primary objective of the project is to automate and organize the creation of task lists used in space walks and ensure that they are easily accessed and can be updated by stakeholders.
-
-## Build status
-
-[![Build Status](https://travis-ci.org/deltj/spacewalk.svg?branch=master)](https://travis-ci.org/deltj/spacewalk)
-[![DeepScan grade](https://deepscan.io/api/teams/3139/projects/4624/branches/37151/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=3139&pid=4624&bid=37151)
-
-## Code style
-
-TBD. First-semester UMUC team _may_ have used [Standard](https://github.com/standard/standard) but lack of semicolons doesn't seem right. Perhaps [Semistandard](https://github.com/standard/semistandard) is a better option. Alternatively use eslint.
-
-## Screenshots
-
-*EVA Task Generator HTML Output Example*
-![EVA HTML_Output](docs/qna/images/HTML_Output.png)
-
-*EVA Task Generator Help Feature*
-![EVA Help](docs/qna/images/Help_Text.png)
-
-*EVA Task Generator Input File Example*
-![EVA File Input](docs/qna/images/Input_File.png)
-
-*EVA Task Generator Successful Execution*
-![EVA Excecution](docs/qna/images/Successful_Execution.png)
+The purpose of xOPS is to replace the manual procedure creation process for Extravehicular Activities (EVAs, AKA "spacewalks") by NASA, Johnson Space Center personnel. The goal of the application is to be able to write EVA procedures as simple YAML files and run `xops build` to generate Word document(s) in the standard procedure format, similar to the Space Shuttle mission "STS-134" procedures found on page `FS 7-20` of [this document](https://www.nasa.gov/centers/johnson/pdf/539922main_EVA_134_F_A.pdf). More EVAs can be found at the [FOIA archive](https://www.nasa.gov/centers/johnson/news/flightdatafiles/foia_archive.html).
 
 ## Installation
+
 The following are step by step instructions for how to get the NASA EVA Task Generator development environment installed and running. The software can be run on Window, Linux, and Mac OS.
 
-1. Install [node LTS version]( https://nodejs.org/en/download/).
-2. Install [Visual Studio Code]( https://code.visualstudio.com/download).
-3. _(Optional) For conversion to .docx format, install [Pandoc](https://pandoc.org/).  **In order for .docx conversion to work, the pandoc command must be on the PATH**_
-4. Clone the NASA EVA Task Generator “spacewalk” repository from GitHub
- ```git clone https://github.com/jamesmontalvo3/spacewalk.git```
-5. Navigate into the project directory, using command `cd spacewalk`
-6. Use NPM to install the module, using command `npm install`
-7. Check the install is working by running help menu `node index.js -h` or the version `node index.js -v`
+1. Install [node LTS version](https://nodejs.org/en/download/).
+2. Install [Visual Studio Code](https://code.visualstudio.com/download).
+3. Clone this repository from GitHub
+ ```git clone https://github.com/xOPERATIONS/xOPS.git```
+4. Navigate into the project directory, using command `cd xOPS`
+5. Use NPM to install the module, using command `npm install`
+6. Setup the `xops` command by doing `npm link`
+7. Check install works by running help menu `xops -h` or the version `xops --version`
 
 ## Videos
+
 The following videos demostrate how to use the application features via the console command line.
 
 *EVA Task Generator CSS- Customizable & scalable CSS template*
@@ -60,19 +37,17 @@ The following videos demostrate how to use the application features via the cons
 
 Libraries used include nunjucks for HTML/CSS template customization, chai assertion for unit testing, and pandoc for HTML-to-Word file conversion.
 
-Installation of Pandoc is required for HTML-to-Word file conversion.  The ```pandoc``` command must be on the user’s path.
-
-See [YAML Definition]( docs/yamlDefinition.md) for an overview of YAML file syntax. This link also provides details on how NASA JSC writes procedures in the YAML files format for EVA Tasks and how the EVA Task Generator uses the data dictionary to parse YAML files.
+See [YAML Definition](docs/yamlDefinition.md) for an overview of YAML file syntax. This link also provides details on how NASA JSC writes procedures in the YAML files format for EVA Tasks and how the EVA Task Generator uses the data dictionary to parse YAML files.
 
 ## Tests
 
 ### Unit Testing
 
-This directory contains unit tests for the spacewalk project. Unit tests are
+This directory contains unit tests for the xOPS project. Unit tests are
 automatically run by travis-ci after commits are made to this repo, and the
 build status is reported by a badge in the README.md in the project root.
 
-Spacewalk unit tests use the Chai Assertion Library for assertions in unit
+xOPS unit tests use the Chai Assertion Library for assertions in unit
 tests. More information here: https://www.chaijs.com/api/bdd/
 
 To manually execute unit tests (which you should do BEFORE committing changes):
@@ -89,7 +64,7 @@ Mocha will generate a nice test report for you.
 ### Integration Testing
 
 Run the program with sample YAML files.
-The following samples may be run from within the spacewalk directory
+The following samples may be run from within the xOPS directory
 - Sample using local files
 `node index.js --input samples/sta-134-eva/main.yml --output sta-134-aqua.html’
 - Sample with CSS on command line
@@ -105,26 +80,29 @@ Or
 
 ## Credits
 
-*NASA Project Sponsor*
+### Project Sponsor
+
 James Montalvo
 
-*UMUC Phase II Development Team, Spring 2019*
-Akruthi Shetty
-Christopher Redding
-Ebony Christian
-Joe Bidinger
-Ted Deloggio
+### UMUC Phase III Development Team, Fall 2019
 
-*UMUC Phase I Development Team, Fall 2018*
-Jose De la Cruz
-Jason Foley
-Alexandra Kuntz
-Engedawork Befekadu
-Timothy Smith
-Christopher Drury
-Kevin Terry
-John-Carlo Babin
+TBD
 
+### UMUC Phase II Development Team, Spring 2019
 
-## License
-The NASA EVA Task Generator uses MIT and Apache licensed open source software
+- Akruthi Shetty
+- Christopher Redding
+- Ebony Christian
+- Joe Bidinger
+- Ted Deloggio
+
+### UMUC Phase I Development Team, Fall 2018
+
+- Jose De la Cruz
+- Jason Foley
+- Alexandra Kuntz
+- Engedawork Befekadu
+- Timothy Smith
+- Christopher Drury
+- Kevin Terry
+- John-Carlo Babin
