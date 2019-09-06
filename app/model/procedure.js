@@ -41,9 +41,22 @@ function readUrlPromise(url) {
 	});
 }
 
-function translatePath(fileName, file) {
-	const fullPath = path.join(path.dirname(fileName), file);
-	return fullPath;
+function translatePath(procedureFilePath, taskFileName) {
+	// Look in tasks directory, sister to procedures directory
+	// Someday look in a directory provided by dependency manager, issue #21
+	const taskFilePath = path.join(
+		path.dirname(procedureFilePath),
+		'..',
+		'tasks',
+		taskFileName
+	);
+
+	// Validate & Load the yaml file!
+	if (!fs.existsSync(taskFilePath)) {
+		throw new Error(`Could not find task file ${taskFilePath}`);
+	}
+
+	return taskFilePath;
 }
 
 module.exports = class Procedure {
@@ -96,12 +109,7 @@ module.exports = class Procedure {
 					// Since the task file is in relative path to the procedure
 					// file, need to translate it!
 					const taskFileName = translatePath(fileName, taskYaml.file);
-					// path.join(path.dirname(fileName), taskYaml.file);
 
-					// Validate & Load the yaml file!
-					if (!fs.existsSync(taskFileName)) {
-						throw new Error(`Could not find task file ${taskFileName}`);
-					}
 					spacewalkValidator.validateTaskSchemaFile(taskFileName);
 					const loadedTaskYaml = YAML.load(taskFileName, null, true);
 
