@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * This file contains the program entry point for eva-tasklist
  */

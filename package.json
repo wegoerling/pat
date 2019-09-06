@@ -1,7 +1,7 @@
 {
-  "name": "spacewalk",
+  "name": "xops",
   "version": "1.2.0",
-  "description": "Spacewalk EVA Checklist Generator",
+  "description": "Procedure generator for on space operations",
   "main": "index.js",
   "scripts": {
     "pretest": "npm install",
@@ -10,7 +10,7 @@
     "start": "node index.js"
   },
   "bin": {
-    "eva-checklist": "./index.js"
+    "xops": "./index.js"
   },
   "repository": {
     "type": "git",
@@ -28,15 +28,14 @@
     "John-Carlo Babin"
   ],
   "keywords": [
-    "eva-checklist",
+    "procedure",
+    "timeline",
     "spacewalk",
     "eva",
     "checklist",
     "UMUC",
-    "SWEN670",
-    "group project"
+    "SWEN670"
   ],
-  "author": "Fall 2018 SWEN 670 Group 3",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jamesmontalvo3/spacewalk/issues"
