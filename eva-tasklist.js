@@ -28,32 +28,47 @@ function run(args) {
 
 	validateProgramArguments(program); // eslint-disable-line no-use-before-define
 
-	console.log(`Input YAML file: \t\t${program.input}`);
-
-	// Parse the input file
-	const procedure = new Procedure();
-	procedure.populateFromFile(program.input).then((err) => {
-		// Check if an error occurred
+	fs.readdir(program.procedurePath, function (err, files) {
 		if (err) {
-			console.error(`Error while deserializing YAML: ${err}`);
-			if (err.validationErrors) {
-				console.log('Validation Errors:');
-				console.log(err.validationErrors);
-			}
-			return;
+			console.log('Unable to scan procedures directory: ' + err);
+			process.exit();
 		}
+		files.forEach(function (file) {
+			console.log(`Generating procedure from ${file}`);
 
-		console.logIfVerbose(program, 2, 4);
-		console.logIfVerbose(procedure, 1, 3);
+			let procedureFile = path.join(program.procedurePath, file);
 
-		// genDocx...
-		const threecoldocx = new ThreeColDocx(program, procedure);
-		threecoldocx.writeFile(`./${procedure.filename}.docx`);
+			// Parse the input file
+			const procedure = new Procedure();
+			procedure.populateFromFile(procedureFile).then((err) => {
+				// Check if an error occurred
+				if (err) {
+					console.error(`Error while deserializing YAML: ${err}`);
+					if (err.validationErrors) {
+						console.log('Validation Errors:');
+						console.log(err.validationErrors);
+					}
+					return;
+				}
 
-		if (program.html) {
-			genHtml(program, procedure); // eslint-disable-line no-use-before-define
-		}
+				console.logIfVerbose(program, 2, 4);
+				console.logIfVerbose(procedure, 1, 3);
+
+				// genDocx...
+				const threecoldocx = new ThreeColDocx(program, procedure);
+				threecoldocx.writeFile(path.join(
+					program.outputPath,
+					`${procedure.filename}.docx`
+				));
+
+				if (program.html) {
+					genHtml(program, procedure); // eslint-disable-line no-use-before-define
+				}
+			});
+
+		});
 	});
+
 }
 
 /**
@@ -128,14 +143,26 @@ function buildProgramArguments(program, args) {
 		.version(ver.currentVersion, '--version')
 		.name('xops')
 		.description(pjson.description)
-		.option('-i, --input <input.yml>', 'name the YAML file for this EVA')
-		.option('-o, --output <.html>', 'name of output HTML file')
+		.option('-v, --verbose', 'Verbosity that can be increased from -v to -vvvv', increaseVerbosity, 0)
+		.allowUnknownOption();
+
+	program
+		.command('build [projectPath]')
+		.description('Build products for an xOPS project')
+		// .option('-i, --input <input.yml>', 'name the YAML file for this EVA')
+		// .option('-o, --output <.html>', 'name of output HTML file')
 		.option('-t, --template <.html>', 'specify a template to use', DEFAULT_TEMPLATE)
 		.option('--html', 'Generate HTML file', null)
 		.option('-p, --pandoc', 'Generate Word doc from HTML using Pandoc (requires --html option)', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
-		.option('-v, --verbose', 'Verbosity that can be increased from -v to -vvvv', increaseVerbosity, 0)
-		.allowUnknownOption();
+		.action(function (projectPath, options) {
+			if (projectPath) {
+				program.projectPath = path.resolve(projectPath)
+			}
+			else {
+				program.projectPath = process.cwd();
+			}
+		});
 
 	//  Commander.js does an unhelpful thing if there are invalid options;
 	//  Override the default behavior to do a more helpful thing.
@@ -152,35 +179,9 @@ function buildProgramArguments(program, args) {
 			//  that requires a parameter is missing its parameter.
 			program.help();
 		}
-	}
-
-	return program;
-}
-
-/**
- * Validates the arguments...
- *
- * @param   {*} program   TBD
- */
-function validateProgramArguments(program) {
-
-	//  Minimum number of arguments is 4:
-	//  e.g. node index.js -i something
-	if (process.argv.length < 4) {
-		program.help();
-	}
-
-	//  If no output file was specified, use a default
-	if (!program.output) {
-		const p = path.parse(program.input);
-		const fileWithoutPath = p.base;
-		const ext = p.ext;
-
-		//  Use input file name with .html extension
-		//  e.g. test.yml becomes test.html
-		const name = fileWithoutPath.replace(ext, '.html');
-
-		program.output = name;
+		else {
+			throw e;
+		}
 	}
 
 	console.logIfVerbose = function (msg, verbosityThreshold = 0, fullObjVerbosityThreshold = 4) {
@@ -193,17 +194,31 @@ function validateProgramArguments(program) {
 		}
 	};
 
-	//  If the input file doesn't exist, emit an error and quit
-	if (!fs.existsSync(program.input)) {
-		console.error(`Input YAML doesn't exist: ${program.input}`);
+	return program;
+}
+
+/**
+ * Validates the arguments...
+ *
+ * @param   {*} program   TBD
+ */
+function validateProgramArguments(program) {
+
+	//  Minimum number of arguments is 3:
+	//  e.g. node index.js build
+	if (process.argv.length < 4) {
+		program.help();
+	}
+
+	program.procedurePath = path.join(program.projectPath, 'procedures');
+	program.outputPath = path.join(program.projectPath, 'build');
+
+	//  If this process can't write to the output location, emit an error and quit
+	if (!canWrite(program.outputPath)) {
+		console.error(`Can't write to output location: ${program.outputPath}`);
 		process.exit();
 	}
 
-	//  If this process can't write to the output location, emit an error and quit
-	if (!canWrite(program.output)) { // eslint-disable-line no-use-before-define
-		console.error(`Can't write to output location: ${program.output}`);
-		process.exit();
-	}
 }
 
 /**
