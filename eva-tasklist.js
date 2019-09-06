@@ -20,7 +20,7 @@ const ThreeColDocx = require('./app/writer/ThreeColDocx');
  * @param   {*} args Command line arguments
  */
 function run(args) {
-	console.log(`\nNASA EVA Tasklist Generator version ${ver.currentVersion}\n`);
+	console.log(`NASA EVA Tasklist Generator version ${ver.currentVersion}\n`);
 
 	// Use Commander to process command line arguments
 	buildProgramArguments(program, args); // eslint-disable-line no-use-before-define
@@ -41,6 +41,9 @@ function run(args) {
 			}
 			return;
 		}
+
+		console.logIfVerbose(program, 2, 4);
+		console.logIfVerbose(procedure, 1, 3);
 
 		// genDocx...
 		const threecoldocx = new ThreeColDocx(program, procedure);
@@ -105,6 +108,10 @@ function genPandocDocx(program) {
 
 }
 
+function increaseVerbosity(dummyValue, previous) {
+	return previous + 1;
+}
+
 /**
  * This function configures commander.js for this application's command line
  * arguments, and attemps to parse the arguments passed to this process.
@@ -117,7 +124,7 @@ function buildProgramArguments(program, args) {
 	const DEFAULT_TEMPLATE = 'templates/spacewalk.njk';
 
 	program
-		.version(ver.currentVersion, '-v, --version')
+		.version(ver.currentVersion, '--version')
 		.name('eva-checklist')
 		.description('Generate the spacewalk EVA checklist from YAML files')
 		.option('-i, --input <input.yml>', 'name the YAML file for this EVA')
@@ -126,6 +133,7 @@ function buildProgramArguments(program, args) {
 		.option('--html', 'Generate HTML file', null)
 		.option('-p, --pandoc', 'Generate Word doc from HTML using Pandoc (requires --html option)', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
+		.option('-v, --verbose', 'Verbosity that can be increased from -v to -vvvv', increaseVerbosity, 0)
 		.allowUnknownOption();
 
 	//  Commander.js does an unhelpful thing if there are invalid options;
@@ -173,6 +181,16 @@ function validateProgramArguments(program) {
 
 		program.output = name;
 	}
+
+	console.logIfVerbose = function (msg, verbosityThreshold = 0, fullObjVerbosityThreshold = 4) {
+		if (program.verbose >= verbosityThreshold) {
+			if (program.verbose >= fullObjVerbosityThreshold) {
+				msg = JSON.stringify(msg, null, 4);
+			}
+			console.log('');
+			console.log(msg);
+		}
+	};
 
 	//  If the input file doesn't exist, emit an error and quit
 	if (!fs.existsSync(program.input)) {
