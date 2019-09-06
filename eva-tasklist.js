@@ -8,6 +8,7 @@ const program = require('commander');
 const path = require('path');
 const fs = require('fs');
 const child = require('child_process');
+const pjson = require('./package.json');
 
 const ver = require('./app/helpers/versionHelper');
 const Procedure = require('./app/model/procedure');
@@ -20,7 +21,7 @@ const ThreeColDocx = require('./app/writer/ThreeColDocx');
  * @param   {*} args Command line arguments
  */
 function run(args) {
-	console.log(`NASA EVA Tasklist Generator version ${ver.currentVersion}\n`);
+	console.log(`xOPS procedure generator v${ver.currentVersion}\n`);
 
 	// Use Commander to process command line arguments
 	buildProgramArguments(program, args); // eslint-disable-line no-use-before-define
@@ -125,8 +126,8 @@ function buildProgramArguments(program, args) {
 
 	program
 		.version(ver.currentVersion, '--version')
-		.name('eva-checklist')
-		.description('Generate the spacewalk EVA checklist from YAML files')
+		.name('xops')
+		.description(pjson.description)
 		.option('-i, --input <input.yml>', 'name the YAML file for this EVA')
 		.option('-o, --output <.html>', 'name of output HTML file')
 		.option('-t, --template <.html>', 'specify a template to use', DEFAULT_TEMPLATE)
