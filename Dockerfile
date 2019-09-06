@@ -1,5 +1,4 @@
 FROM node:lts-alpine
-WORKDIR /home/node/app
-COPY .
-RUN npm install
-CMD node index.js
+WORKDIR /usr/src/app
+COPY . ./
+RUN npm install && npm link
