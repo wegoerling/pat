@@ -101,6 +101,16 @@ function getTaskColumns(task, docColumns) {
 function markupFilter(procedureMarkup) {
 	// FIXME: Process the procedure markup from wikitext/markdown-ish to what
 	// docx needs. Similar to app/helpers/markdownHelper.js
+
+	procedureMarkup = procedureMarkup
+		.replace(/\{\{CHECK\}\}/g, '✓')
+		.replace(/\{\{CHECKBOX\}\}/g, '☐')
+		.replace(/\{\{CHECKEDBOX\}\}/g, '☑')
+		.replace(/\{\{LEFT\}\}/g, '←')
+		.replace(/\{\{RIGHT\}\}/g, '→')
+		.replace(/\{\{CONNECT\}\}/g, '→|←')
+		.replace(/\{\{DISCONNECT\}\}/g, '←|→');
+
 	return procedureMarkup;
 }
 
@@ -169,9 +179,7 @@ function insertStep(cell, step, level = 0) {
 	// writeStep:
 	// step.text via markdownformatter
 	// loop over step.checkboxes via markdownformatter
-	// loop over step.substeps, do writeStep
-	// loop over images ... do nothing but print for now
-	// loop over comments...what is this?
+	// FIXME: loop over images
 
 	if (step.title) {
 		addParagraphToCell(cell, {
@@ -205,6 +213,18 @@ function insertStep(cell, step, level = 0) {
 	if (step.substeps.length) {
 		for (const substep of step.substeps) {
 			insertStep(cell, substep, level + 1);
+		}
+	}
+
+	if (step.checkboxes.length) {
+		for (const checkstep of step.checkboxes) {
+			addParagraphToCell(cell, {
+				text: markupFilter(`☐ ${checkstep}`),
+				numbering: {
+					num: taskNumbering.concrete,
+					level: level + 1
+				}
+			})
 		}
 	}
 
