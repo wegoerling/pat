@@ -27,7 +27,7 @@ const levelTypes = [
 	'decimal',
 	'lowerLetter'
 ];
-var levels = []
+var levels = [];
 
 function getGitHash(repoPath) {
 	// FIXME: This needs update to point to a repoPath rather than using the
