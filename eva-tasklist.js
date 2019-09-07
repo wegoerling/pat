@@ -28,15 +28,15 @@ function run(args) {
 
 	validateProgramArguments(program); // eslint-disable-line no-use-before-define
 
-	fs.readdir(program.procedurePath, function (err, files) {
+	fs.readdir(program.procedurePath, function(err, files) {
 		if (err) {
-			console.log('Unable to scan procedures directory: ' + err);
+			console.log(`Unable to scan procedures directory: ${err}`);
 			process.exit();
 		}
-		files.forEach(function (file) {
+		files.forEach(function(file) {
 			console.log(`Generating procedure from ${file}`);
 
-			let procedureFile = path.join(program.procedurePath, file);
+			const procedureFile = path.join(program.procedurePath, file);
 
 			// Parse the input file
 			const procedure = new Procedure();
@@ -155,11 +155,11 @@ function buildProgramArguments(program, args) {
 		.option('--html', 'Generate HTML file', null)
 		.option('-p, --pandoc', 'Generate Word doc from HTML using Pandoc (requires --html option)', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
-		.action(function (projectPath, options) {
+		.action(function(projectPath, options) {
+			console.logIfVerbose(options, 3);
 			if (projectPath) {
-				program.projectPath = path.resolve(projectPath)
-			}
-			else {
+				program.projectPath = path.resolve(projectPath);
+			} else {
 				program.projectPath = process.cwd();
 			}
 		});
@@ -178,13 +178,12 @@ function buildProgramArguments(program, args) {
 			//  Commander.js will annoyingly throw a TypeError if an argument
 			//  that requires a parameter is missing its parameter.
 			program.help();
-		}
-		else {
+		} else {
 			throw e;
 		}
 	}
 
-	console.logIfVerbose = function (msg, verbosityThreshold = 0, fullObjVerbosityThreshold = 4) {
+	console.logIfVerbose = function(msg, verbosityThreshold = 0, fullObjVerbosityThreshold = 4) {
 		if (program.verbose >= verbosityThreshold) {
 			if (program.verbose >= fullObjVerbosityThreshold) {
 				msg = JSON.stringify(msg, null, 4);
@@ -197,19 +196,50 @@ function buildProgramArguments(program, args) {
 	return program;
 }
 
-function pathMustExist (path, createIfMissing = false) {
+function pathMustExist(path, createIfMissing = false) {
 	try {
 		fs.statSync(path);
-	} catch(e) {
+	} catch (e) {
 		if (createIfMissing) {
 			fs.mkdirSync(path); // catch here, too?
-		}
-		else {
+		} else {
 			console.error(`Path ${path} does not exist`);
 			process.exit();
 		}
 	}
 	return true;
+}
+
+/**
+ * Tests whether the specified path can be written to by this process
+ *
+ * @param   {string} pathToTest The path to test
+ * @return  {boolean} True if path can be written to, false otherwise
+ */
+function canWrite(pathToTest) {
+
+	//  Check whether the path exists
+	if (!fs.existsSync(pathToTest)) {
+		//  File doesn't exist - check permissions for the parent dir
+		const p = path.parse(pathToTest);
+		let dir = p.dir;
+
+		if (dir === '') {
+			dir = '.';
+		}
+
+		pathToTest = dir;
+	}
+
+	//  Test permissions
+	try {
+		fs.accessSync(pathToTest, fs.constants.W_OK);
+		//  Yes
+		return true;
+	} catch (err) {
+		//  No
+		return false;
+	}
 }
 
 /**
@@ -258,38 +288,6 @@ async function generateHtmlChecklist(evaTaskList, program, callback) {
 	}
 
 	html.create(evaTaskList, program.template, callback);
-}
-
-/**
- * Tests whether the specified path can be written to by this process
- *
- * @param   {string} pathToTest The path to test
- * @return  {boolean} True if path can be written to, false otherwise
- */
-function canWrite(pathToTest) {
-
-	//  Check whether the path exists
-	if (!fs.existsSync(pathToTest)) {
-		//  File doesn't exist - check permissions for the parent dir
-		const p = path.parse(pathToTest);
-		let dir = p.dir;
-
-		if (dir === '') {
-			dir = '.';
-		}
-
-		pathToTest = dir;
-	}
-
-	//  Test permissions
-	try {
-		fs.accessSync(pathToTest, fs.constants.W_OK);
-		//  Yes
-		return true;
-	} catch (err) {
-		//  No
-		return false;
-	}
 }
 
 module.exports = {

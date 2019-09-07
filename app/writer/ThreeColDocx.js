@@ -224,7 +224,7 @@ function insertStep(cell, step, level = 0) {
 					num: taskNumbering.concrete,
 					level: level + 1
 				}
-			})
+			});
 		}
 	}
 
