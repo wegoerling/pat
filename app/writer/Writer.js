@@ -235,11 +235,7 @@ module.exports = class Writer {
 	}
 	*/
 
-
-	getGitHash(repoPath) {
-		// FIXME: This needs update to point to a repoPath rather than using the
-		// current working directory
-
+	getGitHash() {
 		// if (fs.existsSync(this.program.gitPath)) {
 		// 	try {
 		// 		gitHash = childProcess
@@ -248,20 +244,22 @@ module.exports = class Writer {
 		// 	}
 
 		// }
-		repoPath.slice(0, 8); // quiet eslint for now
-		return 'fake1234'; // FIXME
+
+		if (!this.gitHash) {
+			this.gitHash = 'fake1234'; // FIXME
+		}
+		return this.gitHash;
 	}
 
-	getGitDate(repoPath) {
-		// FIXME: This needs update to point to a repoPath rather than using the
-		// current working directory
-
+	getGitDate() {
 		// gitDate = childProcess
 		// .execSync('git log -1 --format=%cd --date=iso8601')
 		// .toString().trim();
 
-		repoPath.slice(0, 8); // quiet eslint for now
-		return '1970-01-01'; // FIXME
+		if (!this.gitDate) {
+			this.gitDate = '1970-01-01'; // FIXME
+		}
+		return this.gitDate;
 	}
 
 	writeFile(filepath) {
@@ -300,15 +298,21 @@ module.exports = class Writer {
 		return output;
 	}
 
+	getLastModifiedBy() {
+		return null; // FIXME: get this from git repo if available
+	}
+
 	getDoc() {
-		const doc = new docx.Document({
-			title: this.procedure.procudure_name,
-			description: 'FIXME: Get from procedure yaml',
-			// creator: Get from git? What if multiple committers to a proc?
-			// Just make creator 'Spacewalk'?
-			lastModifiedBy: 'FIXME-InsertFromGit'
-			// revision: ??? ref: https://github.com/dolanmiu/docx/blob/552580bc47b09898d5b5793e656c27ebaf54e06f/docs/usage/document.md
-		});
+		const docMeta = {
+			title: this.procedure.procedure_name,
+			lastModifiedBy: this.getLastModifiedBy(),
+			creator: this.program.fullName,
+			revision: this.getGitHash()
+		};
+		if (this.procedure.description) {
+			docMeta.description = this.procedure.description; // FIXME: not implemented
+		}
+		const doc = new docx.Document(docMeta);
 		doc.Styles.createParagraphStyle('normal', 'Normal')
 			.basedOn('Normal')
 			.next('Normal')
@@ -347,6 +351,14 @@ module.exports = class Writer {
 			});
 
 		return doc;
+	}
+
+	getPageSize() {
+		throw new Error('Abstract function not implemented');
+	}
+
+	getPageMargins() {
+		throw new Error('Abstract function not implemented');
 	}
 
 	renderTask(task) {
@@ -412,17 +424,8 @@ module.exports = class Writer {
 		this.doc.addSection({
 			headers: { default: this.genHeader(task) },
 			footers: { default: this.genFooter() },
-			size: {
-				width: 12240, // width and height transposed in LANDSCAPE
-				height: 15840,
-				orientation: docx.PageOrientation.LANDSCAPE
-			},
-			margins: {
-				top: 720,
-				right: 720,
-				bottom: 720,
-				left: 720
-			},
+			size: this.getPageSize(),
+			margins: this.getPageMargins(),
 			children: [table]
 		});
 	}
@@ -442,6 +445,10 @@ module.exports = class Writer {
 		});
 	}
 
+	getRightTabPosition() {
+		throw new Error('Abstract function not implemented');
+	}
+
 	genFooter() {
 		// const procFooter = new docx.Paragraph({ children: [] }).maxRightTabStop();
 		// const leftFooterText = new docx.TextRun(
@@ -450,8 +457,8 @@ module.exports = class Writer {
 		// procFooter.addRun(leftFooterText);
 		// procFooter.addRun(rightFooterText);
 
-		const gitDate = this.getGitDate('FIXMEpathTOrepo');
-		const gitHash = this.getGitHash('FIXMEpathTOrepo');
+		const gitDate = this.getGitDate();
+		const gitHash = this.getGitHash();
 
 		const footerParagraph = new docx.Paragraph({
 			alignment: docx.AlignmentType.LEFT,
@@ -461,7 +468,7 @@ module.exports = class Writer {
 				new docx.TextRun(' of ').numberOfTotalPages()
 			],
 			tabStop: {
-				right: { position: 14400 }
+				right: { position: this.getRightTabPosition() }
 			},
 			style: 'normal'
 		}); // / .allCaps();
