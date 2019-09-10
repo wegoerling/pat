@@ -299,15 +299,14 @@ module.exports = class Writer {
 	}
 
 	getLastModifiedBy() {
-		return null; // FIXME: get this from git repo if available
+		return ""; // FIXME: get this from git repo if available
 	}
 
 	getDoc() {
 		const docMeta = {
 			title: this.procedure.procedure_name,
 			lastModifiedBy: this.getLastModifiedBy(),
-			creator: this.program.fullName,
-			revision: this.getGitHash()
+			creator: this.program.fullName
 		};
 		if (this.procedure.description) {
 			docMeta.description = this.procedure.description; // FIXME: not implemented
@@ -366,11 +365,23 @@ module.exports = class Writer {
 		// FIXME: this shouldn't be hard-code, but should come from procedure
 		const docColumns = ['IV', 'EV1', 'EV2'];
 
-		const rows = task.concurrentSteps;
+		// taskCols = ["IV", "EV1", "EV2"]
 		const taskCols = this.getTaskColumns(task, docColumns);
 
-		let row,
-			r,
+		// Array of divisions. A division is a set of one or more series of
+		// steps. So a division may have just one series for the "IV" actor, or
+		// it may have multiple series for multiple actors.
+		//
+		// Example:
+		// divisions = [
+		//   { IV: [Step, Step, Step] },             // div 0: just IV series
+		//   { IV: [Step], EV1: [Step, Step] },      // div 1: IV & EV1 series
+		//   { EV1: [Step, Step], EV2: [Step] }      // div 2: EV1 & EV2 series
+		// ]
+		const divisions = task.concurrentSteps;
+
+		let division, // was "row", is a row in a 3-column table format
+			d, // was "r", is index for division
 			colName,
 			c,
 			col,
@@ -392,25 +403,18 @@ module.exports = class Writer {
 			}));
 		}
 
-		// taskCols = ["IV", "EV1", "EV2"]
-		// rows = [
-		//   { IV: [Step, Step, Step] },              // stepRow 0
-		//   { IV: [Step], EV1: [Step, Step] },       // stepRow 1
-		//   { EV1: [Step, Step], EV2: [Step] }       // stepRow 2
-		// ]
-		for (r = 0; r < rows.length; r++) {
-			row = rows[r];
+		for (d = 0; d < divisions.length; d++) {
+			division = divisions[d];
 
 			for (c = 0; c < taskCols.length; c++) {
-
 				colName = taskCols[c];
 
-				// each col name may not have steps within each row. If not, just
-				// set it false.
-				col = row[colName] ? row[colName] : false;
+				// each col name may not have steps within each division. If
+				// not, just set it false.
+				col = division[colName] ? division[colName] : false;
 
 				if (col) {
-					cell = table.getCell(r + 1, c);
+					cell = table.getCell(d + 1, c);
 					for (step of col) {
 						this.insertStep(cell, step);
 					}
