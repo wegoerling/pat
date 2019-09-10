@@ -146,6 +146,16 @@ function buildProgramArguments(program, args) {
 		.option('-v, --verbose', 'Verbosity that can be increased from -v to -vvvv', increaseVerbosity, 0)
 		.allowUnknownOption();
 
+	console.logIfVerbose = function(msg, verbosityThreshold = 0, fullObjVerbosityThreshold = 4) {
+		if (program.verbose >= verbosityThreshold) {
+			if (program.verbose >= fullObjVerbosityThreshold) {
+				msg = JSON.stringify(msg, null, 4);
+			}
+			console.log('');
+			console.log(msg);
+		}
+	};
+
 	program
 		.command('build [projectPath]')
 		.description('Build products for an xOPS project')
@@ -178,20 +188,12 @@ function buildProgramArguments(program, args) {
 			//  Commander.js will annoyingly throw a TypeError if an argument
 			//  that requires a parameter is missing its parameter.
 			program.help();
+			console.log('\n');
+			console.error(e);
 		} else {
 			throw e;
 		}
 	}
-
-	console.logIfVerbose = function(msg, verbosityThreshold = 0, fullObjVerbosityThreshold = 4) {
-		if (program.verbose >= verbosityThreshold) {
-			if (program.verbose >= fullObjVerbosityThreshold) {
-				msg = JSON.stringify(msg, null, 4);
-			}
-			console.log('');
-			console.log(msg);
-		}
-	};
 
 	return program;
 }
@@ -252,6 +254,7 @@ function validateProgramArguments(program) {
 	program.procedurePath = path.join(program.projectPath, 'procedures');
 	program.tasksPath = path.join(program.projectPath, 'tasks');
 	program.outputPath = path.join(program.projectPath, 'build');
+	program.gitPath = path.join(program.projectPath, '.git');
 
 	pathMustExist(program.procedurePath);
 	pathMustExist(program.tasksPath);
