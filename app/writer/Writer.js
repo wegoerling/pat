@@ -178,6 +178,8 @@ module.exports = class Writer {
 	 *                   insignificant tasks.
 	 *    Changes to Z = Fixes and minor clarifications. Changes should not
 	 *                   affect what crew actually do.
+	 *
+	 * @return {string} First 8 characters of git hash for project
 	 */
 	getGitHash() {
 
