@@ -3,6 +3,7 @@
 const fs = require('fs');
 const docx = require('docx');
 const childProcess = require('child_process');
+const Series = require('../model/series');
 
 module.exports = class Writer {
 
@@ -39,7 +40,6 @@ module.exports = class Writer {
 		this.taskNumbering = null; // gets set by getNumbering...better to return value
 		this.getNumbering();
 
-		// console.log(JSON.stringify(concrete, null, 4));
 		for (task of this.procedure.tasks) {
 			this.renderTask(task);
 		}
@@ -170,7 +170,7 @@ module.exports = class Writer {
 	// 	// taskCell.add(new docx.Table(1, 1));
 	// }
 
-	insertStep(series /* was cell */, step, level = 0) {
+	insertStep(series /* FIXME was cell */, step, level = 0) {
 
 		// writeStep:
 		// step.text via markdownformatter
@@ -198,7 +198,9 @@ module.exports = class Writer {
 
 		if (step.text) {
 			series.container.addParagraph({
-				text: this.markupFilter(step.text),
+				// FIXME: seems odd place for markupFilter, but "necessary"
+				// because containerWriter needs access.
+				text: series.container.markupFilter(step.text),
 				numbering: {
 					num: this.taskNumbering.concrete,
 					level: level
@@ -208,14 +210,14 @@ module.exports = class Writer {
 
 		if (step.substeps.length) {
 			for (const substep of step.substeps) {
-				this.insertStep(cell, substep, level + 1);
+				this.insertStep(series, substep, level + 1);
 			}
 		}
 
 		if (step.checkboxes.length) {
 			for (const checkstep of step.checkboxes) {
 				series.container.addParagraph({
-					text: this.markupFilter(`☐ ${checkstep}`),
+					text: series.container.markupFilter(`☐ ${checkstep}`),
 					numbering: {
 						num: this.taskNumbering.concrete,
 						level: level + 1
@@ -413,7 +415,7 @@ module.exports = class Writer {
 			for (c = 0; c < taskCols.length; c++) {
 				colName = taskCols[c];
 
-				series = new Series(division, colName, procedure);
+				let series = new Series(division, colName, this.procedure);
 				if (series.hasSteps()) {
 					series.setContainer(
 						table.getCell(d + 1, c)

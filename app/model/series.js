@@ -1,5 +1,7 @@
 'use strict';
 
+const ContainerWriter = require('../writer/containerWriter.js');
+
 module.exports = class Series {
 
 	constructor (division, primeActor, procedure) {
@@ -13,7 +15,7 @@ module.exports = class Series {
 
 			// if this actor is to be put into this column/series, push the
 			// actor's steps to the series
-			if (procedure.getActorColumn(actorKey) === seriesActorOrColumn) {
+			if (procedure.getActorColumn(actorKey) === primeActor) {
 
 				otherActorsHash[actorKey] = true;
 
@@ -35,6 +37,10 @@ module.exports = class Series {
 		for (let a in otherActorsHash) {
 			this.otherActors.push(a);
 		}
+	}
+
+	getSteps () {
+		return this.series;
 	}
 
 	hasSteps () {
