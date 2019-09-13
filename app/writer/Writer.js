@@ -45,6 +45,7 @@ module.exports = class Writer {
 		}
 	}
 
+
 	/**
 	 * Detect and return what columns are present on a task. A given task may
 	 * have 1 or more columns. Only return those present in a task.
@@ -90,83 +91,86 @@ module.exports = class Writer {
 		return taskColumns;
 	}
 
-	markupFilter(procedureMarkup) {
-		// FIXME: Process the procedure markup from wikitext/markdown-ish to what
-		// docx needs. Similar to app/helpers/markdownHelper.js
+	// MOVED TO: ContainerWriter
+	// markupFilter(procedureMarkup) {
+	// 	// FIXME: Process the procedure markup from wikitext/markdown-ish to what
+	// 	// docx needs. Similar to app/helpers/markdownHelper.js
 
-		procedureMarkup = procedureMarkup
-			.replace(/\{\{CHECK\}\}/g, '✓')
-			.replace(/\{\{CHECKBOX\}\}/g, '☐')
-			.replace(/\{\{CHECKEDBOX\}\}/g, '☑')
-			.replace(/\{\{LEFT\}\}/g, '←')
-			.replace(/\{\{RIGHT\}\}/g, '→')
-			.replace(/\{\{CONNECT\}\}/g, '→|←')
-			.replace(/\{\{DISCONNECT\}\}/g, '←|→');
+	// 	procedureMarkup = procedureMarkup
+	// 		.replace(/\{\{CHECK\}\}/g, '✓')
+	// 		.replace(/\{\{CHECKBOX\}\}/g, '☐')
+	// 		.replace(/\{\{CHECKEDBOX\}\}/g, '☑')
+	// 		.replace(/\{\{LEFT\}\}/g, '←')
+	// 		.replace(/\{\{RIGHT\}\}/g, '→')
+	// 		.replace(/\{\{CONNECT\}\}/g, '→|←')
+	// 		.replace(/\{\{DISCONNECT\}\}/g, '←|→');
 
-		return procedureMarkup;
-	}
+	// 	return procedureMarkup;
+	// }
 
-	addParagraphToCell(cell, params = {}) {
-		if (!params.text) {
-			params.text = '';
-		}
-		if (!params.style) {
-			params.style = 'normal';
-		}
-		cell.add(new docx.Paragraph(params));
-	}
+	// MOVED TO: containerWriter
+	// addParagraphToCell(cell, params = {}) {
+	// 	if (!params.text) {
+	// 		params.text = '';
+	// 	}
+	// 	if (!params.style) {
+	// 		params.style = 'normal';
+	// 	}
+	// 	cell.add(new docx.Paragraph(params));
+	// }
 
-	addBlockToCell(taskCell, blockType, blockLines) {
-		const blockTable = new docx.Table({
-			rows: 2,
-			columns: 1
-		});
+	// MOVED TO: containerWriter
+	// addBlockToCell(taskCell, blockType, blockLines) {
+	// 	const blockTable = new docx.Table({
+	// 		rows: 2,
+	// 		columns: 1
+	// 	});
 
-		const fillColors = {
-			comment: '00FF00',
-			note: 'FFFFFF',
-			caution: 'FFFF00',
-			warning: 'FF0000'
-		};
+	// 	const fillColors = {
+	// 		comment: '00FF00',
+	// 		note: 'FFFFFF',
+	// 		caution: 'FFFF00',
+	// 		warning: 'FF0000'
+	// 	};
 
-		const textColors = {
-			comment: '000000',
-			note: '000000',
-			caution: '000000',
-			warning: 'FFFFFF'
-		};
+	// 	const textColors = {
+	// 		comment: '000000',
+	// 		note: '000000',
+	// 		caution: '000000',
+	// 		warning: 'FFFFFF'
+	// 	};
 
-		// FIXME add logic for formatting based upon type
-		blockTable.getCell(0, 0).add(new docx.Paragraph({
-			children: [new docx.TextRun({
-				text: blockType.toUpperCase(),
-				color: textColors[blockType]
-			})],
-			alignment: docx.AlignmentType.CENTER
-		})).setShading({
-			fill: fillColors[blockType],
-			val: docx.ShadingType.CLEAR,
-			color: 'auto'
-		});
-		const contentCell = blockTable.getCell(1, 0);
+	// 	// FIXME add logic for formatting based upon type
+	// 	blockTable.getCell(0, 0).add(new docx.Paragraph({
+	// 		children: [new docx.TextRun({
+	// 			text: blockType.toUpperCase(),
+	// 			color: textColors[blockType]
+	// 		})],
+	// 		alignment: docx.AlignmentType.CENTER
+	// 	})).setShading({
+	// 		fill: fillColors[blockType],
+	// 		val: docx.ShadingType.CLEAR,
+	// 		color: 'auto'
+	// 	});
+	// 	const contentCell = blockTable.getCell(1, 0);
 
-		for (const line of blockLines) {
-			contentCell.add(new docx.Paragraph({
-				text: this.markupFilter(line),
-				numbering: {
-					num: taskNumbering.concrete,
-					level: 0
-				}
+	// 	for (const line of blockLines) {
+	// 		contentCell.add(new docx.Paragraph({
+	// 			text: this.markupFilter(line),
+	// 			numbering: {
+	// 				num: taskNumbering.concrete,
+	// 				level: 0
+	// 			}
 
-			}));
-		}
+	// 		}));
+	// 	}
 
-		// taskCell.add(new docx.Paragraph(blockTable));
-		taskCell.add(blockTable);
-		// taskCell.add(new docx.Table(1, 1));
-	}
+	// 	// taskCell.add(new docx.Paragraph(blockTable));
+	// 	taskCell.add(blockTable);
+	// 	// taskCell.add(new docx.Table(1, 1));
+	// }
 
-	insertStep(cell, step, level = 0) {
+	insertStep(series /* was cell */, step, level = 0) {
 
 		// writeStep:
 		// step.text via markdownformatter
@@ -174,26 +178,26 @@ module.exports = class Writer {
 		// FIXME: loop over images
 
 		if (step.title) {
-			this.addParagraphToCell(cell, {
+			series.container.addParagraph({
 				text: step.title.toUpperCase()
 			});
 		}
 
 		if (step.warnings.length) {
-			this.addBlockToCell(cell, 'warning', step.warnings);
+			series.container.addBlock('warning', step.warnings);
 		}
 		if (step.cautions.length) {
-			this.addBlockToCell(cell, 'caution', step.cautions);
+			series.container.addBlock('caution', step.cautions);
 		}
 		if (step.notes.length) {
-			this.addBlockToCell(cell, 'note', step.notes);
+			series.container.addBlock('note', step.notes);
 		}
 		if (step.comments.length) {
-			this.addBlockToCell(cell, 'comment', step.comments);
+			series.container.addBlock('comment', step.comments);
 		}
 
 		if (step.text) {
-			this.addParagraphToCell(cell, {
+			series.container.addParagraph({
 				text: this.markupFilter(step.text),
 				numbering: {
 					num: this.taskNumbering.concrete,
@@ -210,7 +214,7 @@ module.exports = class Writer {
 
 		if (step.checkboxes.length) {
 			for (const checkstep of step.checkboxes) {
-				this.addParagraphToCell(cell, {
+				series.container.addParagraph({
 					text: this.markupFilter(`☐ ${checkstep}`),
 					numbering: {
 						num: this.taskNumbering.concrete,
@@ -409,18 +413,15 @@ module.exports = class Writer {
 			for (c = 0; c < taskCols.length; c++) {
 				colName = taskCols[c];
 
-				// each col name may not have steps within each division. If
-				// not, just set it false.
-				col = division[colName] ? division[colName] : false;
-
-				if (col) {
-					cell = table.getCell(d + 1, c);
-					for (step of col) {
-						this.insertStep(cell, step);
+				series = new Series(division, colName, procedure);
+				if (series.hasSteps()) {
+					series.setContainer(
+						table.getCell(d + 1, c)
+							.setVerticalAlign(docx.VerticalAlign.TOP)
+					);
+					for (step of series.getSteps()) {
+						this.insertStep(series, step);
 					}
-
-					cell.setVerticalAlign(docx.VerticalAlign.TOP);
-
 				}
 			}
 		}
