@@ -1,37 +1,29 @@
-# xOPS
+# PAT
 
-[![Build Status](https://travis-ci.org/xoperations/xops.svg?branch=master)](https://travis-ci.org/xoperations/xops)
+[![Build Status](https://travis-ci.org/xoperations/pat.svg?branch=master)](https://travis-ci.org/xoperations/pat)
 
-The purpose of xOPS is to replace the manual procedure creation process for Extravehicular Activities (EVAs, AKA "spacewalks") by NASA, Johnson Space Center personnel. The goal of the application is to be able to write EVA procedures as simple YAML files and run `xops build` to generate Word document(s) in the standard procedure format, similar to the Space Shuttle mission "STS-134" procedures found on page `FS 7-20` of [this document](https://www.nasa.gov/centers/johnson/pdf/539922main_EVA_134_F_A.pdf). More EVAs can be found at the [FOIA archive](https://www.nasa.gov/centers/johnson/news/flightdatafiles/foia_archive.html).
+The purpose of PAT is to replace the manual procedure creation process for Extravehicular Activities (EVAs, AKA "spacewalks") by NASA, Johnson Space Center personnel. The goal of the application is to be able to write EVA procedures as simple YAML files and run `pat build` to generate Word document(s) in the standard procedure format, similar to the Space Shuttle mission "STS-134" procedures found on page `FS 7-20` of [this document](https://www.nasa.gov/centers/johnson/pdf/539922main_EVA_134_F_A.pdf). More EVAs can be found at the [FOIA archive](https://www.nasa.gov/centers/johnson/news/flightdatafiles/foia_archive.html).
 
 ## Installation
 
 The following are step by step instructions for how to get the NASA EVA Task Generator development environment installed and running. The software can be run on Window, Linux, and Mac OS.
 
-1. Install [node LTS version](https://nodejs.org/en/download/).
-2. Install [Visual Studio Code](https://code.visualstudio.com/download).
-3. Clone this repository from GitHub
- ```git clone https://github.com/xOPERATIONS/xOPS.git```
-4. Navigate into the project directory, using command `cd xOPS`
-5. Use NPM to install the module, using command `npm install`
-6. Setup the `xops` command by doing `npm link`
-7. Check install works by running help menu `xops -h` or the version `xops --version`
+1. Install [node LTS version 10.x](https://nodejs.org/en/download/).
+2. `npm install --global xops-pat`
+3. Create a PAT project directory like [this one](https://gitlab.com/xOPERATIONS/sts-134) with procedures, tasks, etc (more info on this to come)
+4. Within that project (`cd /path/to/your/pat-project`), run `pat build`
+5. See your procedures within the `build` subdirectory
+
+### Install for dev purposes
+
+1. Install Node.JS
+2. Clone this repo, then run `npm install` within it
+3. Setup the `pat` command by doing `npm link`
+4. Test it out on a PAT project
 
 ## Videos
 
-The following videos demostrate how to use the application features via the console command line.
-
-*EVA Task Generator CSS- Customizable & scalable CSS template*
-**docs/qna/images/CSS Demo.mp4**
-[![CSS Demo](https://img.youtube.com/vi/l8NPJTH6QzU/0.jpg)](https://www.youtube.com/watch?v=l8NPJTH6QzU "Click to play CSS Demo on YouTube.com")
-
-*EVA Task Generator Pandoc- HTML-to-Word Conversion*
-**docs/qna/images/Pandoc Demo.mp4**
-[![Pandoc Demo](https://img.youtube.com/vi/G60tPv9cM08/0.jpg)](https://www.youtube.com/watch?v=G60tPv9cM08 "Click to play Pandoc Demo on YouTube.com")
-
-*EVA Task Generator URL- Externally Reference Files*
-**docs/qna/images/URL Demo .mp4**
-[![URL Demo](https://img.youtube.com/vi/uTopcel6VpA/0.jpg)](https://www.youtube.com/watch?v=uTopcel6VpA "Click to play URL Demo on YouTube.com")
+Old videos exist [here](https://www.youtube.com/watch?v=l8NPJTH6QzU), [here](https://www.youtube.com/watch?v=G60tPv9cM08), and [here](https://www.youtube.com/watch?v=uTopcel6VpA). These are probably out of date.
 
 ## API Reference
 
@@ -43,11 +35,11 @@ See [YAML Definition](docs/yamlDefinition.md) for an overview of YAML file synta
 
 ### Unit Testing
 
-This directory contains unit tests for the xOPS project. Unit tests are
+This directory contains unit tests for the PAT project. Unit tests are
 automatically run by travis-ci after commits are made to this repo, and the
 build status is reported by a badge in the README.md in the project root.
 
-xOPS unit tests use the Chai Assertion Library for assertions in unit
+PAT unit tests use the Chai Assertion Library for assertions in unit
 tests. More information here: https://www.chaijs.com/api/bdd/
 
 To manually execute unit tests (which you should do BEFORE committing changes):
@@ -64,9 +56,9 @@ Mocha will generate a nice test report for you.
 ### Integration Testing
 
 Run the program with sample YAML files.
-The following samples may be run from within the xOPS directory
+The following samples may be run from within the PAT directory
 - Sample using local files
-`node index.js --input samples/sta-134-eva/main.yml --output sta-134-aqua.html’
+`node index.js --input samples/sta-134-eva/main.yml --output sta-134-aqua.html`
 - Sample with CSS on command line
 `node index.js --input samples/sta-134-eva/main.yml --css samples/sta-134-eva/custom.css --output sta-134-aqua.html`
 - Sample with CSS specified in input YAML file

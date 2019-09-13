@@ -21,7 +21,7 @@ const ThreeColDocx = require('./app/writer/ThreeColDocx');
  * @param   {*} args Command line arguments
  */
 function run(args) {
-	program.fullName = `xOPS procedure generator v${ver.currentVersion}`;
+	program.fullName = `Procedure authoring thing v${pjson.version}`;
 	console.log(`${program.fullName}\n`);
 
 	// Use Commander to process command line arguments
