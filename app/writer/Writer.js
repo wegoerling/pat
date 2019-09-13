@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const docx = require('docx');
+const childProcess = require('child_process');
 const Series = require('../model/series');
 
 module.exports = class Writer {
@@ -161,32 +162,65 @@ module.exports = class Writer {
 	}
 	*/
 
-	// FIXME: instead of using child_process, dig into .git directory. Or use
-	// an npm package for dealing with git
+	/**
+	 * FIXME: Instead of using child_process, dig into .git directory. Or use
+	 * an npm package for dealing with git\
+	 *
+	 * FIXME: This does not currently account for changes to working directory.
+	 *
+	 * ADD FEATURE: Consider `git describe --tags` if tags are available. That
+	 * will be easier for people to understand if a version they are looking at
+	 * is significantly different. Something like semver. If version is = X.Y.Z,
+	 * then maybe version changes could be:
+	 *
+	 *    Changes to X = Adding/removing significant tasks from a procedure
+	 *    Changes to Y = ??? Adding/removing/modifying steps or adding/removing
+	 *                   insignificant tasks.
+	 *    Changes to Z = Fixes and minor clarifications. Changes should not
+	 *                   affect what crew actually do.
+	 *
+	 * @return {string} First 8 characters of git hash for project
+	 */
 	getGitHash() {
 
-		// if (fs.existsSync(this.program.gitPath)) {
-		// try {
-		// gitHash = childProcess
-		// .execSync(`git rev-parse HEAD`)
-		// .toString().trim().slice(0,8);
-		// }
-
-		if (!this.gitHash) {
-			this.gitHash = 'fake1234'; // FIXME
+		if (this.gitHash) {
+			return this.gitHash;
 		}
-		return this.gitHash;
+
+		if (fs.existsSync(this.program.gitPath)) {
+			try {
+				this.gitHash = childProcess
+					.execSync(`cd ${this.program.projectPath} && git rev-parse HEAD`)
+					.toString().trim().slice(0, 8);
+			} catch (err) {
+				console.error(err);
+			}
+			return this.gitHash;
+		} else {
+			return 'NO VERSION (NOT CONFIG MANAGED)';
+		}
+
 	}
 
 	getGitDate() {
-		// gitDate = childProcess
-		// .execSync('git log -1 --format=%cd --date=iso8601')
-		// .toString().trim();
 
-		if (!this.gitDate) {
-			this.gitDate = '1970-01-01'; // FIXME
+		if (this.gitDate) {
+			return this.gitDate;
 		}
-		return this.gitDate;
+
+		if (fs.existsSync(this.program.gitPath)) {
+			try {
+				this.gitDate = childProcess
+					.execSync(`cd ${this.program.projectPath} && git log -1 --format=%cd --date=iso8601`)
+					.toString().trim();
+			} catch (err) {
+				console.error(err);
+			}
+			return this.gitDate;
+		} else {
+			return 'NO DATE (NOT CONFIG MANAGED)';
+		}
+
 	}
 
 	writeFile(filepath) {
@@ -394,7 +428,7 @@ module.exports = class Writer {
 		const footerParagraph = new docx.Paragraph({
 			alignment: docx.AlignmentType.LEFT,
 			children: [
-				new docx.TextRun(`${gitDate} (${gitHash})`),
+				new docx.TextRun(`${gitDate} (version: ${gitHash})`),
 				new docx.TextRun('Page ').pageNumber().tab(),
 				new docx.TextRun(' of ').numberOfTotalPages()
 			],

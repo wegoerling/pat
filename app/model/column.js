@@ -16,6 +16,8 @@ module.exports = class Column {
 
 		if (columnYaml.display) {
 			this.display = columnYaml.display;
+		} else {
+			this.display = columnYaml.key;
 		}
 
 	}
