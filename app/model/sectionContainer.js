@@ -1,14 +1,12 @@
 'use strict';
 
-const docx = require('docx');
-
 module.exports = class SectionContainer {
 
-	constructor (container) {
+	constructor() {
 		this.children = [];
 	}
 
-	add (stuffToAdd) {
+	add(stuffToAdd) {
 		this.children.push(stuffToAdd);
 	}
 };

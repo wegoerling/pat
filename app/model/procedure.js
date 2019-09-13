@@ -65,20 +65,19 @@ function mapActorToColumn(columnDefinition) {
 	// Create a mapping of actor --> column
 	const actorToColumn = {};
 
-	for (let col of columnDefinition) {
+	for (const col of columnDefinition) {
 		if (typeof col.actors === 'string') {
 			col.actors = [col.actors]; // array-ify
 		} else if (!Array.isArray(col.actors)) {
 			throw new Error('Procedure columns.actors must be array or string');
 		}
-		for (let actor of col.actors) {
+		for (const actor of col.actors) {
 			actorToColumn[actor] = col.key;
 		}
 	}
 
 	return actorToColumn;
 }
-
 
 module.exports = class Procedure {
 

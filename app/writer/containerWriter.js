@@ -4,22 +4,27 @@ const docx = require('docx');
 
 module.exports = class ContainerWriter {
 
-	constructor (container) {
+	constructor(container) {
 		this.container = container;
 	}
 
-	getContainerType () {
+	/*
+	FIXME: thought this would be necessary but it doesn't seem to be. Keeping
+	it for now while things are in flux
+
+	getContainerType() {
 		if (this.container instanceof TableCell) {
 			return 'tablecell';
 		} else if (this.container instanceof SectionContainer) {
 			return 'sectioncontainer';
 		} else {
-			let containerJson = JSON.stringify(this.container, null, 4);
+			const containerJson = JSON.stringify(this.container, null, 4);
 			throw new Error(`Unknown container type: ${containerJson}`);
 		}
 	}
+	*/
 
-	addParagraph (params = {}) {
+	addParagraph(params = {}) {
 		if (!params.text) {
 			params.text = '';
 		}
@@ -31,7 +36,7 @@ module.exports = class ContainerWriter {
 	}
 
 	// taskCell
-	addBlock(blockType, blockLines) {
+	addBlock(blockType, blockLines, numbering) {
 		const blockTable = new docx.Table({
 			rows: 2,
 			columns: 1
@@ -69,7 +74,7 @@ module.exports = class ContainerWriter {
 			contentCell.add(new docx.Paragraph({
 				text: this.markupFilter(line),
 				numbering: {
-					num: taskNumbering.concrete,
+					num: numbering.concrete,
 					level: 0
 				}
 

@@ -1,6 +1,5 @@
 'use strict';
 
-
 /**
  * Parse yaml as either string or array, and return an array. If the YAML
  * was a simple string, the array has a single element. If the YAML was
@@ -9,7 +8,7 @@
  * @param   {*} yaml yaml string or array
  * @return  {Array} array of substeps
  */
-exports.parseArray = function (yaml) {
+exports.parseArray = function(yaml) {
 
 	const array = [];
 
@@ -29,6 +28,4 @@ exports.parseArray = function (yaml) {
 	}
 
 	return array;
-}
-
-
+};

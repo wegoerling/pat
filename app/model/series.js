@@ -4,14 +4,14 @@ const ContainerWriter = require('../writer/containerWriter.js');
 
 module.exports = class Series {
 
-	constructor (division, primeActor, procedure) {
+	constructor(division, primeActor, procedure) {
 		this.series = [];
 		this.primeActor = primeActor;
 		this.otherActors = [];
 
-		let otherActorsHash = {};
+		const otherActorsHash = {};
 
-		for (let actorKey in division) {
+		for (const actorKey in division) {
 
 			// if this actor is to be put into this column/series, push the
 			// actor's steps to the series
@@ -20,8 +20,8 @@ module.exports = class Series {
 				otherActorsHash[actorKey] = true;
 
 				let i = 0;
-				let moreSteps = division[actorKey];
-				let c = moreSteps.length;
+				const moreSteps = division[actorKey];
+				const c = moreSteps.length;
 				for (; i < c; ++i) {
 					if (!moreSteps[i].actor) {
 						// if this step gets used in a column with multiple
@@ -34,16 +34,16 @@ module.exports = class Series {
 			}
 		}
 
-		for (let a in otherActorsHash) {
+		for (const a in otherActorsHash) {
 			this.otherActors.push(a);
 		}
 	}
 
-	getSteps () {
+	getSteps() {
 		return this.series;
 	}
 
-	hasSteps () {
+	hasSteps() {
 		if (this.series.length > 0) {
 			return true;
 		} else {
@@ -51,7 +51,7 @@ module.exports = class Series {
 		}
 	}
 
-	setContainer (container) {
+	setContainer(container) {
 		this.container = new ContainerWriter(container);
 	}
 };

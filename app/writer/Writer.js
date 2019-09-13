@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const docx = require('docx');
-const childProcess = require('child_process');
 const Series = require('../model/series');
 
 module.exports = class Writer {
@@ -20,7 +19,9 @@ module.exports = class Writer {
 		this.initialIndent = 45;
 		this.indentStep = 360;
 		// const tabOffset = 360;
-		this.hanging = 360; // how far left of the up-pointing arrow the down-pointing arrow should be
+
+		// how far left of the up-pointing arrow the down-pointing arrow should be
+		this.hanging = 360;
 		this.levelTypes = [
 			'decimal',
 			'lowerLetter',
@@ -44,7 +45,6 @@ module.exports = class Writer {
 			this.renderTask(task);
 		}
 	}
-
 
 	/**
 	 * Detect and return what columns are present on a task. A given task may
@@ -91,85 +91,6 @@ module.exports = class Writer {
 		return taskColumns;
 	}
 
-	// MOVED TO: ContainerWriter
-	// markupFilter(procedureMarkup) {
-	// 	// FIXME: Process the procedure markup from wikitext/markdown-ish to what
-	// 	// docx needs. Similar to app/helpers/markdownHelper.js
-
-	// 	procedureMarkup = procedureMarkup
-	// 		.replace(/\{\{CHECK\}\}/g, '✓')
-	// 		.replace(/\{\{CHECKBOX\}\}/g, '☐')
-	// 		.replace(/\{\{CHECKEDBOX\}\}/g, '☑')
-	// 		.replace(/\{\{LEFT\}\}/g, '←')
-	// 		.replace(/\{\{RIGHT\}\}/g, '→')
-	// 		.replace(/\{\{CONNECT\}\}/g, '→|←')
-	// 		.replace(/\{\{DISCONNECT\}\}/g, '←|→');
-
-	// 	return procedureMarkup;
-	// }
-
-	// MOVED TO: containerWriter
-	// addParagraphToCell(cell, params = {}) {
-	// 	if (!params.text) {
-	// 		params.text = '';
-	// 	}
-	// 	if (!params.style) {
-	// 		params.style = 'normal';
-	// 	}
-	// 	cell.add(new docx.Paragraph(params));
-	// }
-
-	// MOVED TO: containerWriter
-	// addBlockToCell(taskCell, blockType, blockLines) {
-	// 	const blockTable = new docx.Table({
-	// 		rows: 2,
-	// 		columns: 1
-	// 	});
-
-	// 	const fillColors = {
-	// 		comment: '00FF00',
-	// 		note: 'FFFFFF',
-	// 		caution: 'FFFF00',
-	// 		warning: 'FF0000'
-	// 	};
-
-	// 	const textColors = {
-	// 		comment: '000000',
-	// 		note: '000000',
-	// 		caution: '000000',
-	// 		warning: 'FFFFFF'
-	// 	};
-
-	// 	// FIXME add logic for formatting based upon type
-	// 	blockTable.getCell(0, 0).add(new docx.Paragraph({
-	// 		children: [new docx.TextRun({
-	// 			text: blockType.toUpperCase(),
-	// 			color: textColors[blockType]
-	// 		})],
-	// 		alignment: docx.AlignmentType.CENTER
-	// 	})).setShading({
-	// 		fill: fillColors[blockType],
-	// 		val: docx.ShadingType.CLEAR,
-	// 		color: 'auto'
-	// 	});
-	// 	const contentCell = blockTable.getCell(1, 0);
-
-	// 	for (const line of blockLines) {
-	// 		contentCell.add(new docx.Paragraph({
-	// 			text: this.markupFilter(line),
-	// 			numbering: {
-	// 				num: taskNumbering.concrete,
-	// 				level: 0
-	// 			}
-
-	// 		}));
-	// 	}
-
-	// 	// taskCell.add(new docx.Paragraph(blockTable));
-	// 	taskCell.add(blockTable);
-	// 	// taskCell.add(new docx.Table(1, 1));
-	// }
-
 	insertStep(series /* FIXME was cell */, step, level = 0) {
 
 		// writeStep:
@@ -184,16 +105,16 @@ module.exports = class Writer {
 		}
 
 		if (step.warnings.length) {
-			series.container.addBlock('warning', step.warnings);
+			series.container.addBlock('warning', step.warnings, this.taskNumbering);
 		}
 		if (step.cautions.length) {
-			series.container.addBlock('caution', step.cautions);
+			series.container.addBlock('caution', step.cautions, this.taskNumbering);
 		}
 		if (step.notes.length) {
-			series.container.addBlock('note', step.notes);
+			series.container.addBlock('note', step.notes, this.taskNumbering);
 		}
 		if (step.comments.length) {
-			series.container.addBlock('comment', step.comments);
+			series.container.addBlock('comment', step.comments, this.taskNumbering);
 		}
 
 		if (step.text) {
@@ -228,7 +149,6 @@ module.exports = class Writer {
 
 	}
 
-
 	/*
 	If you want step numbers like 3.5.2
 	function getLongStepString (levelIndex) {
@@ -241,14 +161,15 @@ module.exports = class Writer {
 	}
 	*/
 
+	// FIXME: instead of using child_process, dig into .git directory. Or use
+	// an npm package for dealing with git
 	getGitHash() {
-		// if (fs.existsSync(this.program.gitPath)) {
-		// 	try {
-		// 		gitHash = childProcess
-		// 			.execSync(`git rev-parse HEAD`)
-		// 			.toString().trim().slice(0,8);
-		// 	}
 
+		// if (fs.existsSync(this.program.gitPath)) {
+		// try {
+		// gitHash = childProcess
+		// .execSync(`git rev-parse HEAD`)
+		// .toString().trim().slice(0,8);
 		// }
 
 		if (!this.gitHash) {
@@ -285,12 +206,16 @@ module.exports = class Writer {
 		for (let i = 0; i < 3; i++) {
 			// var stepText = getLongStepString(i);
 			var indents = this.getIndents(i);
-			this.levels[i] = this.taskNumbering.abstract.createLevel(i, this.levelTypes[i], `%${i + 1}.`, 'left');
+			this.levels[i] = this.taskNumbering.abstract.createLevel(
+				i, this.levelTypes[i], `%${i + 1}.`, 'left'
+			);
 			this.levels[i].indent({ left: indents.left, hanging: indents.hanging });
 			this.levels[i].leftTabStop(indents.tab);
 		}
 
-		this.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(this.taskNumbering.abstract);
+		this.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
+			this.taskNumbering.abstract
+		);
 	}
 
 	getIndents(levelIndex) {
@@ -305,7 +230,7 @@ module.exports = class Writer {
 	}
 
 	getLastModifiedBy() {
-		return ""; // FIXME: get this from git repo if available
+		return ''; // FIXME: get this from git repo if available
 	}
 
 	getDoc() {
@@ -390,7 +315,6 @@ module.exports = class Writer {
 			d, // was "r", is index for division
 			colName,
 			c,
-			col,
 			step;
 
 		var cell;
@@ -415,7 +339,7 @@ module.exports = class Writer {
 			for (c = 0; c < taskCols.length; c++) {
 				colName = taskCols[c];
 
-				let series = new Series(division, colName, this.procedure);
+				const series = new Series(division, colName, this.procedure);
 				if (series.hasSteps()) {
 					series.setContainer(
 						table.getCell(d + 1, c)
