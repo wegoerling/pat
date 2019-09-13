@@ -6,6 +6,7 @@ const YAML = require('yamljs');
 const filenamify = require('filenamify');
 
 const Actor = require('./actor.js');
+const Column = require('./column.js');
 const Task = require('./task.js');
 const SpacewalkValidator = require('../schema/spacewalkValidator');
 
@@ -59,14 +60,45 @@ function translatePath(procedureFilePath, taskFileName) {
 	return taskFilePath;
 }
 
+function mapActorToColumn(columnDefinition) {
+
+	// Create a mapping of actor --> column
+	const actorToColumn = {};
+
+	for (const col of columnDefinition) {
+		if (typeof col.actors === 'string') {
+			col.actors = [col.actors]; // array-ify
+		} else if (!Array.isArray(col.actors)) {
+			throw new Error('Procedure columns.actors must be array or string');
+		}
+		for (const actor of col.actors) {
+			actorToColumn[actor] = col.key;
+		}
+	}
+
+	return actorToColumn;
+}
+
 module.exports = class Procedure {
 
 	constructor() {
 		this.name = '';
 		this.filename = '';
 		this.actors = [];
+		this.columns = [];
 		this.tasks = [];
 		this.css = '';
+		this.actorToColumn = {};
+	}
+
+	getActorColumn(actor) {
+		if (this.actorToColumn[actor]) {
+			return this.actorToColumn[actor];
+		} else if (this.actorToColumn['*']) {
+			return this.actorToColumn['*']; // wildcard for all others
+		} else {
+			throw new Error(`Unknown column for actor ${actor}. Consider adding wildcard * actor to a column`);
+		}
 	}
 
 	/**
@@ -100,6 +132,13 @@ module.exports = class Procedure {
 			for (var actorYaml of procedureYaml.actors) {
 				this.actors.push(new Actor(actorYaml));
 			}
+
+			for (var columnYaml of procedureYaml.columns) {
+				this.columns.push(new Column(columnYaml));
+			}
+
+			this.actorToColumn = mapActorToColumn(this.columns);
+
 			// Save the tasks
 			for (var taskYaml of procedureYaml.tasks) {
 

@@ -1,5 +1,7 @@
 'use strict';
 
+const arrayHelper = require('../helpers/arrayHelper.js');
+
 module.exports = class Step {
 
 	constructor() {
@@ -35,32 +37,32 @@ module.exports = class Step {
 
 		// Check for images
 		if (stepYaml.images) {
-			this.images = this.parseArray(stepYaml.images);
+			this.images = arrayHelper.parseArray(stepYaml.images);
 		}
 
 		// Check for checkboxes
 		if (stepYaml.checkboxes) {
-			this.checkboxes = this.parseArray(stepYaml.checkboxes);
+			this.checkboxes = arrayHelper.parseArray(stepYaml.checkboxes);
 		}
 
 		// Check for warnings
 		if (stepYaml.warning) {
-			this.warnings = this.parseArray(stepYaml.warning);
+			this.warnings = arrayHelper.parseArray(stepYaml.warning);
 		}
 
 		// Check for cautions
 		if (stepYaml.caution) {
-			this.cautions = this.parseArray(stepYaml.caution);
+			this.cautions = arrayHelper.parseArray(stepYaml.caution);
 		}
 
 		// Check for comments
 		if (stepYaml.comment) {
-			this.comments = this.parseArray(stepYaml.comment);
+			this.comments = arrayHelper.parseArray(stepYaml.comment);
 		}
 
 		// Check for notes
 		if (stepYaml.note) {
-			this.notes = this.parseArray(stepYaml.note);
+			this.notes = arrayHelper.parseArray(stepYaml.note);
 		}
 
 		// Check for substeps
@@ -90,36 +92,6 @@ module.exports = class Step {
      */
 	parseStepText(stepTextYaml) {
 		return stepTextYaml;
-	}
-
-	/**
-     * Parse yaml as either string or array, and return an array. If the YAML
-     * was a simple string, the array has a single element. If the YAML was
-     * multiple elements, return an array with all strings.
-     *
-     * @param   {*} yaml yaml string or array
-     * @return  {Array} array of substeps
-     */
-	parseArray(yaml) {
-
-		const array = [];
-
-		// Check for string
-		if (typeof yaml === 'string') {
-			array.push(yaml);
-
-		// Check for array
-		} else if (Array.isArray(yaml)) {
-			for (var element of yaml) {
-				array.push(element);
-			}
-
-		// Don't know how to process
-		} else {
-			throw new Error(`Expected string or array.  Instead got: ${JSON.stringify(yaml)}`);
-		}
-
-		return array;
 	}
 
 	/**

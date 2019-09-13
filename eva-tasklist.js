@@ -21,7 +21,8 @@ const ThreeColDocx = require('./app/writer/ThreeColDocx');
  * @param   {*} args Command line arguments
  */
 function run(args) {
-	console.log(`xOPS procedure generator v${ver.currentVersion}\n`);
+	program.fullName = `xOPS procedure generator v${ver.currentVersion}`;
+	console.log(`${program.fullName}\n`);
 
 	// Use Commander to process command line arguments
 	buildProgramArguments(program, args); // eslint-disable-line no-use-before-define
