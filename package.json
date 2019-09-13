@@ -1,6 +1,6 @@
 {
-  "name": "xops",
-  "version": "1.2.0",
+  "name": "xops-pat",
+  "version": "2.0.0",
   "description": "Procedure generator for on space operations",
   "main": "index.js",
   "scripts": {
@@ -10,11 +10,11 @@
     "start": "node index.js"
   },
   "bin": {
-    "xops": "./index.js"
+    "pat": "./index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamesmontalvo3/spacewalk.git"
+    "url": "git+https://github.com/xOPERATIONS/pat.git"
   },
   "contributors": [
     "James Montalvo",
@@ -38,9 +38,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jamesmontalvo3/spacewalk/issues"
+    "url": "https://github.com/xOPERATIONS/pat/issues"
   },
-  "homepage": "https://github.com/jamesmontalvo3/spacewalk#readme",
+  "homepage": "https://github.com/xOPERATIONS/pat#readme",
   "dependencies": {
     "ajv": "^6.10.2",
     "bootstrap": "^4.3.1",
