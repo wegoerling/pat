@@ -29,6 +29,10 @@ module.exports = class DocxHandler {
 	}
 	*/
 
+	setContainer() {
+		throw new Error('Abstract function not implemented');
+	}
+
 	addParagraph(params = {}) {
 		if (!params.text) {
 			params.text = '';
@@ -126,6 +130,80 @@ module.exports = class DocxHandler {
 		this.docWrapper.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
 			this.docWrapper.taskNumbering.abstract
 		);
+	}
+
+	writeDivisions() {
+		// Array of divisions. A division is a set of one or more series of
+		// steps. So a division may have just one series for the "IV" actor, or
+		// it may have multiple series for multiple actors.
+		//
+		// Example:
+		// divisions = [
+		//   { IV: [Step, Step, Step] },             // div 0: just IV series
+		//   { IV: [Step], EV1: [Step, Step] },      // div 1: IV & EV1 series
+		//   { EV1: [Step, Step], EV2: [Step] }      // div 2: EV1 & EV2 series
+		// ]
+		const divisions = this.task.concurrentSteps;
+
+		for (let division of divisions) {
+			this.writeDivision(division);
+		}
+	}
+
+	insertStep(step, level = 0) {
+
+		// writeStep:
+		// step.text via markdownformatter
+		// loop over step.checkboxes via markdownformatter
+		// FIXME: loop over images
+
+		if (step.title) {
+			this.addParagraph({
+				text: step.title.toUpperCase()
+			});
+		}
+
+		if (step.warnings.length) {
+			this.addBlock('warning', step.warnings, this.docWrapper.taskNumbering);
+		}
+		if (step.cautions.length) {
+			this.addBlock('caution', step.cautions, this.docWrapper.taskNumbering);
+		}
+		if (step.notes.length) {
+			this.addBlock('note', step.notes, this.docWrapper.taskNumbering);
+		}
+		if (step.comments.length) {
+			this.addBlock('comment', step.comments, this.docWrapper.taskNumbering);
+		}
+
+		if (step.text) {
+			this.addParagraph({
+				text: this.markupFilter(step.text),
+				numbering: {
+					num: this.docWrapper.taskNumbering.concrete,
+					level: level
+				}
+			});
+		}
+
+		if (step.substeps.length) {
+			for (const substep of step.substeps) {
+				this.insertStep(substep, level + 1);
+			}
+		}
+
+		if (step.checkboxes.length) {
+			for (const checkstep of step.checkboxes) {
+				this.addParagraph({
+					text: this.markupFilter(`☐ ${checkstep}`),
+					numbering: {
+						num: this.docWrapper.taskNumbering.concrete,
+						level: level + 1
+					}
+				});
+			}
+		}
+
 	}
 
 };
