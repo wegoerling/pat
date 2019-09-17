@@ -2,10 +2,15 @@
 
 const docx = require('docx');
 
-module.exports = class ContainerWriter {
+module.exports = class DocxHandler {
 
-	constructor(container) {
-		this.container = container;
+	constructor(docWrapper) {
+		this.docWrapper = docWrapper;
+		this.procedure = docWrapper.procedure;
+		this.doc = docWrapper.doc;
+
+		this.docWrapper.taskNumbering = null;
+		this.getNumbering();
 	}
 
 	/*
@@ -98,6 +103,29 @@ module.exports = class ContainerWriter {
 			.replace(/\{\{DISCONNECT\}\}/g, '←|→');
 
 		return procedureMarkup;
+	}
+
+	getNumbering() {
+		this.docWrapper.taskNumbering = {};
+
+		// const numbering = new docx.Numbering();
+		// const abstractNum = numbering.createAbstractNumbering();
+		// const abstractNum = doc.Numbering.createAbstractNumbering();
+		this.docWrapper.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
+
+		for (let i = 0; i < 3; i++) {
+			// var stepText = getLongStepString(i);
+			var indents = this.docWrapper.getIndents(i);
+			this.docWrapper.levels[i] = this.docWrapper.taskNumbering.abstract.createLevel(
+				i, this.docWrapper.levelTypes[i], `%${i + 1}.`, 'left'
+			);
+			this.docWrapper.levels[i].indent({ left: indents.left, hanging: indents.hanging });
+			this.docWrapper.levels[i].leftTabStop(indents.tab);
+		}
+
+		this.docWrapper.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
+			this.docWrapper.taskNumbering.abstract
+		);
 	}
 
 };

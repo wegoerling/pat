@@ -15,7 +15,7 @@ module.exports = class Series {
 
 			// if this actor is to be put into this column/series, push the
 			// actor's steps to the series
-			if (procedure.getActorColumn(actorKey) === primeActor) {
+			if (procedure.getActorColumnKey(actorKey) === primeActor) {
 
 				otherActorsHash[actorKey] = true;
 

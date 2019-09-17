@@ -3,10 +3,15 @@
 const fs = require('fs');
 const docx = require('docx');
 const childProcess = require('child_process');
-const Series = require('../model/series');
+// const Series = require('../model/series');
+const DocxTableHandler = require('./DocxTableHandler');
 
 module.exports = class Writer {
 
+	/**
+	 * MOSTLY belongs here
+	 *
+	 */
 	constructor(program, procedure) {
 		let task;
 
@@ -39,115 +44,9 @@ module.exports = class Writer {
 
 		this.doc = this.getDoc();
 
-		this.taskNumbering = null; // gets set by getNumbering...better to return value
-		this.getNumbering();
-
 		for (task of this.procedure.tasks) {
 			this.renderTask(task);
 		}
-	}
-
-	/**
-	 * Detect and return what columns are present on a task. A given task may
-	 * have 1 or more columns. Only return those present in a task.
-	 *
-	 * @param  {Task} task         Task object holding columns/steps
-	 * @param  {Array} docColumns  The full list of possible columns, in the proper
-	 *                             order
-	 * @return {Array}             Array of column names in this procedure
-	 */
-	getTaskColumns(task, docColumns) {
-
-		const stepRows = task.concurrentSteps;
-		const taskColumns = [];
-		const taskColumnsHash = {};
-		let stepRow,
-			colName;
-
-		// Loop over the array of stepRows, and within that loop over each object of
-		// colName:[array,of,steps].
-		//
-		// stepRows = [
-		//   { IV: [Step, Step, Step] },              // stepRow 0
-		//   { IV: [Step], EV1: [Step, Step] },       // stepRow 1
-		//   { EV1: [Step, Step], EV2: [Step] }       // stepRow 2
-		// ]
-		//
-		for (stepRow of stepRows) {
-			for (colName in stepRow) {
-				if (!taskColumnsHash[colName]) {
-					// insert into a hash table because lookup is faster than array
-					taskColumnsHash[colName] = true;
-				}
-			}
-		}
-
-		// create taskColumns in order specified by procedure
-		for (colName of docColumns) {
-			if (taskColumnsHash[colName]) {
-				taskColumns.push(colName);
-			}
-		}
-
-		return taskColumns;
-	}
-
-	insertStep(series /* FIXME was cell */, step, level = 0) {
-
-		// writeStep:
-		// step.text via markdownformatter
-		// loop over step.checkboxes via markdownformatter
-		// FIXME: loop over images
-
-		if (step.title) {
-			series.container.addParagraph({
-				text: step.title.toUpperCase()
-			});
-		}
-
-		if (step.warnings.length) {
-			series.container.addBlock('warning', step.warnings, this.taskNumbering);
-		}
-		if (step.cautions.length) {
-			series.container.addBlock('caution', step.cautions, this.taskNumbering);
-		}
-		if (step.notes.length) {
-			series.container.addBlock('note', step.notes, this.taskNumbering);
-		}
-		if (step.comments.length) {
-			series.container.addBlock('comment', step.comments, this.taskNumbering);
-		}
-
-		if (step.text) {
-			series.container.addParagraph({
-				// FIXME: seems odd place for markupFilter, but "necessary"
-				// because containerWriter needs access.
-				text: series.container.markupFilter(step.text),
-				numbering: {
-					num: this.taskNumbering.concrete,
-					level: level
-				}
-			});
-		}
-
-		if (step.substeps.length) {
-			for (const substep of step.substeps) {
-				this.insertStep(series, substep, level + 1);
-			}
-		}
-
-		if (step.checkboxes.length) {
-			for (const checkstep of step.checkboxes) {
-				series.container.addParagraph({
-					text: series.container.markupFilter(`☐ ${checkstep}`),
-					numbering: {
-						num: this.taskNumbering.concrete,
-						level: level + 1
-					}
-				});
-			}
-		}
-
 	}
 
 	/*
@@ -163,6 +62,10 @@ module.exports = class Writer {
 	*/
 
 	/**
+	 * MOVE TO: Program (currently there is no Program.js; "Program" is really
+	 * NPM Commander package. Perhaps should have Project.js since procedures
+	 * are really documents within a project.)
+	 *
 	 * FIXME: Instead of using child_process, dig into .git directory. Or use
 	 * an npm package for dealing with git\
 	 *
@@ -202,6 +105,9 @@ module.exports = class Writer {
 
 	}
 
+	/**
+	 * MOVE TO: Program/Project
+	 */
 	getGitDate() {
 
 		if (this.gitDate) {
@@ -223,35 +129,18 @@ module.exports = class Writer {
 
 	}
 
+	/**
+	 * DOCX-specific
+	 */
 	writeFile(filepath) {
 		docx.Packer.toBuffer(this.doc).then((buffer) => {
 			fs.writeFileSync(filepath, buffer);
 		});
 	}
 
-	getNumbering() {
-		this.taskNumbering = {};
-
-		// const numbering = new docx.Numbering();
-		// const abstractNum = numbering.createAbstractNumbering();
-		// const abstractNum = doc.Numbering.createAbstractNumbering();
-		this.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
-
-		for (let i = 0; i < 3; i++) {
-			// var stepText = getLongStepString(i);
-			var indents = this.getIndents(i);
-			this.levels[i] = this.taskNumbering.abstract.createLevel(
-				i, this.levelTypes[i], `%${i + 1}.`, 'left'
-			);
-			this.levels[i].indent({ left: indents.left, hanging: indents.hanging });
-			this.levels[i].leftTabStop(indents.tab);
-		}
-
-		this.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
-			this.taskNumbering.abstract
-		);
-	}
-
+	/**
+	 * DOCX-specific
+	 */
 	getIndents(levelIndex) {
 		const left = this.initialIndent + (levelIndex * this.indentStep) + this.hanging;
 		const tab = left;
@@ -263,10 +152,16 @@ module.exports = class Writer {
 		return output;
 	}
 
+	/**
+	 * MOVE TO Program/Project
+	 */
 	getLastModifiedBy() {
 		return ''; // FIXME: get this from git repo if available
 	}
 
+	/**
+	 * DOCX-specific
+	 */
 	getDoc() {
 		const docMeta = {
 			title: this.procedure.procedure_name,
@@ -317,84 +212,43 @@ module.exports = class Writer {
 		return doc;
 	}
 
+	/**
+	 * DOCX-specific
+	 */
 	getPageSize() {
 		throw new Error('Abstract function not implemented');
 	}
 
+	/**
+	 * DOCX-specific
+	 */
 	getPageMargins() {
 		throw new Error('Abstract function not implemented');
 	}
 
 	renderTask(task) {
 
-		// FIXME: this shouldn't be hard-code, but should come from procedure
-		const docColumns = ['IV', 'EV1', 'EV2'];
+		let handler = new DocxTableHandler(
+			task,
+			this
+		);
 
-		// taskCols = ["IV", "EV1", "EV2"]
-		const taskCols = this.getTaskColumns(task, docColumns);
+		handler.setContainerHeader();
 
-		// Array of divisions. A division is a set of one or more series of
-		// steps. So a division may have just one series for the "IV" actor, or
-		// it may have multiple series for multiple actors.
-		//
-		// Example:
-		// divisions = [
-		//   { IV: [Step, Step, Step] },             // div 0: just IV series
-		//   { IV: [Step], EV1: [Step, Step] },      // div 1: IV & EV1 series
-		//   { EV1: [Step, Step], EV2: [Step] }      // div 2: EV1 & EV2 series
-		// ]
-		const divisions = task.concurrentSteps;
-
-		let division, // was "row", is a row in a 3-column table format
-			d, // was "r", is index for division
-			colName,
-			c,
-			step;
-
-		var cell;
-
-		const table = new docx.Table({
-			rows: task.concurrentSteps.length + 1,
-			columns: taskCols.length
-		});
-
-		for (c = 0; c < taskCols.length; c++) {
-			cell = table.getCell(0, c);
-			cell.add(new docx.Paragraph({
-				text: taskCols[c],
-				alignment: docx.AlignmentType.CENTER,
-				style: 'strong'
-			}));
-		}
-
-		for (d = 0; d < divisions.length; d++) {
-			division = divisions[d];
-
-			for (c = 0; c < taskCols.length; c++) {
-				colName = taskCols[c];
-
-				const series = new Series(division, colName, this.procedure);
-				if (series.hasSteps()) {
-					series.setContainer(
-						table.getCell(d + 1, c)
-							.setVerticalAlign(docx.VerticalAlign.TOP)
-					);
-					for (step of series.getSteps()) {
-						this.insertStep(series, step);
-					}
-				}
-			}
-		}
+		handler.writeDivisions();
 
 		this.doc.addSection({
 			headers: { default: this.genHeader(task) },
 			footers: { default: this.genFooter() },
 			size: this.getPageSize(),
 			margins: this.getPageMargins(),
-			children: [table]
+			children: handler.getSectionChildren()
 		});
 	}
 
+	/**
+	 * DOCX-specific
+	 */
 	genHeader(task) {
 		return new docx.Header({
 			children: [new docx.Paragraph({
@@ -410,10 +264,16 @@ module.exports = class Writer {
 		});
 	}
 
+	/**
+	 * DOCX-specific
+	 */
 	getRightTabPosition() {
 		throw new Error('Abstract function not implemented');
 	}
 
+	/**
+	 * DOCX-specific
+	 */
 	genFooter() {
 		// const procFooter = new docx.Paragraph({ children: [] }).maxRightTabStop();
 		// const leftFooterText = new docx.TextRun(

@@ -71,6 +71,7 @@ function mapActorToColumn(columnDefinition) {
 		} else if (!Array.isArray(col.actors)) {
 			throw new Error('Procedure columns.actors must be array or string');
 		}
+
 		for (const actor of col.actors) {
 			actorToColumn[actor] = col.key;
 		}
@@ -89,9 +90,30 @@ module.exports = class Procedure {
 		this.tasks = [];
 		this.css = '';
 		this.actorToColumn = {};
+
+		// FIXME: this shouldn't be hard-code, but should come from procedure
+		this.docColumns = ['IV', 'EV1', 'EV2'];
 	}
 
-	getActorColumn(actor) {
+	/**
+	 * May actor key to column key. Both strings. this.actorToColumn in form:
+	 *   {
+	 *     "*": "IV",
+	 *     "EV1": "EV1",
+	 *     "EV2": "EV2"
+	 *   }
+	 * A more complicated form may be:
+	 *   {
+	 *     "*": "IV",
+	 *     "EV1": "EV1",
+	 *     "ROBO": "EV1"
+	 *   }
+	 * In this second example the "ROBO" actor gets mapped to the EV1 column.
+	 *
+	 * @param  string actor   key for actor
+	 * @return string         key of column (key of primary actor of column)
+	 */
+	getActorColumnKey(actor) {
 		if (this.actorToColumn[actor]) {
 			return this.actorToColumn[actor];
 		} else if (this.actorToColumn['*']) {
@@ -99,6 +121,22 @@ module.exports = class Procedure {
 		} else {
 			throw new Error(`Unknown column for actor ${actor}. Consider adding wildcard * actor to a column`);
 		}
+	}
+
+	getColumnKeys() {
+		const keys = [];
+		for(const column of this.columns) {
+			keys.push(column.key);
+		}
+		return keys;
+	}
+
+	getColumnHeaderText() {
+		const headerTexts = [];
+		for(const column of this.columns) {
+			headerTexts.push(column.display);
+		}
+		return headerTexts;
 	}
 
 	/**
@@ -153,7 +191,7 @@ module.exports = class Procedure {
 					const loadedTaskYaml = YAML.load(taskFileName, null, true);
 
 					// Save the task!
-					this.tasks.push(new Task(loadedTaskYaml));
+					this.tasks.push(new Task(loadedTaskYaml, this.getColumnKeys()));
 
 				//  Is this a URL?
 				} else if (taskYaml.url) {
@@ -169,7 +207,7 @@ module.exports = class Procedure {
 					const loadedTaskYaml = YAML.parse(yamlString);
 
 					// Save the task!
-					this.tasks.push(new Task(loadedTaskYaml));
+					this.tasks.push(new Task(loadedTaskYaml, this.getColumnKeys()));
 				}
 
 			}
