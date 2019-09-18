@@ -161,14 +161,14 @@ module.exports = class DocxHandler {
 			throw new Error('"duration" is not a supported time format. Use "minutes".');
 		}
 		if (!params.minute && !params.minutes) {
-			return "XX:YY";
+			return 'XX:YY';
 		}
 
 		const totalMinutes = params.minutes || params.minute;
-		const hours = Math.floor(totalMinutes / 60);
-		const minutes = totalMinutes % 60;
+		const hours = Math.floor(totalMinutes / 60); // eslint-disable-line no-unused-vars
+		const minutes = totalMinutes % 60; // eslint-disable-line no-unused-vars
 
-		return `{$hours}:{$minutes}`;
+		return '{$hours}:{$minutes}';
 	}
 
 	insertStep(step, level = 0) {
@@ -184,11 +184,11 @@ module.exports = class DocxHandler {
 					new docx.TextRun({
 						text: step.title.toUpperCase().trim(),
 						underline: {
-						type: "single"
-					},
+							type: 'single'
+						}
 					}),
 					new docx.TextRun({
-						text: ' (' + this.formatDuration({ minutes: step.minutes }) + ')'
+						text: ` (${this.formatDuration({ minutes: step.minutes })})`
 					})
 				]
 			});
