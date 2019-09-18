@@ -171,9 +171,10 @@ module.exports = class Writer {
 			.font('Arial')
 			.quickFormat()
 			.size(20)
+			.indent({ left: 45 })
 			.spacing({
 				// line: 276,
-				before: 0, // 20 * 72 * 0.05,
+				before: 45, // 20 * 72 * 0.05,
 				after: 0 // 20 * 72 * 0.05
 			});
 
@@ -185,7 +186,7 @@ module.exports = class Writer {
 			.size(20)
 			.spacing({
 				// line: 276,
-				before: 0, // 20 * 72 * 0.05,
+				before: 45, // 20 * 72 * 0.05,
 				after: 0 // 20 * 72 * 0.05
 			});
 
@@ -198,7 +199,7 @@ module.exports = class Writer {
 			.size(20)
 			.spacing({
 				// line: 276,
-				before: 0, // 20 * 72 * 0.05,
+				before: 45, // 20 * 72 * 0.05,
 				after: 0 // 20 * 72 * 0.05
 			});
 
