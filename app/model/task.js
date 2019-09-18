@@ -4,7 +4,7 @@ const ConcurrentStep = require('./concurrentStep.js');
 
 module.exports = class Task {
 
-	constructor(taskYaml, procedureColumnKeys=null) {
+	constructor(taskYaml, procedureColumnKeys = null) {
 
 		// Get the title
 		if (!taskYaml.title) {
@@ -31,13 +31,13 @@ module.exports = class Task {
 			if (!Array.isArray(procedureColumnKeys) || procedureColumnKeys.length === 0) {
 				throw new Error('Procedure column keys must be an array with length > 0\n');
 			} else {
-				for (let key of procedureColumnKeys) {
+				for (const key of procedureColumnKeys) {
 					if (typeof key !== 'string') {
 						throw new Error('Procedure column keys must be type string');
 					}
 				}
 			}
-			this.procedureColumnKeys = procedureColumnKeys
+			this.procedureColumnKeys = procedureColumnKeys;
 		}
 	}
 

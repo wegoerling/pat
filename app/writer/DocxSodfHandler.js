@@ -1,6 +1,6 @@
 'use strict';
 
-const docx = require('docx');
+// const docx = require('docx');
 const DocxHandler = require('./DocxHandler');
 
 module.exports = class DocxSodfHandler extends DocxHandler {
@@ -19,14 +19,14 @@ module.exports = class DocxSodfHandler extends DocxHandler {
 	}
 
 	writeDivision(division) {
-		for(let actor in division) {
+		for (const actor in division) {
 			// NOTE: aSeries === division[actor]
 			this.writeSeries(division[actor]);
 		}
 	}
 
 	writeSeries(series) {
-		for (let step of series) {
+		for (const step of series) {
 			this.insertStep(step);
 		}
 	}

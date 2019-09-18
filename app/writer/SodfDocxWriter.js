@@ -33,7 +33,7 @@ module.exports = class SodfDocxWriter extends Writer {
 
 	renderTask(task) {
 
-		let handler = new DocxSodfHandler(
+		const handler = new DocxSodfHandler(
 			task,
 			this
 		);

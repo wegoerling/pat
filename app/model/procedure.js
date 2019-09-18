@@ -110,8 +110,8 @@ module.exports = class Procedure {
 	 *   }
 	 * In this second example the "ROBO" actor gets mapped to the EV1 column.
 	 *
-	 * @param  string actor   key for actor
-	 * @return string         key of column (key of primary actor of column)
+	 * @param  {string} actor   key for actor
+	 * @return {string}         key of column (key of primary actor of column)
 	 */
 	getActorColumnKey(actor) {
 		if (this.actorToColumn[actor]) {
@@ -125,7 +125,7 @@ module.exports = class Procedure {
 
 	getColumnKeys() {
 		const keys = [];
-		for(const column of this.columns) {
+		for (const column of this.columns) {
 			keys.push(column.key);
 		}
 		return keys;
@@ -133,7 +133,7 @@ module.exports = class Procedure {
 
 	getColumnHeaderText() {
 		const headerTexts = [];
-		for(const column of this.columns) {
+		for (const column of this.columns) {
 			headerTexts.push(column.display);
 		}
 		return headerTexts;

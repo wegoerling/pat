@@ -8,10 +8,6 @@ const DocxTableHandler = require('./DocxTableHandler');
 
 module.exports = class Writer {
 
-	/**
-	 * MOSTLY belongs here
-	 *
-	 */
 	constructor(program, procedure) {
 		let task;
 
@@ -106,7 +102,9 @@ module.exports = class Writer {
 	}
 
 	/**
-	 * MOVE TO: Program/Project
+	 * Get the date of the HEAD commit
+	 *
+	 * @return {string} Date in iso8601 format
 	 */
 	getGitDate() {
 
@@ -129,9 +127,6 @@ module.exports = class Writer {
 
 	}
 
-	/**
-	 * DOCX-specific
-	 */
 	writeFile(filepath) {
 		docx.Packer.toBuffer(this.doc).then((buffer) => {
 			fs.writeFileSync(filepath, buffer);
@@ -139,7 +134,11 @@ module.exports = class Writer {
 	}
 
 	/**
-	 * DOCX-specific
+	 * [getIndents description]
+	 *
+	 * @param  {int} levelIndex How far indented? Top level list is 0, first
+	 *                          sub-list is 1, next is 2, and so on.
+	 * @return {Object} Indent object like { left: INT, tab: INT, hanging: INT }
 	 */
 	getIndents(levelIndex) {
 		const left = this.initialIndent + (levelIndex * this.indentStep) + this.hanging;
@@ -152,16 +151,10 @@ module.exports = class Writer {
 		return output;
 	}
 
-	/**
-	 * MOVE TO Program/Project
-	 */
 	getLastModifiedBy() {
 		return ''; // FIXME: get this from git repo if available
 	}
 
-	/**
-	 * DOCX-specific
-	 */
 	getDoc() {
 		const docMeta = {
 			title: this.procedure.procedure_name,
@@ -212,23 +205,17 @@ module.exports = class Writer {
 		return doc;
 	}
 
-	/**
-	 * DOCX-specific
-	 */
 	getPageSize() {
 		throw new Error('Abstract function not implemented');
 	}
 
-	/**
-	 * DOCX-specific
-	 */
 	getPageMargins() {
 		throw new Error('Abstract function not implemented');
 	}
 
 	renderTask(task) {
 
-		let handler = new DocxTableHandler(
+		const handler = new DocxTableHandler(
 			task,
 			this
 		);
@@ -246,9 +233,6 @@ module.exports = class Writer {
 		});
 	}
 
-	/**
-	 * DOCX-specific
-	 */
 	genHeader(task) {
 		return new docx.Header({
 			children: [new docx.Paragraph({
@@ -264,16 +248,10 @@ module.exports = class Writer {
 		});
 	}
 
-	/**
-	 * DOCX-specific
-	 */
 	getRightTabPosition() {
 		throw new Error('Abstract function not implemented');
 	}
 
-	/**
-	 * DOCX-specific
-	 */
 	genFooter() {
 		// const procFooter = new docx.Paragraph({ children: [] }).maxRightTabStop();
 		// const leftFooterText = new docx.TextRun(

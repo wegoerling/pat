@@ -5,7 +5,7 @@ const DocxHandler = require('./DocxHandler');
 
 module.exports = class DocxTableHandler extends DocxHandler {
 
-	constructor(task, docWrapper/*procedure, doc*/) {
+	constructor(task, docWrapper/* procedure, doc*/) {
 		super(docWrapper);
 
 		this.task = task;
@@ -30,14 +30,14 @@ module.exports = class DocxTableHandler extends DocxHandler {
 
 	setContainerHeader() {
 
-		let headerColTexts = this.task.getColumns();
+		const headerColTexts = this.task.getColumns();
 
 		if (headerColTexts.length !== this.numCols) {
 			throw new Error('header column text array does not match number of table columns');
 		}
 
 		for (let c = 0; c < this.numCols; c++) {
-			let cell = this.table.getCell(0, c);
+			const cell = this.table.getCell(0, c);
 			cell.add(new docx.Paragraph({
 				text: headerColTexts[c],
 				alignment: docx.AlignmentType.CENTER,
@@ -49,10 +49,10 @@ module.exports = class DocxTableHandler extends DocxHandler {
 	}
 
 	writeDivision(division) {
-		for(let actor in division) {
+		for (const actor in division) {
 			// NOTE: aSeries === division[actor]
-			let columnKey = this.procedure.getActorColumnKey(actor);
-			let taskColumnIndex = this.task.getColumnIndex(columnKey);
+			const columnKey = this.procedure.getActorColumnKey(actor);
+			const taskColumnIndex = this.task.getColumnIndex(columnKey);
 			this.writeSeries(this.divisionIndex, taskColumnIndex, division[actor]);
 		}
 
@@ -60,8 +60,8 @@ module.exports = class DocxTableHandler extends DocxHandler {
 	}
 
 	writeSeries(row, col, series) {
-		let cell = this.table.getCell(row, col).setVerticalAlign(docx.VerticalAlign.TOP);
-		for (let step of series) {
+		const cell = this.table.getCell(row, col).setVerticalAlign(docx.VerticalAlign.TOP);
+		for (const step of series) {
 			this.setContainer(cell);
 			this.insertStep(step);
 		}

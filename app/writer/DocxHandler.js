@@ -145,7 +145,7 @@ module.exports = class DocxHandler {
 		// ]
 		const divisions = this.task.concurrentSteps;
 
-		for (let division of divisions) {
+		for (const division of divisions) {
 			this.writeDivision(division);
 		}
 	}
