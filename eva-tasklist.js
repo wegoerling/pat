@@ -267,6 +267,7 @@ function validateProgramArguments(program) {
 
 	program.procedurePath = path.join(program.projectPath, 'procedures');
 	program.tasksPath = path.join(program.projectPath, 'tasks');
+	program.imagesPath = path.join(program.projectPath, 'images');
 	program.outputPath = path.join(program.projectPath, 'build');
 	program.gitPath = path.join(program.projectPath, '.git');
 

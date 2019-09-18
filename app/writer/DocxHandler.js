@@ -1,6 +1,9 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const docx = require('docx');
+const imageFileDimensions = require('image-size');
 
 module.exports = class DocxHandler {
 
@@ -11,6 +14,8 @@ module.exports = class DocxHandler {
 
 		this.docWrapper.taskNumbering = null;
 		this.getNumbering();
+
+		this.defaultImageWidth = 300;
 	}
 
 	/*
@@ -31,6 +36,69 @@ module.exports = class DocxHandler {
 
 	setContainer() {
 		throw new Error('Abstract function not implemented');
+	}
+
+	scaleImage(sourceFileDims, desiredDims) {
+		const widthToHeightRatio = sourceFileDims.width / sourceFileDims.height;
+
+		// if both dimensions are desired, just return them (no need to scale)
+		if (Number.isInteger(desiredDims.width) && Number.isInteger(desiredDims.height)) {
+			if (desiredDims.width > sourceFileDims.width) {
+				console.error(`Image quality warning: desired width {$desiredDims.width}
+					is greater than file width {$sourceFileDims.width}`);
+			}
+			if (desiredDims.height > sourceFileDims.height) {
+				console.error(`Image quality warning: desired height {$desiredDims.height}
+					is greater than file height {$sourceFileDims.height}`);
+			}
+			// FIXME: add check for desiredDims ratio being significantly
+			// different from widthToHeightRatio, and notify user that image may
+			// be distorted. Alternatively: just don't allow specifying W and H.
+			return desiredDims;
+		}
+
+		const scaledDims = {};
+
+		// if just desired width is an integer (first check shows both aren't)
+		if (Number.isInteger(desiredDims.width)) {
+			scaledDims.width = desiredDims.width;
+			scaledDims.height = Math.floor(scaledDims.width / widthToHeightRatio);
+
+		// if just desired height is an integer (first check shows both aren't)
+		} else if (Number.isInteger(desiredDims.height)) {
+			scaledDims.height = desiredDims.height;
+			scaledDims.width = Math.floor(scaledDims.height * widthToHeightRatio);
+
+		// neither are valid integers. Scale image to default width
+		} else {
+			scaledDims.width = this.defaultImageWidth;
+			scaledDims.height = Math.floor(scaledDims.width / widthToHeightRatio);
+		}
+
+		return scaledDims;
+	}
+
+	addImages(images) {
+
+		const imagesPath = this.docWrapper.program.imagesPath;
+		for (const imageMeta of images) {
+
+			const imagePath = path.join(imagesPath, imageMeta.path);
+			const imageSize = this.scaleImage(
+				imageFileDimensions(imagePath),
+				{ width: imageMeta.width, height: imageMeta.height }
+			);
+
+			const image = docx.Media.addImage(
+				this.doc,
+				fs.readFileSync(imagePath),
+				imageSize.width,
+				imageSize.height
+			);
+
+			this.container.add(new docx.Paragraph(image));
+		}
+
 	}
 
 	addParagraph(params = {}) {
@@ -176,7 +244,10 @@ module.exports = class DocxHandler {
 		// writeStep:
 		// step.text via markdownformatter
 		// loop over step.checkboxes via markdownformatter
-		// FIXME: loop over images
+
+		if (step.images) {
+			this.addImages(step.images);
+		}
 
 		if (step.title) {
 			this.addParagraph({
