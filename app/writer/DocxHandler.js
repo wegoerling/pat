@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const docx = require('docx');
-const imageFileDimensions = require('image-size');
+const getImageFileDimensions = require('image-size');
 const consoleHelper = require('../helpers/consoleHelper');
 
 module.exports = class DocxHandler {
@@ -16,7 +16,8 @@ module.exports = class DocxHandler {
 		this.docWrapper.taskNumbering = null;
 		this.getNumbering();
 
-		this.defaultImageWidth = 300;
+		this.maxImageWidth = 800; // landscape: 800, portrait probably 640
+		this.maxImageHeight = 640; // landscape: 640, portrait can be more like 800
 	}
 
 	/*
@@ -37,6 +38,35 @@ module.exports = class DocxHandler {
 
 	setContainer() {
 		throw new Error('Abstract function not implemented');
+	}
+
+	fitImageInBox(img, box = {}) {
+
+		if (!box.width) {
+			box.width = this.maxImageWidth;
+		}
+		if (!box.height) {
+			box.height = this.maxImageHeight;
+		}
+
+		if (img.width <= box.width && img.height <= box.height) {
+			return img; // already fits, no change
+		}
+
+		const oriWidth = img.width,
+			oriHeight = img.height;
+
+		if (img.width > box.width) {
+			img.width = box.width;
+			img.height = Math.round(img.height * (box.width / oriWidth));
+		}
+
+		if (img.height > box.height) {
+			img.height = box.height;
+			img.width = Math.round(oriWidth * (box.height / oriHeight));
+		}
+
+		return img;
 	}
 
 	scaleImage(sourceFileDims, desiredImage) {
@@ -70,7 +100,7 @@ module.exports = class DocxHandler {
 			return desiredImage;
 		}
 
-		const scaledDims = {};
+		let scaledDims = {};
 
 		// if just desired width is an integer (first check shows both aren't)
 		if (Number.isInteger(desiredImage.width)) {
@@ -82,10 +112,10 @@ module.exports = class DocxHandler {
 			scaledDims.height = desiredImage.height;
 			scaledDims.width = Math.floor(scaledDims.height * widthToHeightRatio);
 
-		// neither are valid integers. Scale image to default width
+		// neither are valid integers. Keep image at source file's dimensions,
+		// unless they are too big. Then scale image to fit.
 		} else {
-			scaledDims.width = this.defaultImageWidth;
-			scaledDims.height = Math.floor(scaledDims.width / widthToHeightRatio);
+			scaledDims = this.fitImageInBox(sourceFileDims);
 		}
 
 		imgWarnings.flush(desiredImage.path);
@@ -99,7 +129,7 @@ module.exports = class DocxHandler {
 
 			const imagePath = path.join(imagesPath, imageMeta.path);
 			const imageSize = this.scaleImage(
-				imageFileDimensions(imagePath),
+				getImageFileDimensions(imagePath),
 				imageMeta
 			);
 
