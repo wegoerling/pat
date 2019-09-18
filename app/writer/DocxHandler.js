@@ -287,6 +287,9 @@ module.exports = class DocxHandler {
 		const hours = Math.floor(totalMinutes / 60); // eslint-disable-line no-unused-vars
 		const minutes = totalMinutes % 60; // eslint-disable-line no-unused-vars
 
+		// String.padStart requires ES2017 but has a very simple polyfill if we
+		// ever want to run this in non-modern browsers
+		// eslint-disable-next-line no-restricted-properties
 		return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 	}
 
