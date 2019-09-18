@@ -14,6 +14,7 @@ const ver = require('./app/helpers/versionHelper');
 const Procedure = require('./app/model/procedure');
 const html = require('./app/helpers/nunjucksHelper').generators;
 const ThreeColDocx = require('./app/writer/ThreeColDocx');
+const SodfDocxWriter = require('./app/writer/SodfDocxWriter');
 
 /**
  * Surrogate program entry point
@@ -61,6 +62,15 @@ function run(args) {
 					program.outputPath,
 					`${procedure.filename}.docx`
 				));
+
+				if (program.sodf) {
+					console.log('Writing SODF form');
+					const sodf = new SodfDocxWriter(program, procedure);
+					sodf.writeFile(path.join(
+						program.outputPath,
+						`${procedure.filename}.sodf.docx`
+					));
+				}
 
 				if (program.html) {
 					genHtml(program, procedure); // eslint-disable-line no-use-before-define
@@ -164,6 +174,7 @@ function buildProgramArguments(program, args) {
 		// .option('-o, --output <.html>', 'name of output HTML file')
 		.option('-t, --template <.html>', 'specify a template to use', DEFAULT_TEMPLATE)
 		.option('--html', 'Generate HTML file', null)
+		.option('--sodf', 'Generate SODF style procedure', null)
 		.option('-p, --pandoc', 'Generate Word doc from HTML using Pandoc (requires --html option)', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
 		.action(function(projectPath, options) {
@@ -173,6 +184,8 @@ function buildProgramArguments(program, args) {
 			} else {
 				program.projectPath = process.cwd();
 			}
+			program.sodf = options.sodf;
+			program.html = options.html;
 		});
 
 	//  Commander.js does an unhelpful thing if there are invalid options;
