@@ -150,6 +150,27 @@ module.exports = class DocxHandler {
 		}
 	}
 
+	formatDuration(params) {
+		if (params.seconds || params.second) {
+			throw new Error('"seconds" duration format not supported yet. Use "minutes".');
+		}
+		if (params.hours || params.hour) {
+			throw new Error('"hours" duration format not supported yet. Use "minutes".');
+		}
+		if (params.duration) {
+			throw new Error('"duration" is not a supported time format. Use "minutes".');
+		}
+		if (!params.minute && !params.minutes) {
+			return "XX:YY";
+		}
+
+		const totalMinutes = params.minutes || params.minute;
+		const hours = Math.floor(totalMinutes / 60);
+		const minutes = totalMinutes % 60;
+
+		return `{$hours}:{$minutes}`;
+	}
+
 	insertStep(step, level = 0) {
 
 		// writeStep:
@@ -159,7 +180,17 @@ module.exports = class DocxHandler {
 
 		if (step.title) {
 			this.addParagraph({
-				text: step.title.toUpperCase()
+				children: [
+					new docx.TextRun({
+						text: step.title.toUpperCase().trim(),
+						underline: {
+						type: "single"
+					},
+					}),
+					new docx.TextRun({
+						text: ' (' + this.formatDuration({ minutes: step.minutes }) + ')'
+					})
+				]
 			});
 		}
 

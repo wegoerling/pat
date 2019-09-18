@@ -45,6 +45,8 @@ module.exports = class DocxTableHandler extends DocxHandler {
 			}));
 		}
 
+		this.table.getRow(0).setTableHeader();
+
 		this.divisionIndex++;
 	}
 
@@ -54,6 +56,16 @@ module.exports = class DocxTableHandler extends DocxHandler {
 			const columnKey = this.procedure.getActorColumnKey(actor);
 			const taskColumnIndex = this.task.getColumnIndex(columnKey);
 			this.writeSeries(this.divisionIndex, taskColumnIndex, division[actor]);
+		}
+
+		this.table.getRow(this.divisionIndex).setCantSplit();
+
+		for (let c = 0; c < this.numCols; c++) {
+			this.table.getCell(this.divisionIndex, c).Borders.addTopBorder(docx.BorderStyle.SINGLE, 1, "AAAAAA");
+
+			if (this.divisionIndex < this.numRows - 1) {
+				this.table.getCell(this.divisionIndex, c).Borders.addBottomBorder(docx.BorderStyle.SINGLE, 1, "AAAAAA");
+			}
 		}
 
 		this.divisionIndex++;
