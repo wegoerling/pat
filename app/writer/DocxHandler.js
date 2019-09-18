@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const docx = require('docx');
 const imageFileDimensions = require('image-size');
+const consoleHelper = require('../helpers/consoleHelper');
 
 module.exports = class DocxHandler {
 
@@ -38,35 +39,47 @@ module.exports = class DocxHandler {
 		throw new Error('Abstract function not implemented');
 	}
 
-	scaleImage(sourceFileDims, desiredDims) {
+	scaleImage(sourceFileDims, desiredImage) {
 		const widthToHeightRatio = sourceFileDims.width / sourceFileDims.height;
 
+		const imgWarnings = [];
+		imgWarnings.check = function(dim, requested, srcSize) {
+			if (requested > srcSize) {
+				this.push(`Desired ${dim} ${requested}px is greater than file ${dim} ${srcSize}px`);
+			}
+		};
+		imgWarnings.flush = function(imgPath) {
+			if (this.length > 0) {
+				consoleHelper.warn(
+					[`Possibly undesirable dimensions for ${imgPath}`].concat(this), // warnings array
+					'Image quality warning',
+					true // add a newline above and below warning
+				);
+			}
+		};
+
+		imgWarnings.check('width', desiredImage.width, sourceFileDims.width);
+		imgWarnings.check('height', desiredImage.height, sourceFileDims.height);
+
 		// if both dimensions are desired, just return them (no need to scale)
-		if (Number.isInteger(desiredDims.width) && Number.isInteger(desiredDims.height)) {
-			if (desiredDims.width > sourceFileDims.width) {
-				console.error(`Image quality warning: desired width {$desiredDims.width}
-					is greater than file width {$sourceFileDims.width}`);
-			}
-			if (desiredDims.height > sourceFileDims.height) {
-				console.error(`Image quality warning: desired height {$desiredDims.height}
-					is greater than file height {$sourceFileDims.height}`);
-			}
-			// FIXME: add check for desiredDims ratio being significantly
+		if (Number.isInteger(desiredImage.width) && Number.isInteger(desiredImage.height)) {
+			// FIXME: add check for desiredImage ratio being significantly
 			// different from widthToHeightRatio, and notify user that image may
 			// be distorted. Alternatively: just don't allow specifying W and H.
-			return desiredDims;
+			imgWarnings.flush(desiredImage.path);
+			return desiredImage;
 		}
 
 		const scaledDims = {};
 
 		// if just desired width is an integer (first check shows both aren't)
-		if (Number.isInteger(desiredDims.width)) {
-			scaledDims.width = desiredDims.width;
+		if (Number.isInteger(desiredImage.width)) {
+			scaledDims.width = desiredImage.width;
 			scaledDims.height = Math.floor(scaledDims.width / widthToHeightRatio);
 
 		// if just desired height is an integer (first check shows both aren't)
-		} else if (Number.isInteger(desiredDims.height)) {
-			scaledDims.height = desiredDims.height;
+		} else if (Number.isInteger(desiredImage.height)) {
+			scaledDims.height = desiredImage.height;
 			scaledDims.width = Math.floor(scaledDims.height * widthToHeightRatio);
 
 		// neither are valid integers. Scale image to default width
@@ -75,6 +88,7 @@ module.exports = class DocxHandler {
 			scaledDims.height = Math.floor(scaledDims.width / widthToHeightRatio);
 		}
 
+		imgWarnings.flush(desiredImage.path);
 		return scaledDims;
 	}
 
@@ -86,7 +100,7 @@ module.exports = class DocxHandler {
 			const imagePath = path.join(imagesPath, imageMeta.path);
 			const imageSize = this.scaleImage(
 				imageFileDimensions(imagePath),
-				{ width: imageMeta.width, height: imageMeta.height }
+				imageMeta
 			);
 
 			const image = docx.Media.addImage(
