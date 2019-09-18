@@ -167,8 +167,10 @@ module.exports = class Procedure {
 			this.filename = filenamify(this.name.replace(/\s+/g, '_'));
 
 			// Save the actors
-			for (var actorYaml of procedureYaml.actors) {
-				this.actors.push(new Actor(actorYaml));
+			if (procedureYaml.actors) {
+				for (var actorYaml of procedureYaml.actors) {
+					this.actors.push(new Actor(actorYaml));
+				}
 			}
 
 			for (var columnYaml of procedureYaml.columns) {

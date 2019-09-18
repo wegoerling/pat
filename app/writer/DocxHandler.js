@@ -209,6 +209,11 @@ module.exports = class DocxHandler {
 		// FIXME: Process the procedure markup from wikitext/markdown-ish to what
 		// docx needs. Similar to app/helpers/markdownHelper.js
 
+		if (typeof procedureMarkup !== 'string') {
+			console.error(procedureMarkup);
+			throw new Error('procedureMarkup must be type string');
+		}
+
 		procedureMarkup = procedureMarkup
 			.replace(/\{\{CHECK\}\}/g, '✓')
 			.replace(/\{\{CHECKBOX\}\}/g, '☐')

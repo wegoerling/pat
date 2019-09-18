@@ -4,7 +4,7 @@
         "procedure_name": { "type": "string" },
         "actors": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "object",
                 "properties": {
                     "role": { "type": "string"},
@@ -33,5 +33,5 @@
         },
         "css": {"type": "string"}
     },
-    "required": ["procedure_name", "actors", "tasks"]
+    "required": ["procedure_name", "tasks"]
 }
