@@ -57,6 +57,7 @@ function run(args) {
 				console.logIfVerbose(procedure, 1, 3);
 
 				// genDocx...
+				console.log('Creating EVA format');
 				const threecoldocx = new ThreeColDocx(program, procedure);
 				threecoldocx.writeFile(path.join(
 					program.outputPath,
@@ -64,7 +65,7 @@ function run(args) {
 				));
 
 				if (program.sodf) {
-					console.log('Writing SODF form');
+					console.log('Creating SODF format');
 					const sodf = new SodfDocxWriter(program, procedure);
 					sodf.writeFile(path.join(
 						program.outputPath,
@@ -267,6 +268,7 @@ function validateProgramArguments(program) {
 
 	program.procedurePath = path.join(program.projectPath, 'procedures');
 	program.tasksPath = path.join(program.projectPath, 'tasks');
+	program.imagesPath = path.join(program.projectPath, 'images');
 	program.outputPath = path.join(program.projectPath, 'build');
 	program.gitPath = path.join(program.projectPath, '.git');
 

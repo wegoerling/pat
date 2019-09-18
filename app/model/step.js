@@ -38,6 +38,20 @@ module.exports = class Step {
 		// Check for images
 		if (stepYaml.images) {
 			this.images = arrayHelper.parseArray(stepYaml.images);
+
+			for (let i = 0; i < this.images.length; i++) {
+				if (typeof this.images[i] === 'string') {
+					this.images[i] = { path: this.images[i] };
+				}
+				const image = this.images[i];
+
+				if (image.width && !Number.isInteger(image.width) && image.width < 1) {
+					throw new Error('Width should be empty or a positive integery: {$image.path}');
+				}
+				if (image.height && !Number.isInteger(image.height) && image.height < 1) {
+					throw new Error('Height should be empty or a positive integery: {$image.path}');
+				}
+			}
 		}
 
 		// Check for checkboxes

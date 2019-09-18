@@ -5,6 +5,7 @@ const docx = require('docx');
 const childProcess = require('child_process');
 // const Series = require('../model/series');
 const DocxTableHandler = require('./DocxTableHandler');
+const consoleHelper = require('../helpers/consoleHelper');
 
 module.exports = class Writer {
 
@@ -130,6 +131,7 @@ module.exports = class Writer {
 	writeFile(filepath) {
 		docx.Packer.toBuffer(this.doc).then((buffer) => {
 			fs.writeFileSync(filepath, buffer);
+			consoleHelper.success(`${filepath} written!`);
 		});
 	}
 
