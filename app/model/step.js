@@ -46,12 +46,16 @@ module.exports = class Step {
 				const image = this.images[i];
 
 				if (image.width && !Number.isInteger(image.width) && image.width < 1) {
-					throw new Error('Width should be empty or a positive integery: {$image.path}');
+					throw new Error(`Width should be empty or a positive integery: ${image.path}`);
 				}
 				if (image.height && !Number.isInteger(image.height) && image.height < 1) {
-					throw new Error('Height should be empty or a positive integery: {$image.path}');
+					throw new Error(`Height should be empty or a positive integery: ${image.path}`);
 				}
 			}
+		}
+
+		if (stepYaml.minutes) {
+			this.minutes = stepYaml.minutes;
 		}
 
 		// Check for checkboxes

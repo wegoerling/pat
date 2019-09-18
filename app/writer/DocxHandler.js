@@ -262,25 +262,35 @@ module.exports = class DocxHandler {
 		}
 	}
 
-	formatDuration(params) {
-		if (params.seconds || params.second) {
+	formatDuration(step) {
+		if (step.seconds || step.second) {
 			throw new Error('"seconds" duration format not supported yet. Use "minutes".');
 		}
-		if (params.hours || params.hour) {
+		if (step.hours || step.hour) {
 			throw new Error('"hours" duration format not supported yet. Use "minutes".');
 		}
-		if (params.duration) {
+		if (step.duration) {
 			throw new Error('"duration" is not a supported time format. Use "minutes".');
 		}
-		if (!params.minute && !params.minutes) {
+		if (!step.minute && !step.minutes) {
+			const warningMsg = ['should include "minutes" field'];
+			const regex = /\([\d\w]{2}:[\d\w]{2}\)/g;
+			if (regex.test(step.title)) {
+				warningMsg.push(`should not have "${step.title.match(regex)}" within title`);
+			}
+			consoleHelper.warn(warningMsg, `Title "${step.title}"`);
+
 			return 'XX:YY';
 		}
 
-		const totalMinutes = params.minutes || params.minute;
+		const totalMinutes = step.minutes || step.minute;
 		const hours = Math.floor(totalMinutes / 60); // eslint-disable-line no-unused-vars
 		const minutes = totalMinutes % 60; // eslint-disable-line no-unused-vars
 
-		return '{$hours}:{$minutes}';
+		// String.padStart requires ES2017 but has a very simple polyfill if we
+		// ever want to run this in non-modern browsers
+		// eslint-disable-next-line no-restricted-properties
+		return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 	}
 
 	insertStep(step, level = 0) {
@@ -303,7 +313,7 @@ module.exports = class DocxHandler {
 						}
 					}),
 					new docx.TextRun({
-						text: ` (${this.formatDuration({ minutes: step.minutes })})`
+						text: ` (${this.formatDuration(step)})`
 					})
 				]
 			});
