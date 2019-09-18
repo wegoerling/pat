@@ -51,7 +51,7 @@ function formatText(messages, title, color, addSpacing) {
 
 module.exports = {
 
-	warn: function(messages, title, addSpacing = true) {
+	warn: function(messages, title, addSpacing = false) {
 		console.error(formatText(messages, title, 'red', addSpacing));
 	},
 
