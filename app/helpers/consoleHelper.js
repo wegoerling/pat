@@ -56,7 +56,7 @@ module.exports = {
 	},
 
 	error: function(messages, title) {
-		throw new Error(formatText(messages, title, red, true));
+		throw new Error(formatText(messages, title, 'red', true));
 	},
 
 	success: function(messages, title, addSpacing = false) {
