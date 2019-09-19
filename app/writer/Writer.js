@@ -3,7 +3,7 @@
 const fs = require('fs');
 const docx = require('docx');
 const childProcess = require('child_process');
-// const Series = require('../model/series');
+
 const DocxTableHandler = require('./DocxTableHandler');
 const consoleHelper = require('../helpers/consoleHelper');
 
