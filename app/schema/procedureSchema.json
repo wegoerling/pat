@@ -7,10 +7,10 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "role": { "type": "string"},
+                    "id": { "type": "string"},
                     "name": { "type": "string"}
                 },
-                "required": ["role"]
+                "required": ["id"]
             }
         },
         "tasks": {
