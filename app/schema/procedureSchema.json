@@ -19,14 +19,11 @@
                 "type": "object",
                 "properties": {
                     "file": { "type": "string"},
-                    "url": {"type": "string"}
+                    "roles": { "type": "object"}
                 },
                 "anyOf": [
                     {
                         "required": ["file"]
-                    },
-                    {
-                        "required": ["url"]
                     }
                 ]
             }

@@ -55,6 +55,10 @@ module.exports = {
 		console.error(formatText(messages, title, 'red', addSpacing));
 	},
 
+	error: function(messages, title) {
+		throw new Error(formatText(messages, title, 'red', true));
+	},
+
 	success: function(messages, title, addSpacing = false) {
 		console.error(formatText(messages, title, 'green', addSpacing));
 	}
