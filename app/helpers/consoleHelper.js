@@ -27,7 +27,11 @@ function formatText(messages, title, color, addSpacing) {
 	}
 
 	for (let i = 0; i < messages.length; i++) {
-		messages[i] = `${prefix}${messages[i]}`[color];
+		if (typeof messages[i] !== 'string') {
+			messages[i] = `${prefix}var dump:\n${JSON.stringify(messages[i], null, 4)}`[color];
+		} else {
+			messages[i] = `${prefix}${messages[i]}`[color];
+		}
 	}
 
 	if (messages.length > 1) {
@@ -52,11 +56,15 @@ function formatText(messages, title, color, addSpacing) {
 module.exports = {
 
 	warn: function(messages, title, addSpacing = false) {
-		console.error(formatText(messages, title, 'red', addSpacing));
+		console.error(formatText(messages, title, 'yellow', addSpacing));
 	},
 
 	error: function(messages, title) {
 		throw new Error(formatText(messages, title, 'red', true));
+	},
+
+	noExitError: function(messages, title) {
+		console.error(formatText(messages, title, 'red', true));
 	},
 
 	success: function(messages, title, addSpacing = false) {
