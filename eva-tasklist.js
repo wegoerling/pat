@@ -11,8 +11,10 @@ const child = require('child_process');
 const pjson = require('./package.json');
 
 const ver = require('./app/helpers/versionHelper');
-const Procedure = require('./app/model/procedure');
 const html = require('./app/helpers/nunjucksHelper').generators;
+const consoleHelper = require('./app/helpers/consoleHelper');
+
+const Procedure = require('./app/model/procedure');
 const ThreeColDocx = require('./app/writer/ThreeColDocx');
 const SodfDocxWriter = require('./app/writer/SodfDocxWriter');
 
@@ -45,10 +47,10 @@ function run(args) {
 			procedure.populateFromFile(procedureFile).then((err) => {
 				// Check if an error occurred
 				if (err) {
-					console.error(`Error while deserializing YAML: ${err}`);
+					consoleHelper.noExitError(`Error while processing procedure ${file}: ${err}`);
 					if (err.validationErrors) {
-						console.log('Validation Errors:');
-						console.log(err.validationErrors);
+						consoleHelper.noExitError('Validation Errors:');
+						consoleHelper.noExitError(err.validationErrors);
 					}
 					return;
 				}
