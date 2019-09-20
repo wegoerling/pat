@@ -1,9 +1,9 @@
 'use strict';
 
 const docx = require('docx');
-const Writer = require('./Writer');
+const DocxWriter = require('./DocxWriter');
 
-module.exports = class EvaDocxWriter extends Writer {
+module.exports = class EvaDocxWriter extends DocxWriter {
 
 	constructor(program, procedure) {
 		super(program, procedure);

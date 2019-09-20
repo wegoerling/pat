@@ -1,10 +1,10 @@
 'use strict';
 
 const docx = require('docx');
-const Writer = require('./Writer');
+const DocxWriter = require('./DocxWriter');
 const DocxSodfHandler = require('./DocxSodfHandler');
 
-module.exports = class SodfDocxWriter extends Writer {
+module.exports = class SodfDocxWriter extends DocxWriter {
 
 	constructor(program, procedure) {
 		super(program, procedure);
