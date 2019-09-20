@@ -10,18 +10,6 @@ module.exports = class Writer {
 		this.procedure = procedure;
 	}
 
-	/*
-	If you want step numbers like 3.5.2
-	function getLongStepString (levelIndex) {
-		let output = '';
-		for (let i = 0; i <= levelIndex; i++) {
-			let levelValue = i + 1;
-			output += `%${levelValue}.`;
-		}
-		return output;
-	}
-	*/
-
 	/**
 	 * MOVE TO: Program (currently there is no Program.js; "Program" is really
 	 * NPM Commander package. Perhaps should have Project.js since procedures
