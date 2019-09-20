@@ -164,7 +164,6 @@ module.exports = class Procedure {
 			this.actorToColumn = mapActorToColumn(this.columns);
 			this.columnToDisplay = mapColumnKeyToDisplay(this.columns);
 
-
 			// Save the tasks
 			for (const proceduresTaskInstance of procedureYaml.tasks) {
 
