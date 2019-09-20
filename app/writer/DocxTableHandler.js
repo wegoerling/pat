@@ -30,16 +30,16 @@ module.exports = class DocxTableHandler extends DocxHandler {
 
 	setContainerHeader() {
 
-		const headerColTexts = this.task.getColumns();
+		const columnKeys = this.task.getColumns();
 
-		if (headerColTexts.length !== this.numCols) {
+		if (columnKeys.length !== this.numCols) {
 			throw new Error('header column text array does not match number of table columns');
 		}
 
 		for (let c = 0; c < this.numCols; c++) {
 			const cell = this.table.getCell(0, c);
 			cell.add(new docx.Paragraph({
-				text: headerColTexts[c],
+				text: this.procedure.columnToDisplay[columnKeys[c]],
 				alignment: docx.AlignmentType.CENTER,
 				style: 'strong'
 			}));
