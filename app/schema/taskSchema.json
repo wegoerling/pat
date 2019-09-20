@@ -100,9 +100,47 @@
     "type": "object",
     "properties": {
         "title": { "type": "string" },
-        "duration": {
-            "type": "string",
-            "pattern": "^[0-9]{2}:[0-9]{2}$"
+        "roles": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "duration": {
+                        "type": "object",
+                        "properties": {
+                            "hours": {
+                                "type": "number",
+                                "pattern": "^[0-9]+$"
+                            },
+                            "minutes": {
+                                "type": "number",
+                                "pattern": "^[0-9]+$"
+                            },
+                            "offset": {
+                                "type": "object",
+                                "properties": {
+                                    "hours": {
+                                        "type": "number",
+                                        "pattern": "^[0-9]+$"
+                                    },
+                                    "minutes": {
+                                        "type": "number",
+                                        "pattern": "^[0-9]+$"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": ["name", "duration"]
+            }
+
         },
         "steps": {
             "type": "array",
@@ -118,5 +156,5 @@
             }
         }
     },
-    "required": ["title", "duration", "steps"]
+    "required": ["title", "roles", "steps"]
 }

@@ -1,6 +1,7 @@
 'use strict';
 
 const consoleHelper = require('../helpers/consoleHelper');
+const Duration = require('./Duration');
 
 module.exports = class TaskRole {
 
@@ -12,6 +13,7 @@ module.exports = class TaskRole {
 	constructor(roleDef, procTaskInstance) {
 		this.name = roleDef.name;
 		this.description = roleDef.description;
+		this.duration = new Duration(roleDef.duration);
 		if (!procTaskInstance || !procTaskInstance.roles || !procTaskInstance.roles[this.name]) {
 			consoleHelper.error([
 				'Roles defined within tasks must be filled by procedure actors',
