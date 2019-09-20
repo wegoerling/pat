@@ -87,7 +87,6 @@ module.exports = class ConcurrentStep {
 	 *                        actor: 'EV2'
 	 *                      }
 	 *                    }
-	 * @return {Object} ConcurrentStep instance
 	 */
 	constructor(concurrentStepYaml, taskRoles) {
 

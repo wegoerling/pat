@@ -60,7 +60,8 @@ module.exports = class Step {
 
 		// Check for checkboxes
 		if (stepYaml.checkboxes) {
-			this.checkboxes = arrayHelper.parseArray(stepYaml.checkboxes).map(this.replaceTaskRoles);
+			this.checkboxes = arrayHelper.parseArray(stepYaml.checkboxes)
+				.map(this.replaceTaskRoles);
 		}
 
 		// Check for warnings
@@ -104,19 +105,11 @@ module.exports = class Step {
 		};
 	}
 
-	// replaceTaskRoles(text) { return text; }
-	// replaceTaskRoles(text) {
-	// 	for (let role in this.taskRolesMap) {
-	// 		text = text.replace(`{{role:${role}}}`,this.taskRolesMap[role]);
-	// 	}
-	// 	return text;
-	// }
-
 	/**
-     * Return the title. FFIXME: what's the point of this?
-     *
-     * @param   {*} titleYaml YAML for the title
-     * @return  {*} array of substeps
+	 * Return the title. FFIXME: what's the point of this?
+	 *
+	 * @param   {*} titleYaml YAML for the title
+	 * @return  {*} array of substeps
      */
 	parseTitle(titleYaml) {
 		// return titleYaml;
@@ -124,24 +117,24 @@ module.exports = class Step {
 	}
 
 	/**
-     * Return the step text, or an empty string if does not exist.
-     *
-     * FIXME: should this be `return stepTextYaml || "";` ???
-     *
-     * @param   {*} stepTextYaml YAML for the step text
-     * @return  {Array} array of substeps
-     */
+	 * Return the step text, or an empty string if does not exist.
+	 *
+	 * FIXME: should this be `return stepTextYaml || "";` ???
+	 *
+	 * @param   {*} stepTextYaml YAML for the step text
+	 * @return  {Array} array of substeps
+	 */
 	parseStepText(stepTextYaml) {
 		// return stepTextYaml;
 		return this.replaceTaskRoles(stepTextYaml);
 	}
 
 	/**
-     * Returns an array of substeps for the step, or an empty array if none are found.
-     *
-     * @param   {*} substepsYaml YAML for the substeps
-     * @return  {Array} array of substeps
-     */
+	 * Returns an array of substeps for the step, or an empty array if none are found.
+	 *
+	 * @param   {*} substepsYaml YAML for the substeps
+	 * @return  {Array} array of substeps
+	 */
 	parseSubsteps(substepsYaml) {
 
 		const substeps = [];

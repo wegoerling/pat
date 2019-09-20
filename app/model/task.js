@@ -11,7 +11,6 @@ module.exports = class Task {
 	 * @param  {Object} taskDefinition          All the task info from the task file (steps, etc)
 	 * @param  {Object} proceduresTaskInstance  Info about this usage of task from procedure file
 	 * @param  {Array}  procedureColumnKeys     Array of column keys
-	 * @return {Object}                         Task instance
 	 */
 	constructor(taskDefinition, proceduresTaskInstance, procedureColumnKeys = null) {
 
@@ -33,7 +32,7 @@ module.exports = class Task {
 				if (!role.name) {
 					consoleHelper.error([
 						'Roles require a name, none found in role definition',
-						roleDef
+						role
 					], 'Task role definition error');
 				}
 				this.roles[role.name] = new TaskRole(role, proceduresTaskInstance);
@@ -99,10 +98,10 @@ module.exports = class Task {
 			}
 		}
 
-		if (this.docColumns) {
+		if (this.procedureColumnKeys) {
 
 			// create taskColumns in order specified by procedure
-			for (colName of this.docColumns) {
+			for (colName of this.procedureColumnKeys) {
 				if (taskColumnsHash[colName]) {
 					taskColumns.push(colName);
 				}

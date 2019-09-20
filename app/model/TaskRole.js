@@ -8,7 +8,6 @@ module.exports = class TaskRole {
 	 * Constructor for TaskRole
 	 * @param  {Object} roleDef           Ex: { name: crewA, description: 'Person who does XYZ' }
 	 * @param  {Object} procTaskInstance  Info about this usage of task from procedure file
-	 * @return {Object}                         TaskRole instance
 	 */
 	constructor(roleDef, procTaskInstance) {
 		this.name = roleDef.name;
