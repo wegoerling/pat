@@ -3,8 +3,6 @@
 const fs = require('fs');
 const childProcess = require('child_process');
 
-const DocxTableHandler = require('./DocxTableHandler');
-
 module.exports = class Writer {
 
 	constructor(program, procedure) {
@@ -94,12 +92,12 @@ module.exports = class Writer {
 
 	}
 
-	writeFile() {
-		throw new Error('Abstract function not implemented');
-	}
-
 	getLastModifiedBy() {
 		return ''; // FIXME: get this from git repo if available
+	}
+
+	writeFile() {
+		throw new Error('Abstract function not implemented');
 	}
 
 	getPageSize() {
@@ -108,26 +106,6 @@ module.exports = class Writer {
 
 	getPageMargins() {
 		throw new Error('Abstract function not implemented');
-	}
-
-	renderTask(task) {
-
-		const handler = new DocxTableHandler(
-			task,
-			this
-		);
-
-		handler.setContainerHeader();
-
-		handler.writeDivisions();
-
-		this.doc.addSection({
-			headers: { default: this.genHeader(task) },
-			footers: { default: this.genFooter() },
-			size: this.getPageSize(),
-			margins: this.getPageMargins(),
-			children: handler.getSectionChildren()
-		});
 	}
 
 	getRightTabPosition() {

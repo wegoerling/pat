@@ -1,7 +1,9 @@
 'use strict';
 
 const docx = require('docx');
+
 const DocxWriter = require('./DocxWriter');
+const DocxTableHandler = require('./DocxTableHandler');
 
 module.exports = class EvaDocxWriter extends DocxWriter {
 
@@ -29,4 +31,25 @@ module.exports = class EvaDocxWriter extends DocxWriter {
 			left: 720
 		};
 	}
+
+	renderTask(task) {
+
+		const handler = new DocxTableHandler(
+			task,
+			this
+		);
+
+		handler.setContainerHeader();
+
+		handler.writeDivisions();
+
+		this.doc.addSection({
+			headers: { default: this.genHeader(task) },
+			footers: { default: this.genFooter() },
+			size: this.getPageSize(),
+			margins: this.getPageMargins(),
+			children: handler.getSectionChildren()
+		});
+	}
+
 };
