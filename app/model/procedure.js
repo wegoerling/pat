@@ -180,7 +180,8 @@ module.exports = class Procedure {
 				this.tasks.push(new Task(
 					taskDefinition, // all the task info from the task file (steps, etc)
 					proceduresTaskInstance, // info about task from procedure file
-					this.getColumnKeys()
+					this.getColumnKeys(),
+					this
 				));
 
 			}

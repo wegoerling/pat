@@ -9,7 +9,7 @@ module.exports = class DocxTableHandler extends DocxHandler {
 		super(docWrapper);
 
 		this.task = task;
-		this.taskColumns = task.getColumns(task);
+		this.taskColumns = task.getColumns(task); // FIXME no need to pass task into getColumns
 
 		this.numCols = this.taskColumns.length;
 		this.numContentRows = task.concurrentSteps.length;
