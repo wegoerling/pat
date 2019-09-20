@@ -7,7 +7,6 @@
 const program = require('commander');
 const path = require('path');
 const fs = require('fs');
-const child = require('child_process');
 const pjson = require('./package.json');
 
 const ver = require('./app/helpers/versionHelper');
@@ -153,9 +152,9 @@ function buildProgramArguments(program, args) {
 			}
 			program.sodf = options.sodf;
 			program.html = options.html;
-			program.template = options.template
-				? options.template
-				: path.join(__dirname, 'templates', 'spacewalk.njk');
+			program.template = options.template || path.join(
+				__dirname, 'templates', 'spacewalk.njk'
+			);
 		});
 
 	//  Commander.js does an unhelpful thing if there are invalid options;
