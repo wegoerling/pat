@@ -1,30 +1,52 @@
 'use strict';
 
 const ConcurrentStep = require('./concurrentStep.js');
+const TaskRole = require('./TaskRole.js');
+const consoleHelper = require('../helpers/consoleHelper');
 
 module.exports = class Task {
 
-	constructor(taskYaml, procedureColumnKeys = null) {
+	/**
+	 * Constructor for Task object
+	 * @param  {Object} taskDefinition          All the task info from the task file (steps, etc)
+	 * @param  {Object} proceduresTaskInstance  Info about this usage of task from procedure file
+	 * @param  {Array}  procedureColumnKeys     Array of column keys
+	 * @return {Object}                         Task instance
+	 */
+	constructor(taskDefinition, proceduresTaskInstance, procedureColumnKeys = null) {
 
 		// Get the title
-		if (!taskYaml.title) {
-			throw new Error(`Input YAML task missing title: ${JSON.stringify(taskYaml)}`);
+		if (!taskDefinition.title) {
+			throw new Error(`Input YAML task missing title: ${JSON.stringify(taskDefinition)}`);
 		}
-		this.title = taskYaml.title;
+		this.title = taskDefinition.title;
 
 		// Get the duration
-		if (!taskYaml.duration) {
-			throw new Error(`Input YAML task missing duration: ${JSON.stringify(taskYaml)}`);
+		if (!taskDefinition.duration) {
+			throw new Error(`Input YAML task missing duration: ${JSON.stringify(taskDefinition)}`);
 		}
-		this.duration = taskYaml.duration;
+		this.duration = taskDefinition.duration;
+
+		if (taskDefinition.roles) {
+			this.roles = {};
+			for (const role of taskDefinition.roles) {
+				if (!role.name) {
+					consoleHelper.error([
+						'Roles require a name, none found in role definition',
+						roleDef
+					], 'Task role definition error');
+				}
+				this.roles[role.name] = new TaskRole(role, proceduresTaskInstance);
+			}
+		}
 
 		// Get the steps.  ConcurrentSteps class will handle the simo vs actor stuff in the yaml.
-		if (!taskYaml.steps) {
-			throw new Error(`Input YAML task missing steps: ${JSON.stringify(taskYaml)}`);
+		if (!taskDefinition.steps) {
+			throw new Error(`Input YAML task missing steps: ${JSON.stringify(taskDefinition)}`);
 		}
 		this.concurrentSteps = [];
-		for (var concurrentStepYaml of taskYaml.steps) {
-			this.concurrentSteps.push(new ConcurrentStep(concurrentStepYaml));
+		for (var concurrentStepYaml of taskDefinition.steps) {
+			this.concurrentSteps.push(new ConcurrentStep(concurrentStepYaml, this.roles));
 		}
 
 		if (procedureColumnKeys) {

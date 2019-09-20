@@ -148,17 +148,21 @@ module.exports = class Procedure {
 			this.actorToColumn = mapActorToColumn(this.columns);
 
 			// Save the tasks
-			for (var taskYaml of procedureYaml.tasks) {
+			for (const proceduresTaskInstance of procedureYaml.tasks) {
 
 				// Since the task file is in relative path to the procedure
 				// file, need to translate it!
-				const taskFileName = translatePath(fileName, taskYaml.file);
+				const taskFileName = translatePath(fileName, proceduresTaskInstance.file);
 
 				spacewalkValidator.validateTaskSchemaFile(taskFileName);
-				const loadedTaskYaml = YAML.load(taskFileName, null, true);
+				const taskDefinition = YAML.load(taskFileName, null, true);
 
 				// Save the task!
-				this.tasks.push(new Task(loadedTaskYaml, this.getColumnKeys()));
+				this.tasks.push(new Task(
+					taskDefinition, // all the task info from the task file (steps, etc)
+					proceduresTaskInstance, // info about task from procedure file
+					this.getColumnKeys()
+				));
 
 			}
 

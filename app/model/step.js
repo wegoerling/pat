@@ -60,27 +60,27 @@ module.exports = class Step {
 
 		// Check for checkboxes
 		if (stepYaml.checkboxes) {
-			this.checkboxes = arrayHelper.parseArray(stepYaml.checkboxes);
+			this.checkboxes = arrayHelper.parseArray(stepYaml.checkboxes).map(this.replaceTaskRoles);
 		}
 
 		// Check for warnings
 		if (stepYaml.warning) {
-			this.warnings = arrayHelper.parseArray(stepYaml.warning);
+			this.warnings = arrayHelper.parseArray(stepYaml.warning).map(this.replaceTaskRoles);
 		}
 
 		// Check for cautions
 		if (stepYaml.caution) {
-			this.cautions = arrayHelper.parseArray(stepYaml.caution);
+			this.cautions = arrayHelper.parseArray(stepYaml.caution).map(this.replaceTaskRoles);
 		}
 
 		// Check for comments
 		if (stepYaml.comment) {
-			this.comments = arrayHelper.parseArray(stepYaml.comment);
+			this.comments = arrayHelper.parseArray(stepYaml.comment).map(this.replaceTaskRoles);
 		}
 
 		// Check for notes
 		if (stepYaml.note) {
-			this.notes = arrayHelper.parseArray(stepYaml.note);
+			this.notes = arrayHelper.parseArray(stepYaml.note).map(this.replaceTaskRoles);
 		}
 
 		// Check for substeps
@@ -90,6 +90,28 @@ module.exports = class Step {
 
 	}
 
+	mapTaskRolesToActor(taskRoles) {
+		this.taskRoles = taskRoles;
+		const taskRolesMap = {};
+		for (const role in taskRoles) {
+			taskRolesMap[role] = taskRoles[role].actor;
+		}
+		this.replaceTaskRoles = function(text) {
+			for (const role in taskRolesMap) {
+				text = text.replace(`{{role:${role}}}`, taskRolesMap[role]);
+			}
+			return text;
+		};
+	}
+
+	// replaceTaskRoles(text) { return text; }
+	// replaceTaskRoles(text) {
+	// 	for (let role in this.taskRolesMap) {
+	// 		text = text.replace(`{{role:${role}}}`,this.taskRolesMap[role]);
+	// 	}
+	// 	return text;
+	// }
+
 	/**
      * Return the title. FFIXME: what's the point of this?
      *
@@ -97,7 +119,8 @@ module.exports = class Step {
      * @return  {*} array of substeps
      */
 	parseTitle(titleYaml) {
-		return titleYaml;
+		// return titleYaml;
+		return this.replaceTaskRoles(titleYaml);
 	}
 
 	/**
@@ -109,7 +132,8 @@ module.exports = class Step {
      * @return  {Array} array of substeps
      */
 	parseStepText(stepTextYaml) {
-		return stepTextYaml;
+		// return stepTextYaml;
+		return this.replaceTaskRoles(stepTextYaml);
 	}
 
 	/**
@@ -125,6 +149,7 @@ module.exports = class Step {
 		// Check for string
 		if (typeof substepsYaml === 'string') {
 			const substep = new Step();
+			substep.mapTaskRolesToActor(this.taskRoles);
 			substep.populateFromYaml(substepsYaml);
 			substeps.push(substep);
 
@@ -132,6 +157,7 @@ module.exports = class Step {
 		} else if (Array.isArray(substepsYaml)) {
 			for (var substepYaml of substepsYaml) {
 				const substep = new Step();
+				substep.mapTaskRolesToActor(this.taskRoles);
 				substep.populateFromYaml(substepYaml);
 				substeps.push(substep);
 			}
@@ -144,4 +170,5 @@ module.exports = class Step {
 		return substeps;
 
 	}
+
 };
