@@ -32,7 +32,7 @@ function setCssFilename(filename) {
 /*
  * Create the html from the template file
  */
-function createHtml(evaTask, htmlFileTemplate, callback) {
+function createHtml(procedure, htmlFileTemplate, callback) {
 
 	// Get the directory and main template name
 	var templatePath = path.resolve(htmlFileTemplate);
@@ -101,10 +101,10 @@ function createHtml(evaTask, htmlFileTemplate, callback) {
 		return `${dir}/${imageName}`;
 	});
 
-	// Create the object passed into nunjucks from the evaTask and the css file
+	// Create the object passed into nunjucks from the procedure and the css file
 	// (if it exists)
 	var nunjucksObject = {
-		procedure: evaTask,
+		procedure: procedure,
 		version: ver.currentVersion
 	};
 

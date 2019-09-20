@@ -96,46 +96,14 @@ function genHtml(program, procedure) {
 	// Generate the HTML output file
 	// eslint-disable-next-line no-use-before-define
 	generateHtmlChecklist(procedure, program, function() {
-		if (!fs.existsSync(program.output)) {
+		if (!fs.existsSync(program.outputPath)) {
 			console.error('Failed to generate HTML output');
 			return;
 		}
 
-		console.log(`HTML output written to: \t${program.output}`);
-		console.log(`HTML url for browser: \t\tfile://${path.resolve(program.output)}`);
-
-		if (program.pandoc) {
-			genPandocDocx(program); // eslint-disable-line no-use-before-define
-		}
+		console.log(`HTML output written to: \t${program.outputPath}`);
+		console.log(`HTML url for browser: \t\tfile://${path.resolve(program.outputPath)}`);
 	});
-}
-
-/**
- * High level function to generate DOCX output using Pandoc
- *
- * @param   {*} program       Program arguments and stuff
- */
-function genPandocDocx(program) {
-
-	//  Perform HTML -> DOCX conversion
-
-	//  Figure out docx output filename
-	const p = path.parse(program.output);
-	const ext = p.ext;
-	const docfile = program.output.replace(ext, '.pandoc.docx');
-
-	//  Outsource the conversion to pandoc
-	//  WARNING: NEVER USE THIS ON A WEB SERVER!
-	const command = `pandoc -s -o ${docfile} -t html5 -t docx ${program.output}`;
-	child.execSync(command);
-
-	if (!fs.existsSync(docfile)) {
-		console.error('Failed to generate DOCX output');
-		return;
-	}
-
-	console.log(`DOCX output written to: \t${docfile}`);
-
 }
 
 function increaseVerbosity(dummyValue, previous) {
@@ -151,7 +119,6 @@ function increaseVerbosity(dummyValue, previous) {
  * @return  {*} TBD FIXME
  */
 function buildProgramArguments(program, args) {
-	const DEFAULT_TEMPLATE = 'templates/spacewalk.njk';
 
 	program
 		.version(ver.currentVersion, '--version')
@@ -172,13 +139,10 @@ function buildProgramArguments(program, args) {
 
 	program
 		.command('build [projectPath]')
-		.description('Build products for an xOPS project')
-		// .option('-i, --input <input.yml>', 'name the YAML file for this EVA')
-		// .option('-o, --output <.html>', 'name of output HTML file')
-		.option('-t, --template <.html>', 'specify a template to use', DEFAULT_TEMPLATE)
+		.description('Build products for PAT project')
+		.option('-t, --template <.html>', 'specify a template to use')
 		.option('--html', 'Generate HTML file', null)
 		.option('--sodf', 'Generate SODF style procedure', null)
-		.option('-p, --pandoc', 'Generate Word doc from HTML using Pandoc (requires --html option)', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
 		.action(function(projectPath, options) {
 			console.logIfVerbose(options, 3);
@@ -189,6 +153,9 @@ function buildProgramArguments(program, args) {
 			}
 			program.sodf = options.sodf;
 			program.html = options.html;
+			program.template = options.template
+				? options.template
+				: path.join(__dirname, 'templates', 'spacewalk.njk');
 		});
 
 	//  Commander.js does an unhelpful thing if there are invalid options;
@@ -293,22 +260,24 @@ function validateProgramArguments(program) {
  * This function generates a checklist in HTML format and calls the callback
  * when complete.
  *
- * @param   {*} evaTaskList  TBD
- * @param   {*} program      TBD
- * @param   {*} callback     TBD
+ * @param   {*} procedure  TBD
+ * @param   {*} program    TBD
+ * @param   {*} callback   TBD
  * @return  {*} TBD FIXME
  */
-async function generateHtmlChecklist(evaTaskList, program, callback) {
-	const outputFile = path.resolve(program.output);
+async function generateHtmlChecklist(procedure, program, callback) {
 
-	html.params.inputDir(path.resolve(path.dirname(program.input)));
-	html.params.outputDir(path.resolve(path.dirname(program.output)));
-	html.params.htmlFile(outputFile);
+	html.params.inputDir(program.imagesPath);
+	html.params.outputDir(program.outputPath);
+	html.params.htmlFile(path.join(
+		program.outputPath,
+		`${procedure.filename}.html`
+	));
 	if (program.css) {
 		html.params.cssFile(path.resolve(program.css));
 	}
 
-	html.create(evaTaskList, program.template, callback);
+	html.create(procedure, program.template, callback);
 }
 
 module.exports = {

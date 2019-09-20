@@ -132,6 +132,8 @@ module.exports = class Procedure {
      */
 	async populateFromFile(fileName) {
 
+		this.procedureFile = fileName;
+
 		try {
 
 			// Check if the file exists
