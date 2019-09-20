@@ -20,14 +20,9 @@ module.exports = class Task {
 		}
 		this.title = taskDefinition.title;
 
-		// Get the duration
-		if (!taskDefinition.duration) {
-			throw new Error(`Input YAML task missing duration: ${JSON.stringify(taskDefinition)}`);
-		}
-		this.duration = taskDefinition.duration;
-
 		if (taskDefinition.roles) {
-			this.roles = {};
+			this.rolesDict = {};
+			this.rolesArr = [];
 			for (const role of taskDefinition.roles) {
 				if (!role.name) {
 					consoleHelper.error([
@@ -35,7 +30,8 @@ module.exports = class Task {
 						role
 					], 'Task role definition error');
 				}
-				this.roles[role.name] = new TaskRole(role, proceduresTaskInstance);
+				this.rolesDict[role.name] = new TaskRole(role, proceduresTaskInstance);
+				this.rolesArr.push(this.rolesDict[role.name]);
 			}
 		}
 
@@ -45,7 +41,7 @@ module.exports = class Task {
 		}
 		this.concurrentSteps = [];
 		for (var concurrentStepYaml of taskDefinition.steps) {
-			this.concurrentSteps.push(new ConcurrentStep(concurrentStepYaml, this.roles));
+			this.concurrentSteps.push(new ConcurrentStep(concurrentStepYaml, this.rolesDict));
 		}
 
 		if (procedureColumnKeys) {

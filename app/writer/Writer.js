@@ -237,10 +237,27 @@ module.exports = class Writer {
 	}
 
 	genHeader(task) {
+
+		const durationDisplays = [];
+		let durationDisplay;
+
+		for (const role of task.rolesArr) {
+			durationDisplays.push(role.duration.format('H:M'));
+		}
+
+		// if all the duration displays are the same
+		if (durationDisplays.every((val, i, arr) => val === arr[0])) {
+			durationDisplay = durationDisplays[0];
+
+		// not the same, concatenate them
+		} else {
+			durationDisplay = durationDisplays.join(' / ');
+		}
+
 		return new docx.Header({
 			children: [new docx.Paragraph({
 				children: [new docx.TextRun({
-					text: `${this.procedure.name} - ${task.title} (${task.duration})`,
+					text: `${this.procedure.name} - ${task.title} (${durationDisplay})`,
 					bold: true,
 					size: 24, // half-points, so double the point height
 					font: {
