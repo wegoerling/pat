@@ -48,6 +48,22 @@ function mapActorToColumn(columnDefinition) {
 	return actorToColumn;
 }
 
+function mapColumnKeyToDisplay(columnDefinition) {
+
+	// Create a mapping of actor --> column
+	const columnToDisplay = {};
+
+	for (const col of columnDefinition) {
+		if (col.display) {
+			columnToDisplay[col.key] = col.display;
+		} else {
+			columnToDisplay[col.key] = col.key;
+		}
+	}
+
+	return columnToDisplay;
+}
+
 module.exports = class Procedure {
 
 	constructor() {
@@ -146,6 +162,8 @@ module.exports = class Procedure {
 			}
 
 			this.actorToColumn = mapActorToColumn(this.columns);
+			this.columnToDisplay = mapColumnKeyToDisplay(this.columns);
+
 
 			// Save the tasks
 			for (const proceduresTaskInstance of procedureYaml.tasks) {
