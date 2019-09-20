@@ -3,7 +3,7 @@
 const docx = require('docx');
 const Writer = require('./Writer');
 
-module.exports = class ThreeColDocx extends Writer {
+module.exports = class EvaDocxWriter extends Writer {
 
 	constructor(program, procedure) {
 		super(program, procedure);

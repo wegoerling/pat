@@ -14,7 +14,7 @@ const html = require('./app/helpers/nunjucksHelper').generators;
 const consoleHelper = require('./app/helpers/consoleHelper');
 
 const Procedure = require('./app/model/procedure');
-const ThreeColDocx = require('./app/writer/ThreeColDocx');
+const EvaDocxWriter = require('./app/writer/EvaDocxWriter');
 const SodfDocxWriter = require('./app/writer/SodfDocxWriter');
 
 /**
@@ -59,8 +59,8 @@ function run(args) {
 
 				// genDocx...
 				console.log('Creating EVA format');
-				const threecoldocx = new ThreeColDocx(program, procedure);
-				threecoldocx.writeFile(path.join(
+				const eva = new EvaDocxWriter(program, procedure);
+				eva.writeFile(path.join(
 					program.outputPath,
 					`${procedure.filename}.docx`
 				));
