@@ -1,6 +1,9 @@
 'use strict';
 
-const arrayHelper = require('../helpers/arrayHelper.js');
+const arrayHelper = require('../helpers/arrayHelper');
+const consoleHelper = require('../helpers/consoleHelper');
+
+const Duration = require('./Duration');
 
 module.exports = class Step {
 
@@ -25,9 +28,33 @@ module.exports = class Step {
 			return;
 		}
 
+		this.duration = new Duration(stepYaml.duration);
+
 		// Check for the title
 		if (stepYaml.title) {
 			this.title = this.parseTitle(stepYaml.title);
+			const titleWarnings = [];
+
+			// check if text like "(01:15)" is in the title and warn against it
+			const regex = /\([\d\w]{2}:[\d\w]{2}\)/g;
+			if (regex.test(this.title)) {
+				titleWarnings.push(
+					`Should not have "${this.title.match(regex)}" within title, use duration field`
+				);
+			}
+
+			// check if duration is zero, and recommend adding duration
+			if (this.duration.getTotalSeconds() === 0) {
+				titleWarnings.push(
+					'Should include "duration" field with hours, minutes, and/or seconds field'
+				);
+				titleWarnings.push(`Example:\n     duration:\n       hours: 1\n       minutes: 15`);
+			}
+
+			// warn if necessary
+			if (titleWarnings.length > 0) {
+				consoleHelper.warn(titleWarnings, `Title "${this.title}"`);
+			}
 		}
 
 		// Check for the text
@@ -52,10 +79,6 @@ module.exports = class Step {
 					throw new Error(`Height should be empty or a positive integery: ${image.path}`);
 				}
 			}
-		}
-
-		if (stepYaml.minutes) {
-			this.minutes = stepYaml.minutes;
 		}
 
 		// Check for checkboxes
