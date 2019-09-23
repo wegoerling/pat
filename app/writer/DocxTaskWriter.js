@@ -6,7 +6,7 @@ const docx = require('docx');
 const getImageFileDimensions = require('image-size');
 const consoleHelper = require('../helpers/consoleHelper');
 
-module.exports = class DocxHandler {
+module.exports = class DocxTaskWriter {
 
 	constructor(docWrapper) {
 		this.docWrapper = docWrapper;

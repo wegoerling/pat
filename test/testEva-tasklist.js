@@ -1,4 +1,4 @@
-/* Specify environment to include mocha globals */
+/* Specify environment to include mocha globals, like 'describe' */
 /* eslint-env node, mocha */
 
 /**

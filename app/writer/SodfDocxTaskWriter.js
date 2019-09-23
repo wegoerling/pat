@@ -1,9 +1,9 @@
 'use strict';
 
 // const docx = require('docx');
-const DocxHandler = require('./DocxHandler');
+const DocxTaskWriter = require('./DocxTaskWriter');
 
-module.exports = class DocxSodfHandler extends DocxHandler {
+module.exports = class SodfDocxTaskWriter extends DocxTaskWriter {
 
 	constructor(task, docWrapper) {
 		super(docWrapper);
@@ -32,7 +32,7 @@ module.exports = class DocxSodfHandler extends DocxHandler {
 	}
 
 	/**
-	 * For the DocxTableHandler type, the content is all within the docx table.
+	 * For the EvaDocxTaskWriter type, the content is all within the docx table.
 	 * However, it must be wrapped in an array since docx.Document.addSection
 	 * expects one argument: an object with { children: anIterable }.
 	 *

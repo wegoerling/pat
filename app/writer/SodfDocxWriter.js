@@ -2,7 +2,7 @@
 
 const docx = require('docx');
 const DocxWriter = require('./DocxWriter');
-const DocxSodfHandler = require('./DocxSodfHandler');
+const SodfDocxTaskWriter = require('./SodfDocxTaskWriter');
 
 module.exports = class SodfDocxWriter extends DocxWriter {
 
@@ -33,7 +33,7 @@ module.exports = class SodfDocxWriter extends DocxWriter {
 
 	renderTask(task) {
 
-		const handler = new DocxSodfHandler(
+		const handler = new SodfDocxTaskWriter(
 			task,
 			this
 		);

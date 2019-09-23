@@ -3,7 +3,7 @@
 const docx = require('docx');
 
 const DocxWriter = require('./DocxWriter');
-const DocxTableHandler = require('./DocxTableHandler');
+const EvaDocxTaskWriter = require('./EvaDocxTaskWriter');
 
 module.exports = class EvaDocxWriter extends DocxWriter {
 
@@ -34,7 +34,7 @@ module.exports = class EvaDocxWriter extends DocxWriter {
 
 	renderTask(task) {
 
-		const handler = new DocxTableHandler(
+		const handler = new EvaDocxTaskWriter(
 			task,
 			this
 		);
