@@ -5,9 +5,9 @@ const docx = require('docx');
 
 const consoleHelper = require('../helpers/consoleHelper');
 
-const Writer = require('./Writer');
+const ProcedureWriter = require('./ProcedureWriter');
 
-module.exports = class DocxWriter extends Writer {
+module.exports = class DocxProcedureWriter extends ProcedureWriter {
 
 	constructor(program, procedure) {
 		super(program, procedure);

@@ -1,24 +1,25 @@
 'use strict';
 
 const docx = require('docx');
-const DocxWriter = require('./DocxWriter');
-const SodfDocxTaskWriter = require('./SodfDocxTaskWriter');
 
-module.exports = class SodfDocxWriter extends DocxWriter {
+const DocxProcedureWriter = require('./DocxProcedureWriter');
+const EvaDocxTaskWriter = require('./EvaDocxTaskWriter');
+
+module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 
 	constructor(program, procedure) {
 		super(program, procedure);
 	}
 
 	getRightTabPosition() {
-		return 10800;
+		return 14400;
 	}
 
 	getPageSize() {
 		return {
-			width: 12240,
+			width: 12240, // width and height transposed in LANDSCAPE
 			height: 15840,
-			orientation: docx.PageOrientation.PORTRAIT
+			orientation: docx.PageOrientation.LANDSCAPE
 		};
 	}
 
@@ -33,10 +34,12 @@ module.exports = class SodfDocxWriter extends DocxWriter {
 
 	renderTask(task) {
 
-		const handler = new SodfDocxTaskWriter(
+		const handler = new EvaDocxTaskWriter(
 			task,
 			this
 		);
+
+		handler.setContainerHeader();
 
 		handler.writeDivisions();
 

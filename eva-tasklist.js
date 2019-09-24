@@ -14,8 +14,8 @@ const html = require('./app/helpers/nunjucksHelper').generators;
 const consoleHelper = require('./app/helpers/consoleHelper');
 
 const Procedure = require('./app/model/procedure');
-const EvaDocxWriter = require('./app/writer/EvaDocxWriter');
-const SodfDocxWriter = require('./app/writer/SodfDocxWriter');
+const EvaDocxProcedureWriter = require('./app/writer/EvaDocxProcedureWriter');
+const SodfDocxProcedureWriter = require('./app/writer/SodfDocxProcedureWriter');
 
 /**
  * Surrogate program entry point
@@ -59,7 +59,7 @@ function run(args) {
 
 				// genDocx...
 				console.log('Creating EVA format');
-				const eva = new EvaDocxWriter(program, procedure);
+				const eva = new EvaDocxProcedureWriter(program, procedure);
 				eva.writeFile(path.join(
 					program.outputPath,
 					`${procedure.filename}.docx`
@@ -67,7 +67,7 @@ function run(args) {
 
 				if (program.sodf) {
 					console.log('Creating SODF format');
-					const sodf = new SodfDocxWriter(program, procedure);
+					const sodf = new SodfDocxProcedureWriter(program, procedure);
 					sodf.writeFile(path.join(
 						program.outputPath,
 						`${procedure.filename}.sodf.docx`

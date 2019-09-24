@@ -3,7 +3,7 @@
 const fs = require('fs');
 const childProcess = require('child_process');
 
-module.exports = class Writer {
+module.exports = class ProcedureWriter {
 
 	constructor(program, procedure) {
 		this.program = program;
