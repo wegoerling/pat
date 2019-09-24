@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const docx = require('docx');
 const getImageFileDimensions = require('image-size');
-const consoleHelper = require('../helpers/consoleHelper');
+const consoleHelper = require('../../helpers/consoleHelper');
 
 module.exports = class DocxTaskWriter {
 

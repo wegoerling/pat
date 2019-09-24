@@ -3,7 +3,7 @@
 const fs = require('fs');
 const docx = require('docx');
 
-const consoleHelper = require('../helpers/consoleHelper');
+const consoleHelper = require('../../helpers/consoleHelper');
 
 const ProcedureWriter = require('./ProcedureWriter');
 

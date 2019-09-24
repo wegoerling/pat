@@ -14,8 +14,8 @@ const html = require('./app/helpers/nunjucksHelper').generators;
 const consoleHelper = require('./app/helpers/consoleHelper');
 
 const Procedure = require('./app/model/procedure');
-const EvaDocxProcedureWriter = require('./app/writer/EvaDocxProcedureWriter');
-const SodfDocxProcedureWriter = require('./app/writer/SodfDocxProcedureWriter');
+const EvaDocxProcedureWriter = require('./app/writer/procedure/EvaDocxProcedureWriter');
+const SodfDocxProcedureWriter = require('./app/writer/procedure/SodfDocxProcedureWriter');
 
 /**
  * Surrogate program entry point
