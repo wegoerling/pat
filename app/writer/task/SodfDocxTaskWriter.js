@@ -5,10 +5,8 @@ const DocxTaskWriter = require('./DocxTaskWriter');
 
 module.exports = class SodfDocxTaskWriter extends DocxTaskWriter {
 
-	constructor(task, docWrapper) {
-		super(docWrapper);
-
-		this.task = task;
+	constructor(task, procedureWriter) {
+		super(task, procedureWriter);
 
 		this.container = {
 			children: [],

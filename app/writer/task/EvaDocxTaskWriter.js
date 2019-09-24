@@ -5,10 +5,9 @@ const DocxTaskWriter = require('./DocxTaskWriter');
 
 module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 
-	constructor(task, docWrapper/* procedure, doc*/) {
-		super(docWrapper);
+	constructor(task, procedureWriter) {
+		super(task, procedureWriter);
 
-		this.task = task;
 		this.taskColumns = task.getColumns(task); // FIXME no need to pass task into getColumns
 
 		this.numCols = this.taskColumns.length;

@@ -8,12 +8,15 @@ const consoleHelper = require('../../helpers/consoleHelper');
 
 module.exports = class DocxTaskWriter {
 
-	constructor(docWrapper) {
-		this.docWrapper = docWrapper;
-		this.procedure = docWrapper.procedure;
-		this.doc = docWrapper.doc;
+	constructor(task, procedureWriter) {
 
-		this.docWrapper.taskNumbering = null;
+		this.task = task;
+
+		this.procedureWriter = procedureWriter;
+		this.procedure = procedureWriter.procedure;
+		this.doc = procedureWriter.doc;
+
+		this.procedureWriter.taskNumbering = null;
 		this.getNumbering();
 
 		this.maxImageWidth = 800; // landscape: 800, portrait probably 640
@@ -124,7 +127,7 @@ module.exports = class DocxTaskWriter {
 
 	addImages(images) {
 
-		const imagesPath = this.docWrapper.program.imagesPath;
+		const imagesPath = this.procedureWriter.program.imagesPath;
 		for (const imageMeta of images) {
 
 			const imagePath = path.join(imagesPath, imageMeta.path);
@@ -227,25 +230,25 @@ module.exports = class DocxTaskWriter {
 	}
 
 	getNumbering() {
-		this.docWrapper.taskNumbering = {};
+		this.procedureWriter.taskNumbering = {};
 
 		// const numbering = new docx.Numbering();
 		// const abstractNum = numbering.createAbstractNumbering();
 		// const abstractNum = doc.Numbering.createAbstractNumbering();
-		this.docWrapper.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
+		this.procedureWriter.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
 
 		for (let i = 0; i < 3; i++) {
 			// var stepText = getLongStepString(i);
-			var indents = this.docWrapper.getIndents(i);
-			this.docWrapper.levels[i] = this.docWrapper.taskNumbering.abstract.createLevel(
-				i, this.docWrapper.levelTypes[i], `%${i + 1}.`, 'left'
+			var indents = this.procedureWriter.getIndents(i);
+			this.procedureWriter.levels[i] = this.procedureWriter.taskNumbering.abstract.createLevel(
+				i, this.procedureWriter.levelTypes[i], `%${i + 1}.`, 'left'
 			);
-			this.docWrapper.levels[i].indent({ left: indents.left, hanging: indents.hanging });
-			this.docWrapper.levels[i].leftTabStop(indents.tab);
+			this.procedureWriter.levels[i].indent({ left: indents.left, hanging: indents.hanging });
+			this.procedureWriter.levels[i].leftTabStop(indents.tab);
 		}
 
-		this.docWrapper.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
-			this.docWrapper.taskNumbering.abstract
+		this.procedureWriter.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
+			this.procedureWriter.taskNumbering.abstract
 		);
 	}
 
@@ -294,23 +297,23 @@ module.exports = class DocxTaskWriter {
 		}
 
 		if (step.warnings.length) {
-			this.addBlock('warning', step.warnings, this.docWrapper.taskNumbering);
+			this.addBlock('warning', step.warnings, this.procedureWriter.taskNumbering);
 		}
 		if (step.cautions.length) {
-			this.addBlock('caution', step.cautions, this.docWrapper.taskNumbering);
+			this.addBlock('caution', step.cautions, this.procedureWriter.taskNumbering);
 		}
 		if (step.notes.length) {
-			this.addBlock('note', step.notes, this.docWrapper.taskNumbering);
+			this.addBlock('note', step.notes, this.procedureWriter.taskNumbering);
 		}
 		if (step.comments.length) {
-			this.addBlock('comment', step.comments, this.docWrapper.taskNumbering);
+			this.addBlock('comment', step.comments, this.procedureWriter.taskNumbering);
 		}
 
 		if (step.text) {
 			this.addParagraph({
 				text: this.markupFilter(step.text),
 				numbering: {
-					num: this.docWrapper.taskNumbering.concrete,
+					num: this.procedureWriter.taskNumbering.concrete,
 					level: level
 				}
 			});
@@ -327,7 +330,7 @@ module.exports = class DocxTaskWriter {
 				this.addParagraph({
 					text: this.markupFilter(`☐ ${checkstep}`),
 					numbering: {
-						num: this.docWrapper.taskNumbering.concrete,
+						num: this.procedureWriter.taskNumbering.concrete,
 						level: level + 1
 					}
 				});
