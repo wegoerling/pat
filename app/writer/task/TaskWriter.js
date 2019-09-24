@@ -1,9 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const docx = require('docx');
-const getImageFileDimensions = require('image-size');
 const consoleHelper = require('../../helpers/consoleHelper');
 
 module.exports = class TaskWriter {
@@ -21,14 +17,14 @@ module.exports = class TaskWriter {
 
 		this.container = null;
 
-		let abstractMethods = [
+		const abstractMethods = [
 			'addImages',
 			'addParagraph',
 			'addBlock',
 			'insertStep'
 		];
 
-		for(const fn of abstractMethods) {
+		for (const fn of abstractMethods) {
 			if (typeof this[fn] !== 'function') {
 				throw new Error(`Abstract method "${fn}" not implemented in class ${this.constructor.name}`);
 			}

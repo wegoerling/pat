@@ -48,7 +48,7 @@ module.exports = class Step {
 				titleWarnings.push(
 					'Should include "duration" field with hours, minutes, and/or seconds field'
 				);
-				titleWarnings.push(`Example:\n     duration:\n       hours: 1\n       minutes: 15`);
+				titleWarnings.push('Example:\n     duration:\n       hours: 1\n       minutes: 15');
 			}
 
 			// warn if necessary

@@ -5,8 +5,6 @@ const path = require('path');
 const docx = require('docx');
 const getImageFileDimensions = require('image-size');
 
-const consoleHelper = require('../../helpers/consoleHelper');
-
 const TaskWriter = require('./TaskWriter');
 
 module.exports = class DocxTaskWriter extends TaskWriter {
@@ -128,9 +126,8 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		for (let i = 0; i < 3; i++) {
 			// var stepText = getLongStepString(i);
 			var indents = this.procedureWriter.getIndents(i);
-			this.procedureWriter.levels[i] = this.procedureWriter.taskNumbering.abstract.createLevel(
-				i, this.procedureWriter.levelTypes[i], `%${i + 1}.`, 'left'
-			);
+			this.procedureWriter.levels[i] = this.procedureWriter.taskNumbering.abstract
+				.createLevel(i, this.procedureWriter.levelTypes[i], `%${i + 1}.`, 'left');
 			this.procedureWriter.levels[i].indent({ left: indents.left, hanging: indents.hanging });
 			this.procedureWriter.levels[i].leftTabStop(indents.tab);
 		}

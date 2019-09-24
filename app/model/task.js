@@ -114,7 +114,8 @@ module.exports = class Task {
 	getColumnIndex(actorKey) {
 		const columnIndexes = this.getColumnIndexes();
 		if (typeof columnIndexes[actorKey] === 'undefined') {
-
+			throw new Error(`Unknown actor "${actorKey}" passed to getColumnIndex.
+				Column index = ${JSON.stringify(columnIndexes)}`);
 		} else {
 			return columnIndexes[actorKey];
 		}
