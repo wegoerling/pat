@@ -23,10 +23,6 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 
 	}
 
-	setContainer(container) {
-		this.container = container;
-	}
-
 	setContainerHeader() {
 
 		const columnKeys = this.task.getColumns();
