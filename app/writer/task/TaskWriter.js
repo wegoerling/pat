@@ -156,4 +156,44 @@ module.exports = class TaskWriter {
 		}
 	}
 
+	insertStep(step, level = 0) {
+
+		if (step.images) {
+			this.addImages(step.images);
+		}
+
+		if (step.title) {
+			this.addTitleText(step);
+		}
+
+		if (step.warnings.length) {
+			this.addBlock('warning', step.warnings);
+		}
+		if (step.cautions.length) {
+			this.addBlock('caution', step.cautions);
+		}
+		if (step.notes.length) {
+			this.addBlock('note', step.notes);
+		}
+		if (step.comments.length) {
+			this.addBlock('comment', step.comments);
+		}
+
+		if (step.text) {
+			this.addStepText(step.text, level);
+		}
+
+		if (step.substeps.length) {
+			for (const substep of step.substeps) {
+				this.insertStep(substep, level + 1);
+			}
+		}
+
+		if (step.checkboxes.length) {
+			for (const checkstep of step.checkboxes) {
+				this.addCheckStepText(checkstep, level + 1);
+			}
+		}
+
+	}
 };

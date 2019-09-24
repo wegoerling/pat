@@ -67,7 +67,9 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	}
 
 	// taskCell
-	addBlock(blockType, blockLines, numbering) {
+	addBlock(blockType, blockLines) {
+		const numbering = this.procedureWriter.taskNumbering;
+
 		const blockTable = new docx.Table({
 			rows: 2,
 			columns: 1
@@ -137,73 +139,34 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		);
 	}
 
-	insertStep(step, level = 0) {
-
-		// writeStep:
-		// step.text via markdownformatter
-		// loop over step.checkboxes via markdownformatter
-
-		if (step.images) {
-			this.addImages(step.images);
-		}
-
-		if (step.title) {
-			this.addParagraph({
-				children: [
-					new docx.TextRun({
-						text: step.title.toUpperCase().trim(),
-						underline: {
-							type: 'single'
-						}
-					}),
-					new docx.TextRun({
-						text: ` (${step.duration.format('H:M')})`
-					})
-				]
-			});
-		}
-
-		if (step.warnings.length) {
-			this.addBlock('warning', step.warnings, this.procedureWriter.taskNumbering);
-		}
-		if (step.cautions.length) {
-			this.addBlock('caution', step.cautions, this.procedureWriter.taskNumbering);
-		}
-		if (step.notes.length) {
-			this.addBlock('note', step.notes, this.procedureWriter.taskNumbering);
-		}
-		if (step.comments.length) {
-			this.addBlock('comment', step.comments, this.procedureWriter.taskNumbering);
-		}
-
-		if (step.text) {
-			this.addParagraph({
-				text: this.markupFilter(step.text),
-				numbering: {
-					num: this.procedureWriter.taskNumbering.concrete,
-					level: level
-				}
-			});
-		}
-
-		if (step.substeps.length) {
-			for (const substep of step.substeps) {
-				this.insertStep(substep, level + 1);
+	addStepText(stepText, level) {
+		this.addParagraph({
+			text: this.markupFilter(stepText),
+			numbering: {
+				num: this.procedureWriter.taskNumbering.concrete,
+				level: level
 			}
-		}
+		});
+	}
 
-		if (step.checkboxes.length) {
-			for (const checkstep of step.checkboxes) {
-				this.addParagraph({
-					text: this.markupFilter(`☐ ${checkstep}`),
-					numbering: {
-						num: this.procedureWriter.taskNumbering.concrete,
-						level: level + 1
+	addCheckStepText(stepText, level) {
+		this.addStepText(`☐ ${stepText}`, level);
+	}
+
+	addTitleText(step) {
+		this.addParagraph({
+			children: [
+				new docx.TextRun({
+					text: step.title.toUpperCase().trim(),
+					underline: {
+						type: 'single'
 					}
-				});
-			}
-		}
-
+				}),
+				new docx.TextRun({
+					text: ` (${step.duration.format('H:M')})`
+				})
+			]
+		});
 	}
 
 };
