@@ -109,7 +109,7 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 		this.container.add(`<ol ${start}>`);
 	}
 
-	postInsertSteps(level) {
+	postInsertSteps(level) { // eslint-disable-line no-unused-vars
 		this.container.add('</ol>');
 	}
 

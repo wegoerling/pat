@@ -158,11 +158,11 @@ module.exports = class TaskWriter {
 		}
 	}
 
-	preInsertSteps(level) {
+	preInsertSteps(level) { // eslint-disable-line no-unused-vars
 		return 'preInsertSteps(): No action for base TaskWriter class';
 	}
 
-	postInsertSteps(level) {
+	postInsertSteps(level) { // eslint-disable-line no-unused-vars
 		return 'postInsertSteps(): No action for base TaskWriter class';
 	}
 
