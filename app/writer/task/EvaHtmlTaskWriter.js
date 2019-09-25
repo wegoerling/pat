@@ -1,16 +1,13 @@
 'use strict';
 
 const path = require('path');
-const docx = require('docx');
 
-const consoleHelper = require('../../helpers/consoleHelper');
 const nunjucks = require('nunjucks');
 
 const nunjucksEnvironment = new nunjucks.Environment(
 	new nunjucks.FileSystemLoader(path.join(__dirname, '../../view')),
 	{ autoescape: false }
 );
-
 
 const HtmlTaskWriter = require('./HtmlTaskWriter');
 
@@ -83,7 +80,7 @@ module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 
 	writeSeries(container, series) {
 		this.setContainer(container);
-		this.preInsertSteps()
+		this.preInsertSteps();
 		for (const step of series) {
 			this.insertStep(step);
 		}

@@ -59,13 +59,14 @@ function run(args) {
 				console.logIfVerbose(program, 2, 4);
 				console.logIfVerbose(procedure, 1, 3);
 
-				// genDocx...
-				console.log('Creating EVA format');
-				const eva = new EvaDocxProcedureWriter(program, procedure);
-				eva.writeFile(path.join(
-					program.outputPath,
-					`${procedure.filename}.docx`
-				));
+				if (program.EvaDocx) {
+					console.log('Creating EVA format');
+					const eva = new EvaDocxProcedureWriter(program, procedure);
+					eva.writeFile(path.join(
+						program.outputPath,
+						`${procedure.filename}.docx`
+					));
+				}
 
 				if (program.sodf) {
 					console.log('Creating SODF format');
@@ -77,15 +78,16 @@ function run(args) {
 				}
 
 				if (program.html) {
-					// genHtml(program, procedure); // eslint-disable-line no-use-before-define
-
 					console.log('Creating EVA HTML format');
 					const evaHtml = new EvaHtmlProcedureWriter(program, procedure);
 					evaHtml.writeFile(path.join(
 						program.outputPath,
 						`${procedure.filename}.eva.html`
 					));
+				}
 
+				if (program.oldhtml) {
+					genHtml(program, procedure); // eslint-disable-line no-use-before-define
 				}
 			});
 
@@ -152,6 +154,9 @@ function buildProgramArguments(program, args) {
 		.option('-t, --template <.html>', 'specify a template to use')
 		.option('--html', 'Generate HTML file', null)
 		.option('--sodf', 'Generate SODF style procedure', null)
+
+		// note: this will generate an options.evaDocx property, not noEvaDocx
+		.option('--no-eva-docx', 'Don\'t generate the default EVA DOCX file', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
 		.action(function(projectPath, options) {
 			console.logIfVerbose(options, 3);
@@ -160,8 +165,10 @@ function buildProgramArguments(program, args) {
 			} else {
 				program.projectPath = process.cwd();
 			}
+
 			program.sodf = options.sodf;
 			program.html = options.html;
+			program.evaDocx = options.evaDocx;
 			program.template = options.template || path.join(
 				__dirname, 'templates', 'spacewalk.njk'
 			);

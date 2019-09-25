@@ -200,7 +200,7 @@ module.exports = class TaskWriter {
 		}
 
 		if (step.checkboxes.length) {
-			this.preInsertSteps()
+			this.preInsertSteps();
 			for (const checkstep of step.checkboxes) {
 				this.addCheckStepText(checkstep, level + 1);
 			}

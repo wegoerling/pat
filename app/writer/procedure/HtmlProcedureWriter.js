@@ -2,13 +2,12 @@
 
 const path = require('path');
 const fs = require('fs');
-const docx = require('docx');
+
 const nunjucks = require('nunjucks');
 const nunjucksEnvironment = new nunjucks.Environment(
 	new nunjucks.FileSystemLoader(path.join(__dirname, '../../view')),
 	{ autoescape: false }
 );
-
 
 const consoleHelper = require('../../helpers/consoleHelper');
 
@@ -18,8 +17,6 @@ module.exports = class HtmlProcedureWriter extends ProcedureWriter {
 
 	constructor(program, procedure) {
 		super(program, procedure);
-
-
 
 		// Properties handled in CSS
 		// initialIndent
@@ -39,7 +36,7 @@ module.exports = class HtmlProcedureWriter extends ProcedureWriter {
 	// Handle with CSS
 	// getIndents(levelIndex)
 
-	wrapDocument(content) {
+	wrapDocument() {
 		return nunjucksEnvironment.render('document.html', {
 			title: this.procedure.name,
 			content: this.content,

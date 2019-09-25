@@ -1,7 +1,5 @@
 'use strict';
 
-const docx = require('docx');
-
 const HtmlProcedureWriter = require('./HtmlProcedureWriter');
 const EvaHtmlTaskWriter = require('../task/EvaHtmlTaskWriter');
 

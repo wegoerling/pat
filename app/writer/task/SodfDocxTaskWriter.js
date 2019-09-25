@@ -24,7 +24,7 @@ module.exports = class SodfDocxTaskWriter extends DocxTaskWriter {
 	}
 
 	writeSeries(series) {
-		this.preInsertSteps()
+		this.preInsertSteps();
 		for (const step of series) {
 			this.insertStep(step);
 		}

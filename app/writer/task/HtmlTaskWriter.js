@@ -2,14 +2,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const docx = require('docx');
+
 const getImageFileDimensions = require('image-size');
 const nunjucks = require('nunjucks');
 const nunjucksEnvironment = new nunjucks.Environment(
 	new nunjucks.FileSystemLoader(path.join(__dirname, '../../view')),
 	{ autoescape: false }
 );
-
 
 const consoleHelper = require('../../helpers/consoleHelper');
 const TaskWriter = require('./TaskWriter');
@@ -83,7 +82,9 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 	// getNumbering() {}
 
 	addStepText(stepText, level) {
-		this.container.add(`<li>${this.markupFilter(stepText)}</li>`);
+		// added class li-level-${level} really just as a way to remind that
+		// some handling of this will be necessary
+		this.container.add(`<li class="li-level-${level}">${this.markupFilter(stepText)}</li>`);
 	}
 
 	addCheckStepText(stepText, level) {
