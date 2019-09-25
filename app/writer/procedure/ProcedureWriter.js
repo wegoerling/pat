@@ -8,6 +8,19 @@ module.exports = class ProcedureWriter {
 	constructor(program, procedure) {
 		this.program = program;
 		this.procedure = procedure;
+
+		const abstractMethods = [
+			'writeFile',
+			'getPageSize',
+			'getPageMargins',
+			'getRightTabPosition'
+		];
+
+		for (const fn of abstractMethods) {
+			if (typeof this[fn] !== 'function') {
+				throw new Error(`Abstract method "${fn}" not implemented in class ${this.constructor.name}`);
+			}
+		}
 	}
 
 	/**
@@ -82,22 +95,6 @@ module.exports = class ProcedureWriter {
 
 	getLastModifiedBy() {
 		return ''; // FIXME: get this from git repo if available
-	}
-
-	writeFile() {
-		throw new Error('Abstract function not implemented');
-	}
-
-	getPageSize() {
-		throw new Error('Abstract function not implemented');
-	}
-
-	getPageMargins() {
-		throw new Error('Abstract function not implemented');
-	}
-
-	getRightTabPosition() {
-		throw new Error('Abstract function not implemented');
 	}
 
 };
