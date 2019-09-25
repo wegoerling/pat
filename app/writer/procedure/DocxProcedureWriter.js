@@ -121,21 +121,7 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 
 	genHeader(task) {
 
-		const durationDisplays = [];
-		let durationDisplay;
-
-		for (const role of task.rolesArr) {
-			durationDisplays.push(role.duration.format('H:M'));
-		}
-
-		// if all the duration displays are the same
-		if (durationDisplays.every((val, i, arr) => val === arr[0])) {
-			durationDisplay = durationDisplays[0];
-
-		// not the same, concatenate them
-		} else {
-			durationDisplay = durationDisplays.join(' / ');
-		}
+		const durationDisplay = this.getTaskDurationDisplay(task);
 
 		return new docx.Header({
 			children: [new docx.Paragraph({
