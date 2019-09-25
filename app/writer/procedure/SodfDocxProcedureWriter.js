@@ -1,10 +1,10 @@
 'use strict';
 
 const docx = require('docx');
-const Writer = require('./Writer');
-const DocxSodfHandler = require('./DocxSodfHandler');
+const DocxProcedureWriter = require('./DocxProcedureWriter');
+const SodfDocxTaskWriter = require('../task/SodfDocxTaskWriter');
 
-module.exports = class SodfDocxWriter extends Writer {
+module.exports = class SodfDocxProcedureWriter extends DocxProcedureWriter {
 
 	constructor(program, procedure) {
 		super(program, procedure);
@@ -33,7 +33,7 @@ module.exports = class SodfDocxWriter extends Writer {
 
 	renderTask(task) {
 
-		const handler = new DocxSodfHandler(
+		const handler = new SodfDocxTaskWriter(
 			task,
 			this
 		);

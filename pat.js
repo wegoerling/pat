@@ -14,16 +14,18 @@ const html = require('./app/helpers/nunjucksHelper').generators;
 const consoleHelper = require('./app/helpers/consoleHelper');
 
 const Procedure = require('./app/model/procedure');
-const ThreeColDocx = require('./app/writer/ThreeColDocx');
-const SodfDocxWriter = require('./app/writer/SodfDocxWriter');
-
+const EvaDocxProcedureWriter = require('./app/writer/procedure/EvaDocxProcedureWriter');
+const SodfDocxProcedureWriter = require('./app/writer/procedure/SodfDocxProcedureWriter');
+const EvaHtmlProcedureWriter = require('./app/writer/procedure/EvaHtmlProcedureWriter');
 /**
  * Surrogate program entry point
  *
  * @param   {*} args Command line arguments
  */
 function run(args) {
-	program.fullName = `Procedure authoring thing v${pjson.version}`;
+	program.fullName = `Procedure Author Thing v${pjson.version}`;
+	program.repoURL = pjson.repository.url;
+
 	console.log(`${program.fullName}\n`);
 
 	// Use Commander to process command line arguments
@@ -57,17 +59,18 @@ function run(args) {
 				console.logIfVerbose(program, 2, 4);
 				console.logIfVerbose(procedure, 1, 3);
 
-				// genDocx...
-				console.log('Creating EVA format');
-				const threecoldocx = new ThreeColDocx(program, procedure);
-				threecoldocx.writeFile(path.join(
-					program.outputPath,
-					`${procedure.filename}.docx`
-				));
+				if (program.evaDocx) {
+					console.log('Creating EVA format');
+					const eva = new EvaDocxProcedureWriter(program, procedure);
+					eva.writeFile(path.join(
+						program.outputPath,
+						`${procedure.filename}.docx`
+					));
+				}
 
 				if (program.sodf) {
 					console.log('Creating SODF format');
-					const sodf = new SodfDocxWriter(program, procedure);
+					const sodf = new SodfDocxProcedureWriter(program, procedure);
 					sodf.writeFile(path.join(
 						program.outputPath,
 						`${procedure.filename}.sodf.docx`
@@ -75,6 +78,15 @@ function run(args) {
 				}
 
 				if (program.html) {
+					console.log('Creating EVA HTML format');
+					const evaHtml = new EvaHtmlProcedureWriter(program, procedure);
+					evaHtml.writeFile(path.join(
+						program.outputPath,
+						`${procedure.filename}.eva.html`
+					));
+				}
+
+				if (program.oldhtml) {
 					genHtml(program, procedure); // eslint-disable-line no-use-before-define
 				}
 			});
@@ -142,6 +154,9 @@ function buildProgramArguments(program, args) {
 		.option('-t, --template <.html>', 'specify a template to use')
 		.option('--html', 'Generate HTML file', null)
 		.option('--sodf', 'Generate SODF style procedure', null)
+
+		// note: this will generate an options.evaDocx property, not noEvaDocx
+		.option('--no-eva-docx', 'Don\'t generate the default EVA DOCX file', null)
 		.option('-c, --css <.css>', 'CSS to append to generated HTML', null)
 		.action(function(projectPath, options) {
 			console.logIfVerbose(options, 3);
@@ -150,8 +165,10 @@ function buildProgramArguments(program, args) {
 			} else {
 				program.projectPath = process.cwd();
 			}
+
 			program.sodf = options.sodf;
 			program.html = options.html;
+			program.evaDocx = options.evaDocx;
 			program.template = options.template || path.join(
 				__dirname, 'templates', 'spacewalk.njk'
 			);

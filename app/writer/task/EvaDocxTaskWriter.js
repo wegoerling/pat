@@ -1,15 +1,14 @@
 'use strict';
 
 const docx = require('docx');
-const DocxHandler = require('./DocxHandler');
+const DocxTaskWriter = require('./DocxTaskWriter');
 
-module.exports = class DocxTableHandler extends DocxHandler {
+module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 
-	constructor(task, docWrapper/* procedure, doc*/) {
-		super(docWrapper);
+	constructor(task, procedureWriter) {
+		super(task, procedureWriter);
 
-		this.task = task;
-		this.taskColumns = task.getColumns(task);
+		this.taskColumns = task.getColumns(task); // FIXME no need to pass task into getColumns
 
 		this.numCols = this.taskColumns.length;
 		this.numContentRows = task.concurrentSteps.length;
@@ -24,11 +23,7 @@ module.exports = class DocxTableHandler extends DocxHandler {
 
 	}
 
-	setContainer(container) {
-		this.container = container;
-	}
-
-	setContainerHeader() {
+	setTaskTableHeader() {
 
 		const columnKeys = this.task.getColumns();
 
@@ -73,14 +68,16 @@ module.exports = class DocxTableHandler extends DocxHandler {
 
 	writeSeries(row, col, series) {
 		const cell = this.table.getCell(row, col).setVerticalAlign(docx.VerticalAlign.TOP);
+		this.preInsertSteps();
 		for (const step of series) {
-			this.setContainer(cell);
+			this.setContainer(cell); // FIXME: pretty sure this can move outside for loop
 			this.insertStep(step);
 		}
+		this.postInsertSteps();
 	}
 
 	/**
-	 * For the DocxTableHandler type, the content is all within the docx table.
+	 * For the EvaDocxTaskWriter type, the content is all within the docx table.
 	 * However, it must be wrapped in an array since docx.Document.addSection
 	 * expects one argument: an object with { children: anIterable }.
 	 *

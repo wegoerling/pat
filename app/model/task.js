@@ -11,8 +11,10 @@ module.exports = class Task {
 	 * @param  {Object} taskDefinition          All the task info from the task file (steps, etc)
 	 * @param  {Object} proceduresTaskInstance  Info about this usage of task from procedure file
 	 * @param  {Array}  procedureColumnKeys     Array of column keys
+	 * @param  {Object} procedure               Procedure instance
+	 *                                          FIXME hack to just shove this in here
 	 */
-	constructor(taskDefinition, proceduresTaskInstance, procedureColumnKeys = null) {
+	constructor(taskDefinition, proceduresTaskInstance, procedureColumnKeys, procedure) {
 
 		// Get the title
 		if (!taskDefinition.title) {
@@ -56,6 +58,7 @@ module.exports = class Task {
 			}
 			this.procedureColumnKeys = procedureColumnKeys;
 		}
+		this.procedure = procedure;
 	}
 
 	/**
@@ -70,42 +73,37 @@ module.exports = class Task {
 			return this.columnsArray;
 		}
 
-		const stepRows = this.concurrentSteps;
+		const divisions = this.concurrentSteps;
 		const taskColumns = [];
 		const taskColumnsHash = {};
-		let stepRow,
-			colName;
+		let division,
+			colKey,
+			actorKey;
 
-		// Loop over the array of stepRows, and within that loop over each object of
-		// colName:[array,of,steps].
+		// Loop over the array of divisions, and within that loop over each object of
+		// actorKey:[array,of,steps].
 		//
-		// stepRows = [
-		//   { IV: [Step, Step, Step] },              // stepRow 0
-		//   { IV: [Step], EV1: [Step, Step] },       // stepRow 1
-		//   { EV1: [Step, Step], EV2: [Step] }       // stepRow 2
+		// divisions = [
+		//   { IV: [Step, Step, Step] },              // division (row) 0
+		//   { IV: [Step], EV1: [Step, Step] },       // division (row) 1
+		//   { EV1: [Step, Step], EV2: [Step] }       // division (row) 2
 		// ]
 		//
-		for (stepRow of stepRows) {
-			for (colName in stepRow) {
-				if (!taskColumnsHash[colName]) {
+		for (division of divisions) {
+			for (actorKey in division) {
+				colKey = this.procedure.getActorColumnKey(actorKey);
+
+				if (!taskColumnsHash[colKey]) {
 					// insert into a hash table because lookup is faster than array
-					taskColumnsHash[colName] = true;
+					taskColumnsHash[colKey] = true;
 				}
 			}
 		}
 
-		if (this.procedureColumnKeys) {
-
-			// create taskColumns in order specified by procedure
-			for (colName of this.procedureColumnKeys) {
-				if (taskColumnsHash[colName]) {
-					taskColumns.push(colName);
-				}
-			}
-		} else {
-
-			for (colName in taskColumnsHash) {
-				taskColumns.push(colName);
+		// create taskColumns in order specified by procedure
+		for (colKey of this.procedureColumnKeys) {
+			if (taskColumnsHash[colKey]) {
+				taskColumns.push(colKey);
 			}
 		}
 
@@ -114,7 +112,14 @@ module.exports = class Task {
 	}
 
 	getColumnIndex(actorKey) {
-		return this.getColumnIndexes()[actorKey];
+		const columnIndexes = this.getColumnIndexes();
+		if (typeof columnIndexes[actorKey] === 'undefined') {
+			throw new Error(`Unknown actor "${actorKey}" passed to getColumnIndex.
+				Column index = ${JSON.stringify(columnIndexes)}`);
+		} else {
+			return columnIndexes[actorKey];
+		}
+
 	}
 
 	getColumnIndexes() {
