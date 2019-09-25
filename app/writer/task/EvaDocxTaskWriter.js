@@ -69,7 +69,7 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 	writeSeries(row, col, series) {
 		const cell = this.table.getCell(row, col).setVerticalAlign(docx.VerticalAlign.TOP);
 		for (const step of series) {
-			this.setContainer(cell);
+			this.setContainer(cell); // FIXME: pretty sure this can move outside for loop
 			this.insertStep(step);
 		}
 	}

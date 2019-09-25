@@ -117,4 +117,16 @@ module.exports = class ProcedureWriter {
 		return durationDisplay;
 	}
 
+	getDocMeta() {
+		const docMeta = {
+			title: this.procedure.procedure_name,
+			lastModifiedBy: this.getLastModifiedBy(),
+			creator: this.program.fullName
+		};
+		if (this.procedure.description) {
+			docMeta.description = this.procedure.description; // FIXME: not implemented
+		}
+		return docMeta;
+	}
+
 };

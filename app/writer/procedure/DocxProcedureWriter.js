@@ -62,15 +62,7 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 	}
 
 	getDoc() {
-		const docMeta = {
-			title: this.procedure.procedure_name,
-			lastModifiedBy: this.getLastModifiedBy(),
-			creator: this.program.fullName
-		};
-		if (this.procedure.description) {
-			docMeta.description = this.procedure.description; // FIXME: not implemented
-		}
-		const doc = new docx.Document(docMeta);
+		const doc = new docx.Document(this.getDocMeta());
 		doc.Styles.createParagraphStyle('normal', 'Normal')
 			.basedOn('Normal')
 			.next('Normal')
