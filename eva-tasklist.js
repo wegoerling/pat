@@ -59,7 +59,7 @@ function run(args) {
 				console.logIfVerbose(program, 2, 4);
 				console.logIfVerbose(procedure, 1, 3);
 
-				if (program.EvaDocx) {
+				if (program.evaDocx) {
 					console.log('Creating EVA format');
 					const eva = new EvaDocxProcedureWriter(program, procedure);
 					eva.writeFile(path.join(

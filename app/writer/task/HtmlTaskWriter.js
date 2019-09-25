@@ -17,7 +17,6 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 
 	constructor(task, procedureWriter) {
 		super(task, procedureWriter);
-
 		// this.procedureWriter.taskNumbering = null;
 		// this.getNumbering();
 	}
@@ -100,11 +99,17 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 		this.container.add(subtaskTitle);
 	}
 
-	preInsertSteps() {
-		this.container.add('<ol>');
+	preInsertSteps(level) {
+		let start;
+		if (!level || level === 0) {
+			start = `start="${this.stepNumber}"`;
+		} else {
+			start = '';
+		}
+		this.container.add(`<ol ${start}>`);
 	}
 
-	postInsertSteps() {
+	postInsertSteps(level) {
 		this.container.add('</ol>');
 	}
 
