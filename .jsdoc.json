@@ -1,0 +1,32 @@
+{
+    "plugins": [],
+    "recurseDepth": 10,
+    "source": {
+        "includePattern": ".+\\.js(doc|x)?$",
+        "exclude": [
+            ".git",
+            ".nyc_output",
+            ".vscode",
+            "node_modules",
+            "coverage",
+            "examples",
+            "samples",
+            "docs"
+        ]
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "opts": {
+        "encoding": "utf8",
+        "destination": "./api-docs/",
+        "recurse": true,
+        "template": "templates/default"
+    }
+}
