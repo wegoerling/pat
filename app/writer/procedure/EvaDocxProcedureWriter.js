@@ -39,7 +39,7 @@ module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 			this
 		);
 
-		handler.setContainerHeader();
+		handler.setTaskTableHeader();
 
 		handler.writeDivisions();
 
