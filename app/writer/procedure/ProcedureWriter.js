@@ -10,10 +10,7 @@ module.exports = class ProcedureWriter {
 		this.procedure = procedure;
 
 		const abstractMethods = [
-			'writeFile',
-			'getPageSize',
-			'getPageMargins',
-			'getRightTabPosition'
+			'writeFile'
 		];
 
 		for (const fn of abstractMethods) {

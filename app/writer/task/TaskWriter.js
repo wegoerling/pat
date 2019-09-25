@@ -156,6 +156,14 @@ module.exports = class TaskWriter {
 		}
 	}
 
+	preInsertSteps() {
+		return 'preInsertSteps(): No action for base TaskWriter class';
+	}
+
+	postInsertSteps() {
+		return 'postInsertSteps(): No action for base TaskWriter class';
+	}
+
 	insertStep(step, level = 0) {
 
 		if (step.images) {
@@ -184,15 +192,19 @@ module.exports = class TaskWriter {
 		}
 
 		if (step.substeps.length) {
+			this.preInsertSteps(level + 1);
 			for (const substep of step.substeps) {
 				this.insertStep(substep, level + 1);
 			}
+			this.postInsertSteps(level + 1);
 		}
 
 		if (step.checkboxes.length) {
+			this.preInsertSteps()
 			for (const checkstep of step.checkboxes) {
 				this.addCheckStepText(checkstep, level + 1);
 			}
+			this.postInsertSteps();
 		}
 
 	}

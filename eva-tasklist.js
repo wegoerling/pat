@@ -16,14 +16,16 @@ const consoleHelper = require('./app/helpers/consoleHelper');
 const Procedure = require('./app/model/procedure');
 const EvaDocxProcedureWriter = require('./app/writer/procedure/EvaDocxProcedureWriter');
 const SodfDocxProcedureWriter = require('./app/writer/procedure/SodfDocxProcedureWriter');
-
+const EvaHtmlProcedureWriter = require('./app/writer/procedure/EvaHtmlProcedureWriter');
 /**
  * Surrogate program entry point
  *
  * @param   {*} args Command line arguments
  */
 function run(args) {
-	program.fullName = `Procedure authoring thing v${pjson.version}`;
+	program.fullName = `Procedure Author Thing v${pjson.version}`;
+	program.repoURL = pjson.repository.url;
+
 	console.log(`${program.fullName}\n`);
 
 	// Use Commander to process command line arguments
@@ -75,7 +77,15 @@ function run(args) {
 				}
 
 				if (program.html) {
-					genHtml(program, procedure); // eslint-disable-line no-use-before-define
+					// genHtml(program, procedure); // eslint-disable-line no-use-before-define
+
+					console.log('Creating EVA HTML format');
+					const evaHtml = new EvaHtmlProcedureWriter(program, procedure);
+					evaHtml.writeFile(path.join(
+						program.outputPath,
+						`${procedure.filename}.eva.html`
+					));
+
 				}
 			});
 
