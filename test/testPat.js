@@ -2,7 +2,7 @@
 /* eslint-env node, mocha */
 
 /**
- * Unit tests for eva-tasklist.js
+ * Unit tests for pat.js
  */
 'use strict';
 
@@ -12,9 +12,9 @@ const program = require('commander');
 const fs = require('fs');
 const path = require('path');
 
-const et = require('../eva-tasklist.js');
+const et = require('../pat.js');
 
-describe('eva-tasklist.js', () => {
+describe('pat.js', () => {
 
 	describe('run', () => {
 
