@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * This file contains the program entry point for eva-tasklist
+ * This file contains the program entry point for PAT
  */
 
 'use strict';
 
-const et = require('./eva-tasklist.js');
+const pat = require('./pat.js');
 
 (function() {
-	et.run(process.argv);
+	pat.run(process.argv);
 }());
