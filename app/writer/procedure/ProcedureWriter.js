@@ -126,4 +126,10 @@ module.exports = class ProcedureWriter {
 		return docMeta;
 	}
 
+	renderTasks() {
+		for (const task of this.procedure.tasks) {
+			this.renderTask(task);
+		}
+	}
+
 };

@@ -25,6 +25,7 @@ module.exports = class Task {
 		if (taskDefinition.roles) {
 			this.rolesDict = {};
 			this.rolesArr = [];
+			this.actorRolesDict = {};
 			for (const role of taskDefinition.roles) {
 				if (!role.name) {
 					consoleHelper.error([
@@ -34,8 +35,16 @@ module.exports = class Task {
 				}
 				this.rolesDict[role.name] = new TaskRole(role, proceduresTaskInstance);
 				this.rolesArr.push(this.rolesDict[role.name]);
+
+				// task defines roles, procedure applies actors to roles in TaskRole object. Get
+				// "actor" for this task from that.
+				const actor = this.rolesDict[role.name].actor;
+
+				this.actorRolesDict[actor] = this.rolesDict[role.name]; // for convenience
 			}
 		}
+
+		this.color = proceduresTaskInstance.color || 'white';
 
 		// Get the steps.  ConcurrentSteps class will handle the simo vs actor stuff in the yaml.
 		if (!taskDefinition.steps) {

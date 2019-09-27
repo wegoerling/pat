@@ -1,9 +1,13 @@
 'use strict';
 
 const docx = require('docx');
+const path = require('path');
+const fs = require('fs');
 
 const DocxProcedureWriter = require('./DocxProcedureWriter');
 const EvaDocxTaskWriter = require('../task/EvaDocxTaskWriter');
+const consoleHelper = require('../../helpers/consoleHelper');
+const TimelineWriter = require('../TimelineWriter');
 
 module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 
@@ -32,6 +36,58 @@ module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 		};
 	}
 
+	renderIntro(callback) {
+		// console.log(this.procedure);
+		// console.log(this.procedure.tasks);
+		// console.log(this.procedure.tasks[0]);
+		// console.log(this.procedure.tasks[0].rolesDict);
+		// console.log(this.procedure.tasks[0].rolesArr);
+		// consoleHelper.error('stopping...');
+
+		const allActors = this.procedure.getAllActorsDefinedInColumns();
+		const actorTasks = [];
+
+		for (const actor of allActors) {
+			const tasks = this.procedure.getTasksWithActorInLeadRole(actor);
+			if (tasks.length > 0) {
+				actorTasks.push({
+					actor: actor,
+					header: actor, // FIXME: column display text if single actor?
+					tasks: tasks
+				});
+			}
+		}
+
+		const timeline = new TimelineWriter(actorTasks);
+		const pngPath = path.join(
+			this.program.outputPath,
+			`${this.procedure.filename}.summary.timeline.png`
+		);
+
+		timeline.writePNG(pngPath, (imageDimensions) => {
+			const image = docx.Media.addImage(
+				this.doc,
+				fs.readFileSync(pngPath),
+				imageDimensions.width,
+				imageDimensions.height
+			);
+			this.doc.addSection({
+				headers: { default: this.genHeader(`${this.procedure.name} - Summary Timeline`) },
+				footers: { default: this.genFooter() },
+				size: this.getPageSize(),
+				margins: this.getPageMargins(),
+				children: [new docx.Paragraph(image)]
+			});
+			callback();
+		});
+
+		timeline.writeSVG(path.join(
+			this.program.outputPath,
+			`${this.procedure.filename}.summary.timeline.svg`
+		));
+
+	}
+
 	renderTask(task) {
 
 		const handler = new EvaDocxTaskWriter(
@@ -44,12 +100,13 @@ module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 		handler.writeDivisions();
 
 		this.doc.addSection({
-			headers: { default: this.genHeader(task) },
+			headers: { default: this.genTaskHeader(task) },
 			footers: { default: this.genFooter() },
 			size: this.getPageSize(),
 			margins: this.getPageMargins(),
 			children: handler.getSectionChildren()
 		});
+		consoleHelper.success(`Added section to EVA DOCX for task ${task.title}`);
 	}
 
 };

@@ -28,9 +28,6 @@ module.exports = class HtmlProcedureWriter extends ProcedureWriter {
 		this.getDocMeta();
 		this.content = '';
 
-		for (const task of this.procedure.tasks) {
-			this.renderTask(task);
-		}
 	}
 
 	// Handle with CSS
