@@ -62,15 +62,20 @@ function run(args) {
 				if (program.evaDocx) {
 					console.log('Creating EVA format');
 					const eva = new EvaDocxProcedureWriter(program, procedure);
-					eva.writeFile(path.join(
-						program.outputPath,
-						`${procedure.filename}.docx`
-					));
+
+					eva.renderIntro(function() {
+						eva.renderTasks();
+						eva.writeFile(path.join(
+							program.outputPath,
+							`${procedure.filename}.docx`
+						));
+					});
 				}
 
 				if (program.sodf) {
 					console.log('Creating SODF format');
 					const sodf = new SodfDocxProcedureWriter(program, procedure);
+					sodf.renderTasks();
 					sodf.writeFile(path.join(
 						program.outputPath,
 						`${procedure.filename}.sodf.docx`
@@ -80,6 +85,7 @@ function run(args) {
 				if (program.html) {
 					console.log('Creating EVA HTML format');
 					const evaHtml = new EvaHtmlProcedureWriter(program, procedure);
+					evaHtml.renderTasks();
 					evaHtml.writeFile(path.join(
 						program.outputPath,
 						`${procedure.filename}.eva.html`

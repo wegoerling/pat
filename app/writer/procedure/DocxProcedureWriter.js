@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const docx = require('docx');
 
 const consoleHelper = require('../../helpers/consoleHelper');
@@ -38,9 +39,6 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 
 		this.doc = this.getDoc();
 
-		for (const task of this.procedure.tasks) {
-			this.renderTask(task);
-		}
 	}
 
 	/**
@@ -105,20 +103,21 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 	}
 
 	writeFile(filepath) {
+		const relativeFilepath = path.relative(process.cwd(), filepath);
+
+		console.log(`Starting to write ${relativeFilepath}`);
 		docx.Packer.toBuffer(this.doc).then((buffer) => {
 			fs.writeFileSync(filepath, buffer);
-			consoleHelper.success(`${filepath} written!`);
+			consoleHelper.success(`SUCCESS: ${relativeFilepath} written!`);
 		});
 	}
 
-	genHeader(task) {
-
-		const durationDisplay = this.getTaskDurationDisplay(task);
+	genHeader(headerText) {
 
 		return new docx.Header({
 			children: [new docx.Paragraph({
 				children: [new docx.TextRun({
-					text: `${this.procedure.name} - ${task.title} (${durationDisplay})`,
+					text: headerText,
 					bold: true,
 					size: 24, // half-points, so double the point height
 					font: {
@@ -127,6 +126,11 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 				})]
 			})]
 		});
+	}
+
+	genTaskHeader(task) {
+		const durationDisplay = this.getTaskDurationDisplay(task);
+		return this.genHeader(`${this.procedure.name} - ${task.title} (${durationDisplay})`);
 	}
 
 	genFooter() {
@@ -160,4 +164,11 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 		return procFooter;
 	}
 
+	renderIntro() {
+		return '';
+	}
+
+	renderOutro() {
+		return '';
+	}
 };

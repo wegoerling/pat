@@ -123,6 +123,44 @@ module.exports = class Procedure {
 		return headerTexts;
 	}
 
+	getActorsInLeadRoles() {
+		const actorsDict = {};
+		const actorsArr = [];
+		for (const task of this.tasks) {
+			for (const role of task.rolesArr) {
+				if (!actorsDict[role.actor]) {
+					actorsDict[role.actor] = true;
+				}
+			}
+		}
+		for (const actor in actorsDict) {
+			actorsArr.push(actor);
+		}
+		return actorsArr;
+	}
+
+	getTasksWithActorInLeadRole(actorKey) {
+		const actorTasks = [];
+		for (const task of this.tasks) {
+			if (task.actorRolesDict[actorKey]) {
+				actorTasks.push(task);
+			}
+		}
+		return actorTasks;
+	}
+
+	getAllActorsDefinedInColumns(includeWildcard = false) {
+		const allActors = [];
+		for (const col of this.columns) {
+			for (const actor of col.actors) {
+				if (includeWildcard || actor !== '*') {
+					allActors.push(actor);
+				}
+			}
+		}
+		return allActors;
+	}
+
 	/**
      * Populates data, reading in the specified file.
      *

@@ -42,6 +42,7 @@
   },
   "homepage": "https://github.com/xOPERATIONS/pat#readme",
   "dependencies": {
+    "@svgdotjs/svg.js": "^3.0.13",
     "ajv": "^6.10.2",
     "bootstrap": "^4.3.1",
     "colors": "^1.3.3",
@@ -56,6 +57,8 @@
     "path": "^0.12.7",
     "popper.js": "^1.15.0",
     "showdown": "1.9.0",
+    "svg2img": "^0.6.1",
+    "svgdom": "0.0.20",
     "wait.for": "^0.6.6",
     "wiky": "^0.95.1",
     "yamljs": "^0.3.0"
