@@ -26,8 +26,9 @@ let xPosition,
 	textSize,
 	tickLengthMajor,
 	tickLengthMinor,
-	numColumns,
-	bottomPadding = 5;
+	numColumns;
+
+const bottomPadding = 5;
 
 function minutesToPixels(minutes) {
 	// If max height were 650 pixels
