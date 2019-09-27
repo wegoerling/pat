@@ -21,12 +21,13 @@ let xPosition,
 	topTextMargin,
 	totalMinutes,
 	headerRowY,
-	largestY,
+	imageHeight,
 	headerTextSize,
 	textSize,
 	tickLengthMajor,
 	tickLengthMinor,
-	numColumns;
+	numColumns,
+	bottomPadding = 5;
 
 function minutesToPixels(minutes) {
 	// If max height were 650 pixels
@@ -38,7 +39,7 @@ function minutesToPixels(minutes) {
 
 function getConversionFactor(totalMinutes) {
 	// totalMinutes * x = maxHeight
-	return (maxHeight - headerRowY) / totalMinutes;
+	return ((maxHeight - bottomPadding) - headerRowY) / totalMinutes;
 }
 
 /*
@@ -108,7 +109,7 @@ function addColumn(canvas, columnInfo) {
 			rectWidth: colWidth,
 			rectHeight: minutesToPixels(minutes),
 			strokeColor: '#000',
-			fillColor: task.color || 'white',
+			fillColor: task.color || '#F0FFFF',
 			textColor: '#000',
 			rectX: xPosition,
 			rectY: headerRowY + minutesToPixels(elapsedTime),
@@ -151,7 +152,6 @@ function addColumn(canvas, columnInfo) {
 				size: t.fontSize
 			});
 
-		largestY = t.rectY + t.rectHeight;
 		elapsedTime += minutes;
 	}
 	xPosition += colWidth;
@@ -253,7 +253,11 @@ module.exports = class TimelineWriter {
 			}
 		}
 		totalMinutes = Math.max(...taskLengths);
-		conversionFactor = getConversionFactor(totalMinutes);
+		const roundMinutesUpToHalfHour = Math.ceil(totalMinutes / 30) * 30;
+		conversionFactor = getConversionFactor(roundMinutesUpToHalfHour);
+
+		// + 5 gives room for text below line
+		imageHeight = headerRowY + minutesToPixels(roundMinutesUpToHalfHour) + bottomPadding;
 
 		numColumns = validColumns.length;
 		if (!colWidth) {
@@ -273,7 +277,7 @@ module.exports = class TimelineWriter {
 	writePNG(filename, callback) {
 		const dimensions = {
 			width: (2 * sidebarWidth) + (numColumns * colWidth),
-			height: largestY,
+			height: imageHeight,
 			preserveAspectRatio: true
 		};
 		svg2img(

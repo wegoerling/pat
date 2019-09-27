@@ -44,7 +44,7 @@ module.exports = class Task {
 			}
 		}
 
-		this.color = proceduresTaskInstance.color || 'white';
+		this.color = proceduresTaskInstance.color || null;
 
 		// Get the steps.  ConcurrentSteps class will handle the simo vs actor stuff in the yaml.
 		if (!taskDefinition.steps) {
