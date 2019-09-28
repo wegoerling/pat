@@ -114,6 +114,25 @@ module.exports = class Step {
 
 	}
 
+	/**
+	 * Create a dict taskRolesMap to be able to determine role-->actor. Then
+	 * create function replaceTaskRoles(text) to allow changing text like
+	 * "{{role:crewB}}" into "EV1" if taskRolesMap['crewB'] === 'EV1'
+	 *
+	 * @param  {Object} taskRoles object of TaskRole objects. Example:
+	 *                    taskRoles === {
+	 *                      crewA: TaskRole{
+	 *                        name: 'crewA',
+	 *                        description: 'Crewmember exiting A/L first',
+	 *                        actor: 'EV1'
+	 *                      },
+	 *                      crewB: TaskRole{
+	 *                        name: 'crewB',
+	 *                        description: 'Crewmember exiting A/L second',
+	 *                        actor: 'EV2'
+	 *                      }
+	 *                    }
+	 */
 	mapTaskRolesToActor(taskRoles) {
 		this.taskRoles = taskRoles;
 		const taskRolesMap = {};
@@ -126,6 +145,10 @@ module.exports = class Step {
 			}
 			return text;
 		};
+	}
+
+	setActors(actorIdOrIds) {
+		this.actors = arrayHelper.parseArray(actorIdOrIds);
 	}
 
 	/**

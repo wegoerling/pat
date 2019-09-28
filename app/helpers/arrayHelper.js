@@ -29,3 +29,26 @@ exports.parseArray = function(yaml) {
 
 	return array;
 };
+
+/**
+ * Determine if all array values (must be integer) are 1 or 0 difference from values before and
+ * after.
+ * @param  {Array} inputArr Array like [1, 2, 3] (returns true) or [1, 3, 5] (returns false) to
+ *                          check for adjacency.
+ * @return {boolean}        Whether or not all items are adjacent
+ */
+exports.allAdjacent = function(inputArr) {
+	return inputArr.reduce((acc, cur, i, arr) => {
+		if (!acc) {
+			return false;
+		}
+		if (i === 0) {
+			return true;
+		}
+		if (Math.abs(cur - arr[i - 1]) > 1) {
+			return false;
+		} else {
+			return true;
+		}
+	}, true);
+};

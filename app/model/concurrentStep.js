@@ -24,7 +24,7 @@ function getRealActorId(taskRoles, actorIdGuess) {
 	}
 }
 
-function getActorSteps(actorStepsYaml, taskRoles) {
+function getActorSteps(actorStepsYaml, taskRoles, actorIdOrIds) {
 	var step;
 
 	// Initiate the array of steps for the actor
@@ -35,6 +35,7 @@ function getActorSteps(actorStepsYaml, taskRoles) {
 		step = new Step();
 		step.mapTaskRolesToActor(taskRoles);
 		step.populateFromYaml(actorStepsYaml);
+		step.setActors(actorIdOrIds);
 		actorSteps.push(step);
 
 	// Check if actorStepsYaml is an array
@@ -47,6 +48,7 @@ function getActorSteps(actorStepsYaml, taskRoles) {
 			step = new Step();
 			step.mapTaskRolesToActor(taskRoles);
 			step.populateFromYaml(stepYaml);
+			step.setActors(actorIdOrIds);
 			actorSteps.push(step);
 		}
 
@@ -57,6 +59,30 @@ function getActorSteps(actorStepsYaml, taskRoles) {
 
 	return actorSteps;
 
+}
+
+function getActorInfo(actorIdGuess, taskRoles) {
+	let idOrIds,
+		id;
+	// check for joint actors
+	if (actorIdGuess.indexOf('+') !== -1) {
+
+		// split the actors/roles on +, then replace things like "crewB" with "EV2" (if
+		// EV2 is assigned to crewB role)
+		idOrIds = actorIdGuess.split('+').map((str) => {
+			return getRealActorId(taskRoles, str.trim());
+		});
+
+		// recreate ID by gluing back together
+		id = idOrIds.join(' + ');
+
+		idOrIds.unshift(id); // stick the composite back on the front. TODO necessary?
+	} else {
+		idOrIds = getRealActorId(taskRoles, actorIdGuess);
+		id = idOrIds;
+	}
+
+	return { id: id, idOrIds: idOrIds };
 }
 
 module.exports = class ConcurrentStep {
@@ -90,7 +116,7 @@ module.exports = class ConcurrentStep {
 	 */
 	constructor(concurrentStepYaml, taskRoles) {
 
-		var actorIdGuess,
+		let actorIdGuess,
 			actorSteps;
 
 		// First, check if this is a simo
@@ -99,11 +125,18 @@ module.exports = class ConcurrentStep {
 			// Iterate over they keys (which are actor roles)
 			for (actorIdGuess in concurrentStepYaml.simo) {
 
+				const actorInfo = getActorInfo(actorIdGuess, taskRoles);
+
 				// Get the actor steps array
-				actorSteps = getActorSteps(concurrentStepYaml.simo[actorIdGuess], taskRoles);
+				actorSteps = getActorSteps(
+					// use the "guess" here since that's what's in the user-supplied yaml
+					concurrentStepYaml.simo[actorIdGuess],
+					taskRoles,
+					actorInfo.idOrIds
+				);
 
 				// Set the actor and steps in the object
-				this[getRealActorId(taskRoles, actorIdGuess)] = actorSteps;
+				this[actorInfo.id] = actorSteps;
 
 			}
 
@@ -116,13 +149,22 @@ module.exports = class ConcurrentStep {
 		if (Object.keys(concurrentStepYaml).length !== 1) {
 			throw new Error(`Expected a single actor role, but instead got ${JSON.stringify(concurrentStepYaml)}`);
 		}
+
 		actorIdGuess = Object.keys(concurrentStepYaml)[0];
+		// const actorIdReal = getRealActorId(taskRoles, actorIdGuess);
+
+		const actorInfo = getActorInfo(actorIdGuess, taskRoles);
 
 		// get the actor steps
-		actorSteps = getActorSteps(concurrentStepYaml[actorIdGuess], taskRoles);
+		actorSteps = getActorSteps(
+			// use the "guess" here since that's what's in the user-supplied yaml
+			concurrentStepYaml[actorIdGuess],
+			taskRoles,
+			actorInfo.idOrIds
+		);
 
 		// Set the actor and steps in the object
-		this[getRealActorId(taskRoles, actorIdGuess)] = actorSteps;
+		this[actorInfo.id] = actorSteps;
 
 	}
 
