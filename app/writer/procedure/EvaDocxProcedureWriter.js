@@ -37,12 +37,6 @@ module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 	}
 
 	renderIntro(callback) {
-		// console.log(this.procedure);
-		// console.log(this.procedure.tasks);
-		// console.log(this.procedure.tasks[0]);
-		// console.log(this.procedure.tasks[0].rolesDict);
-		// console.log(this.procedure.tasks[0].rolesArr);
-		// consoleHelper.error('stopping...');
 
 		const allActors = this.procedure.getAllActorsDefinedInColumns();
 		const actorTasks = [];

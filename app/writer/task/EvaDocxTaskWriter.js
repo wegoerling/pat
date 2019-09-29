@@ -48,7 +48,7 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 	}
 
 	writeDivision(division) {
-		console.log(division);
+
 		const actorsInDivision = [];
 		const columnsInDivision = [];
 		const columnIndexesInDivision = [];
@@ -129,7 +129,7 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 		for (let c = 0; c < this.numCols; c++) {
 			columnReMap[c] = c; // map to itself
 		}
-		console.log(jointActors);
+
 		// merge the merged columns and write the series' to them
 		for (const actors of jointActors) {
 
