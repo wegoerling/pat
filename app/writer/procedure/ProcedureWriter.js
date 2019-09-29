@@ -25,10 +25,8 @@ module.exports = class ProcedureWriter {
 	 * NPM Commander package. Perhaps should have Project.js since procedures
 	 * are really documents within a project.)
 	 *
-	 * FIXME: Instead of using child_process, dig into .git directory. Or use
-	 * an npm package for dealing with git\
-	 *
-	 * FIXME: This does not currently account for changes to working directory.
+	 * OPTIMIZE: Instead of using child_process, dig into .git directory. Or use
+	 * an npm package for dealing with git.
 	 *
 	 * ADD FEATURE: Consider `git describe --tags` if tags are available. That
 	 * will be easier for people to understand if a version they are looking at
@@ -57,11 +55,41 @@ module.exports = class ProcedureWriter {
 			} catch (err) {
 				console.error(err);
 			}
-			return this.gitHash;
 		} else {
-			return 'NO VERSION (NOT CONFIG MANAGED)';
+			this.gitHash = 'NO VERSION (NOT CONFIG MANAGED)';
 		}
 
+		return this.gitHash;
+	}
+
+	getGitUncommittedChanges() {
+
+		if (this.gitUncommittedChanges) {
+			return this.gitUncommittedChanges;
+		}
+
+		if (fs.existsSync(this.program.gitPath)) {
+			try {
+				const uncommitted = childProcess
+					.execSync(`cd ${this.program.projectPath} && git status --porcelain`)
+					.toString().trim().split('\n');
+
+				if (uncommitted.length > 1 || uncommitted[0] !== '') {
+					const plural = uncommitted.length === 1 ? '' : 's';
+					this.gitUncommittedChanges = `${uncommitted.length} uncommitted change${plural}`;
+					console.log(this.gitUncommittedChanges);
+				} else {
+					this.gitUncommittedChanges = false;
+				}
+			} catch (err) {
+				console.error(err);
+			}
+
+		} else {
+			this.gitUncommittedChanges = false;
+		}
+
+		return this.gitUncommittedChanges;
 	}
 
 	/**
@@ -83,11 +111,11 @@ module.exports = class ProcedureWriter {
 			} catch (err) {
 				console.error(err);
 			}
-			return this.gitDate;
 		} else {
-			return 'NO DATE (NOT CONFIG MANAGED)';
+			this.gitDate = 'NO DATE (NOT CONFIG MANAGED)';
 		}
 
+		return this.gitDate;
 	}
 
 	getLastModifiedBy() {

@@ -30,9 +30,8 @@ exports.convert = function(markdown) {
 	markdown = markdown.replace(/{{CHECKBOX}}/gi, '&#10063;');
 	markdown = markdown.replace(/{{CHECK BOX}}/gi, '&#10063;');
 
-	// TODO: Why does checmkark actually mean checkbox?
-	markdown = markdown.replace(/{{CHECKMARK}}/gi, '&#10063;');
-	markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10063;');
+	markdown = markdown.replace(/{{CHECKMARK}}/gi, '&#10004;');
+	markdown = markdown.replace(/{{CHECK MARK}}/gi, '&#10004;');
 
 	//  Find and replace emphasis markdown?
 	if (markdown.includes("'''")) {

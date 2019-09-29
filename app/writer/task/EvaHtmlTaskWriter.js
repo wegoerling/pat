@@ -98,8 +98,7 @@ module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 	}
 
 	getContent() {
-		// console.log('doing table contents');
-		// console.log(this.tableContents);
+		// NOTE: this is not Table of Contents
 		return `<table class="gridtable">${this.tableContents}</table>`;
 	}
 

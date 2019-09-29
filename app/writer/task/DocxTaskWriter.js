@@ -16,22 +16,6 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		this.getNumbering();
 	}
 
-	/*
-	FIXME: thought this would be necessary but it doesn't seem to be. Keeping
-	it for now while things are in flux
-
-	getContainerType() {
-		if (this.container instanceof TableCell) {
-			return 'tablecell';
-		} else if (this.container instanceof SectionContainer) {
-			return 'sectioncontainer';
-		} else {
-			const containerJson = JSON.stringify(this.container, null, 4);
-			throw new Error(`Unknown container type: ${containerJson}`);
-		}
-	}
-	*/
-
 	addImages(images) {
 
 		const imagesPath = this.procedureWriter.program.imagesPath;
@@ -89,7 +73,6 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 			warning: 'FFFFFF'
 		};
 
-		// FIXME add logic for formatting based upon type
 		blockTable.getCell(0, 0).add(new docx.Paragraph({
 			children: [new docx.TextRun({
 				text: blockType.toUpperCase(),

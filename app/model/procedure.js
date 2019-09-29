@@ -74,9 +74,6 @@ module.exports = class Procedure {
 		this.tasks = [];
 		this.css = '';
 		this.actorToColumn = {};
-
-		// FIXME: this shouldn't be hard-code, but should come from procedure
-		this.docColumns = ['IV', 'EV1', 'EV2'];
 	}
 
 	/**

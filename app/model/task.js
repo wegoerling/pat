@@ -12,7 +12,10 @@ module.exports = class Task {
 	 * @param  {Object} proceduresTaskInstance  Info about this usage of task from procedure file
 	 * @param  {Array}  procedureColumnKeys     Array of column keys
 	 * @param  {Object} procedure               Procedure instance
-	 *                                          FIXME hack to just shove this in here
+	 *                                          OPTIMIZE: the procedure param was added later when
+	 *                                          it became obvious that tasks would need general info
+	 *                                          about procedures. Now it seems excessive to have the
+	 *                                          prior two params be part of the procedure param
 	 */
 	constructor(taskDefinition, proceduresTaskInstance, procedureColumnKeys, procedure) {
 
