@@ -90,7 +90,7 @@ module.exports = class TaskWriter {
 
 		// if both dimensions are desired, just return them (no need to scale)
 		if (Number.isInteger(desiredImage.width) && Number.isInteger(desiredImage.height)) {
-			// FIXME: add check for desiredImage ratio being significantly
+			// OPTIMIZE: add check for desiredImage ratio being significantly
 			// different from widthToHeightRatio, and notify user that image may
 			// be distorted. Alternatively: just don't allow specifying W and H.
 			imgWarnings.flush(desiredImage.path);
@@ -120,8 +120,6 @@ module.exports = class TaskWriter {
 	}
 
 	markupFilter(procedureMarkup) {
-		// FIXME: Process the procedure markup from wikitext/markdown-ish to what
-		// docx needs. Similar to app/helpers/markdownHelper.js
 
 		if (typeof procedureMarkup !== 'string') {
 			console.error(procedureMarkup);

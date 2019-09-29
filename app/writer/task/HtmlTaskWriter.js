@@ -66,8 +66,6 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 	}
 
 	addBlock(blockType, blockLines) {
-		// FIXME: need method to handle different numbering formats
-		// const numbering = this.procedureWriter.taskNumbering;
 
 		const blockTable = nunjucksEnvironment.render('block-table.html', {
 			blockType: blockType,
@@ -76,9 +74,6 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 
 		this.container.add(blockTable);
 	}
-
-	// FIXME: re-implement
-	// getNumbering() {}
 
 	addStepText(stepText, level) {
 		// added class li-level-${level} really just as a way to remind that
