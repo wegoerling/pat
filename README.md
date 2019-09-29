@@ -51,11 +51,11 @@ PAT is under heavy development. While it's possible to `npm install -g xops-pat`
 
 Below are future desired features, in approximate order of priority.
 
-1. High-level procedure editor (#37, currently under development by UMUC students): This will not perform editing of steps, but will allow for reorganization of tasks, adjusting task durations, etc.
-2. Modules (#42): Pre-built step-generators. Just supply inputs, get the standards-compliant step text
-3. Variables (#43): Certain values may be repeated many times throughout a procedure. Capture them as variables.
-4. Package/dependency manager (#21): Allow reuse of common elements (e.g. egressing the airlock) or sharing tasks (two EVAs may carry the same task)
-5. Track state (#44): During spacewalks, the crew move and reconfigure things. PAT should be able to track this.
+1. High-level procedure editor ([#37](https://github.com/xOPERATIONS/pat/issues/37), currently under development by UMUC students): This will not perform editing of steps, but will allow for reorganization of tasks, adjusting task durations, etc.
+2. Modules ([#42](https://github.com/xOPERATIONS/pat/issues/42)): Pre-built step-generators. Just supply inputs, get the standards-compliant step text
+3. Variables ([#43](https://github.com/xOPERATIONS/pat/issues/43)): Certain values may be repeated many times throughout a procedure. Capture them as variables.
+4. Package/dependency manager ([#21](https://github.com/xOPERATIONS/pat/issues/21)): Allow reuse of common elements (e.g. egressing the airlock) or sharing tasks (two EVAs may carry the same task)
+5. Track state ([#44](https://github.com/xOPERATIONS/pat/issues/44)): During spacewalks, the crew move and reconfigure things. PAT should be able to track this.
 6. Full editor: Edit all steps, handling modules, variables, state, etc, and integrate with GitLab (GitLab is used internally).
 
 ## Definitions
