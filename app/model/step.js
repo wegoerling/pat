@@ -152,7 +152,7 @@ module.exports = class Step {
 	}
 
 	/**
-	 * Return the title. FFIXME: what's the point of this?
+	 * Return formatted title
 	 *
 	 * @param   {*} titleYaml YAML for the title
 	 * @return  {*} array of substeps
@@ -163,9 +163,7 @@ module.exports = class Step {
 	}
 
 	/**
-	 * Return the step text, or an empty string if does not exist.
-	 *
-	 * FIXME: should this be `return stepTextYaml || "";` ???
+	 * Return formatted step text
 	 *
 	 * @param   {*} stepTextYaml YAML for the step text
 	 * @return  {Array} array of substeps
