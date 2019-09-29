@@ -145,7 +145,7 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 		const gitHash = this.getGitHash();
 		const gitUncommitted = this.getGitUncommittedChanges();
 
-		const children = [ new docx.TextRun(`${gitDate} (version: ${gitHash})`) ];
+		const children = [new docx.TextRun(`${gitDate} (version: ${gitHash})`)];
 		if (gitUncommitted) {
 			children.push(new docx.TextRun({
 				text: ` WARNING: ${gitUncommitted}`,
