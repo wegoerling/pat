@@ -143,14 +143,22 @@ module.exports = class DocxProcedureWriter extends ProcedureWriter {
 
 		const gitDate = this.getGitDate();
 		const gitHash = this.getGitHash();
+		const gitUncommitted = this.getGitUncommittedChanges();
+
+		const children = [ new docx.TextRun(`${gitDate} (version: ${gitHash})`) ];
+		if (gitUncommitted) {
+			children.push(new docx.TextRun({
+				text: ` WARNING: ${gitUncommitted}`,
+				color: 'red',
+				bold: true
+			}));
+		}
+		children.push(new docx.TextRun('Page ').pageNumber().tab());
+		children.push(new docx.TextRun(' of ').numberOfTotalPages());
 
 		const footerParagraph = new docx.Paragraph({
 			alignment: docx.AlignmentType.LEFT,
-			children: [
-				new docx.TextRun(`${gitDate} (version: ${gitHash})`),
-				new docx.TextRun('Page ').pageNumber().tab(),
-				new docx.TextRun(' of ').numberOfTotalPages()
-			],
+			children: children,
 			tabStop: {
 				right: { position: this.getRightTabPosition() }
 			},
