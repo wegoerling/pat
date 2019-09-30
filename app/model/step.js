@@ -24,7 +24,7 @@ module.exports = class Step {
 
 		// Check if the step is a simple string
 		if (typeof stepYaml === 'string') {
-			this.text = stepYaml;
+			this.text = this.parseStepText(stepYaml);
 			return;
 		}
 
@@ -33,28 +33,6 @@ module.exports = class Step {
 		// Check for the title
 		if (stepYaml.title) {
 			this.title = this.parseTitle(stepYaml.title);
-			const titleWarnings = [];
-
-			// check if text like "(01:15)" is in the title and warn against it
-			const regex = /\([\d\w]{2}:[\d\w]{2}\)/g;
-			if (regex.test(this.title)) {
-				titleWarnings.push(
-					`Should not have "${this.title.match(regex)}" within title, use duration field`
-				);
-			}
-
-			// check if duration is zero, and recommend adding duration
-			if (this.duration.getTotalSeconds() === 0) {
-				titleWarnings.push(
-					'Should include "duration" field with hours, minutes, and/or seconds field'
-				);
-				titleWarnings.push('Example:\n     duration:\n       hours: 1\n       minutes: 15');
-			}
-
-			// warn if necessary
-			if (titleWarnings.length > 0) {
-				consoleHelper.warn(titleWarnings, `Title "${this.title}"`);
-			}
 		}
 
 		// Check for the text
@@ -81,30 +59,18 @@ module.exports = class Step {
 			}
 		}
 
-		// Check for checkboxes
-		if (stepYaml.checkboxes) {
-			this.checkboxes = arrayHelper.parseArray(stepYaml.checkboxes)
-				.map(this.replaceTaskRoles);
-		}
-
-		// Check for warnings
-		if (stepYaml.warning) {
-			this.warnings = arrayHelper.parseArray(stepYaml.warning).map(this.replaceTaskRoles);
-		}
-
-		// Check for cautions
-		if (stepYaml.caution) {
-			this.cautions = arrayHelper.parseArray(stepYaml.caution).map(this.replaceTaskRoles);
-		}
-
-		// Check for comments
-		if (stepYaml.comment) {
-			this.comments = arrayHelper.parseArray(stepYaml.comment).map(this.replaceTaskRoles);
-		}
-
-		// Check for notes
-		if (stepYaml.note) {
-			this.notes = arrayHelper.parseArray(stepYaml.note).map(this.replaceTaskRoles);
+		const blocks = {
+			// yaml prop    internal prop
+			checkboxes: 'checkboxes',
+			warning: 'warnings',
+			caution: 'cautions',
+			note: 'notes',
+			comment: 'comments'
+		};
+		for (const yamlKey in blocks) {
+			// user-generated YAML has different property names than internal JS property names
+			const jsKey = blocks[yamlKey];
+			this[jsKey] = this.parseBlock(stepYaml[yamlKey]);
 		}
 
 		// Check for substeps
@@ -112,6 +78,14 @@ module.exports = class Step {
 			this.substeps = this.parseSubsteps(stepYaml.substeps);
 		}
 
+	}
+
+	parseBlock(textOrArray) {
+		if (textOrArray) {
+			return arrayHelper.parseArray(textOrArray).map(this.replaceTaskRoles);
+		} else {
+			return [];
+		}
 	}
 
 	/**
@@ -158,8 +132,32 @@ module.exports = class Step {
 	 * @return  {*} array of substeps
      */
 	parseTitle(titleYaml) {
-		// return titleYaml;
-		return this.replaceTaskRoles(titleYaml);
+		const title = this.replaceTaskRoles(titleYaml);
+
+		const titleWarnings = [];
+
+		// check if text like "(01:15)" is in the title and warn against it
+		const regex = /\([\d\w]{2}:[\d\w]{2}\)/g;
+		if (regex.test(title)) {
+			titleWarnings.push(
+				`Should not have "${title.match(regex)}" within title, use duration field`
+			);
+		}
+
+		// check if duration is zero, and recommend adding duration
+		if (this.duration.getTotalSeconds() === 0) {
+			titleWarnings.push(
+				'Should include "duration" field with hours, minutes, and/or seconds field'
+			);
+			titleWarnings.push('Example:\n     duration:\n       hours: 1\n       minutes: 15');
+		}
+
+		// warn if necessary
+		if (titleWarnings.length > 0) {
+			consoleHelper.warn(titleWarnings, `Title "${title}"`);
+		}
+
+		return title;
 	}
 
 	/**
