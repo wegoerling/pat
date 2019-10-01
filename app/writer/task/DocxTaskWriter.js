@@ -123,17 +123,34 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	}
 
 	addStepText(stepText, level) {
-		this.addParagraph({
-			text: this.markupFilter(stepText),
+		const paraOptions = {
 			numbering: {
 				num: this.taskNumbering.concrete,
 				level: level
 			}
-		});
+		};
+		if (typeof stepText === 'string') {
+			paraOptions.text = this.markupFilter(stepText);
+		} else if(Array.isArray(stepText)) {
+			paraOptions.children = stepText;
+		} else {
+			throw new Error('addStepText() stepText must be string or array');
+		}
+
+		this.addParagraph(paraOptions);
 	}
 
 	addCheckStepText(stepText, level) {
-		this.addStepText(`☐ ${stepText}`, level);
+		const paragraphChildren = [
+			new docx.TextRun({
+				text: 'q', // in Wingdings this is an empty checkbox
+				font: {
+					name: 'Wingdings'
+				},
+			}),
+			new docx.TextRun(this.markupFilter(' ' + stepText)),
+		];
+		this.addStepText(paragraphChildren, level);
 	}
 
 	addTitleText(step) {
