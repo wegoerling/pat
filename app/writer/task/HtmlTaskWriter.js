@@ -17,7 +17,7 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 
 	constructor(task, procedureWriter) {
 		super(task, procedureWriter);
-		// this.procedureWriter.taskNumbering = null;
+		// this.taskNumbering = null;
 		// this.getNumbering();
 	}
 

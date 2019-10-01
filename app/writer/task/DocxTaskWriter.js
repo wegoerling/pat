@@ -12,7 +12,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	constructor(task, procedureWriter) {
 		super(task, procedureWriter);
 
-		this.procedureWriter.taskNumbering = null;
+		this.taskNumbering = null;
 		this.getNumbering();
 	}
 
@@ -52,7 +52,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 
 	// taskCell
 	addBlock(blockType, blockLines) {
-		const numbering = this.procedureWriter.taskNumbering;
+		const numbering = this.taskNumbering;
 
 		const blockTable = new docx.Table({
 			rows: 2,
@@ -101,24 +101,24 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	}
 
 	getNumbering() {
-		this.procedureWriter.taskNumbering = {};
+		this.taskNumbering = {};
 
 		// const numbering = new docx.Numbering();
 		// const abstractNum = numbering.createAbstractNumbering();
 		// const abstractNum = doc.Numbering.createAbstractNumbering();
-		this.procedureWriter.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
+		this.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
 
 		for (let i = 0; i < 3; i++) {
 			// var stepText = getLongStepString(i);
 			var indents = this.procedureWriter.getIndents(i);
-			this.procedureWriter.levels[i] = this.procedureWriter.taskNumbering.abstract
+			this.procedureWriter.levels[i] = this.taskNumbering.abstract
 				.createLevel(i, this.procedureWriter.levelTypes[i], `%${i + 1}.`, 'left');
 			this.procedureWriter.levels[i].indent({ left: indents.left, hanging: indents.hanging });
 			this.procedureWriter.levels[i].leftTabStop(indents.tab);
 		}
 
-		this.procedureWriter.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
-			this.procedureWriter.taskNumbering.abstract
+		this.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
+			this.taskNumbering.abstract
 		);
 	}
 
@@ -126,7 +126,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		this.addParagraph({
 			text: this.markupFilter(stepText),
 			numbering: {
-				num: this.procedureWriter.taskNumbering.concrete,
+				num: this.taskNumbering.concrete,
 				level: level
 			}
 		});
