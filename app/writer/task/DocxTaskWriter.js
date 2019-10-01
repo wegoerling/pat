@@ -103,18 +103,17 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	getNumbering() {
 		this.taskNumbering = {};
 
-		// const numbering = new docx.Numbering();
-		// const abstractNum = numbering.createAbstractNumbering();
-		// const abstractNum = doc.Numbering.createAbstractNumbering();
 		this.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
 
 		for (let i = 0; i < 3; i++) {
-			// var stepText = getLongStepString(i);
-			var indents = this.procedureWriter.getIndents(i);
-			this.procedureWriter.levels[i] = this.taskNumbering.abstract
-				.createLevel(i, this.procedureWriter.levelTypes[i], `%${i + 1}.`, 'left');
-			this.procedureWriter.levels[i].indent({ left: indents.left, hanging: indents.hanging });
-			this.procedureWriter.levels[i].leftTabStop(indents.tab);
+			const indents = this.procedureWriter.getIndents(i);
+			const level = this.taskNumbering.abstract.createLevel(
+				i,
+				this.procedureWriter.levelTypes[i],
+				`%${i + 1}.`, 'left'
+			);
+			level.indent({ left: indents.left, hanging: indents.hanging });
+			level.leftTabStop(indents.tab);
 		}
 
 		this.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
