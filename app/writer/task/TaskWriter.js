@@ -156,11 +156,11 @@ module.exports = class TaskWriter {
 		}
 	}
 
-	preInsertSteps(level) { // eslint-disable-line no-unused-vars
+	preInsertSteps(level, isCheckbox) { // eslint-disable-line no-unused-vars
 		return 'preInsertSteps(): No action for base TaskWriter class';
 	}
 
-	postInsertSteps(level) { // eslint-disable-line no-unused-vars
+	postInsertSteps(level, isCheckbox) { // eslint-disable-line no-unused-vars
 		return 'postInsertSteps(): No action for base TaskWriter class';
 	}
 
@@ -200,11 +200,11 @@ module.exports = class TaskWriter {
 		}
 
 		if (step.checkboxes.length) {
-			this.preInsertSteps(level + 1);
+			this.preInsertSteps(level + 1, true);
 			for (const checkstep of step.checkboxes) {
 				this.addCheckStepText(checkstep, level + 1);
 			}
-			this.postInsertSteps(level + 1);
+			this.postInsertSteps(level + 1, true);
 		}
 
 		if (!level || level === 0) {
