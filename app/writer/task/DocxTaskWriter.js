@@ -12,7 +12,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	constructor(task, procedureWriter) {
 		super(task, procedureWriter);
 
-		this.procedureWriter.taskNumbering = null;
+		this.taskNumbering = null;
 		this.getNumbering();
 	}
 
@@ -52,7 +52,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 
 	// taskCell
 	addBlock(blockType, blockLines) {
-		const numbering = this.procedureWriter.taskNumbering;
+		const numbering = this.taskNumbering;
 
 		const blockTable = new docx.Table({
 			rows: 2,
@@ -101,39 +101,55 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	}
 
 	getNumbering() {
-		this.procedureWriter.taskNumbering = {};
+		this.taskNumbering = {};
 
-		// const numbering = new docx.Numbering();
-		// const abstractNum = numbering.createAbstractNumbering();
-		// const abstractNum = doc.Numbering.createAbstractNumbering();
-		this.procedureWriter.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
+		this.taskNumbering.abstract = this.doc.Numbering.createAbstractNumbering();
 
 		for (let i = 0; i < 3; i++) {
-			// var stepText = getLongStepString(i);
-			var indents = this.procedureWriter.getIndents(i);
-			this.procedureWriter.levels[i] = this.procedureWriter.taskNumbering.abstract
-				.createLevel(i, this.procedureWriter.levelTypes[i], `%${i + 1}.`, 'left');
-			this.procedureWriter.levels[i].indent({ left: indents.left, hanging: indents.hanging });
-			this.procedureWriter.levels[i].leftTabStop(indents.tab);
+			const indents = this.procedureWriter.getIndents(i);
+			const level = this.taskNumbering.abstract.createLevel(
+				i,
+				this.procedureWriter.levelTypes[i],
+				`%${i + 1}.`, 'left'
+			);
+			level.indent({ left: indents.left, hanging: indents.hanging });
+			level.leftTabStop(indents.tab);
 		}
 
-		this.procedureWriter.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
-			this.procedureWriter.taskNumbering.abstract
+		this.taskNumbering.concrete = this.doc.Numbering.createConcreteNumbering(
+			this.taskNumbering.abstract
 		);
 	}
 
 	addStepText(stepText, level) {
-		this.addParagraph({
-			text: this.markupFilter(stepText),
+		const paraOptions = {
 			numbering: {
-				num: this.procedureWriter.taskNumbering.concrete,
+				num: this.taskNumbering.concrete,
 				level: level
 			}
-		});
+		};
+		if (typeof stepText === 'string') {
+			paraOptions.text = this.markupFilter(stepText);
+		} else if (Array.isArray(stepText)) {
+			paraOptions.children = stepText;
+		} else {
+			throw new Error('addStepText() stepText must be string or array');
+		}
+
+		this.addParagraph(paraOptions);
 	}
 
 	addCheckStepText(stepText, level) {
-		this.addStepText(`☐ ${stepText}`, level);
+		const paragraphChildren = [
+			new docx.TextRun({
+				text: 'q', // in Wingdings this is an empty checkbox
+				font: {
+					name: 'Wingdings'
+				}
+			}),
+			new docx.TextRun(this.markupFilter(` ${stepText}`))
+		];
+		this.addStepText(paragraphChildren, level);
 	}
 
 	addTitleText(step) {
