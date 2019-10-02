@@ -130,7 +130,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		};
 		if (typeof stepText === 'string') {
 			paraOptions.text = this.markupFilter(stepText);
-		} else if(Array.isArray(stepText)) {
+		} else if (Array.isArray(stepText)) {
 			paraOptions.children = stepText;
 		} else {
 			throw new Error('addStepText() stepText must be string or array');
@@ -145,9 +145,9 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 				text: 'q', // in Wingdings this is an empty checkbox
 				font: {
 					name: 'Wingdings'
-				},
+				}
 			}),
-			new docx.TextRun(this.markupFilter(' ' + stepText)),
+			new docx.TextRun(this.markupFilter(` ${stepText}`))
 		];
 		this.addStepText(paragraphChildren, level);
 	}
