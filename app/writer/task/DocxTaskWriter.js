@@ -271,7 +271,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		this.addParagraph(paraOptions);
 	}
 
-	addCheckStepText(stepText, level) {
+	addCheckStepText(stepText /* , level */) {
 
 		const paraOptions = {
 			children: [],
@@ -313,13 +313,13 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 	preInsertSteps(level, isCheckbox) {
 		if (isCheckbox) {
 			// this.checkboxNumbering.currentLevel === -1 ||
-			if ( !this.checkboxNumbering.numbering) {
+			if (!this.checkboxNumbering.numbering) {
 
 				let options = {};
 
 				// Clean this up when iss #49 fixed
 				if (docx.RunFonts) {
-						options = {
+					options = {
 						text: 'q',
 						font: 'Wingdings'
 					};
@@ -334,7 +334,8 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		if (isCheckbox) {
 			this.checkboxNumbering.currentLevel--;
 			if (this.checkboxNumbering.currentLevel === -1) {
-				// this.checkboxNumbering.numbering = null; // unset this numbering if the list is over
+				// unset this numbering if the list is over
+				// this.checkboxNumbering.numbering = null;
 			}
 		}
 	}
