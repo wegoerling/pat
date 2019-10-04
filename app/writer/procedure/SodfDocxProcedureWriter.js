@@ -39,14 +39,17 @@ module.exports = class SodfDocxProcedureWriter extends DocxProcedureWriter {
 			this
 		);
 
-		handler.writeDivisions();
+		const sectionChildren = [];
+		sectionChildren.push(
+			...handler.writeDivisions()
+		);
 
 		this.doc.addSection({
 			headers: { default: this.genTaskHeader(task) },
 			footers: { default: this.genFooter() },
 			size: this.getPageSize(),
 			margins: this.getPageMargins(),
-			children: handler.getSectionChildren()
+			children: sectionChildren
 		});
 
 		consoleHelper.success(`Added section to SODF DOCX for task ${task.title}`);

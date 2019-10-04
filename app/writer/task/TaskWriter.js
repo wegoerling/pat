@@ -150,65 +150,80 @@ module.exports = class TaskWriter {
 		//   { EV1: [Step, Step], EV2: [Step] }      // div 2: EV1 & EV2 series
 		// ]
 		const divisions = this.task.concurrentSteps;
+		const divisionElements = [];
 
 		for (const division of divisions) {
-			this.writeDivision(division);
+			divisionElements.push(
+				...this.writeDivision(division)
+			);
 		}
+
+		return divisionElements;
 	}
 
-	preInsertSteps(level) { // eslint-disable-line no-unused-vars
+	preInsertSteps(level, isCheckbox) { // eslint-disable-line no-unused-vars
 		return 'preInsertSteps(): No action for base TaskWriter class';
 	}
 
-	postInsertSteps(level) { // eslint-disable-line no-unused-vars
+	postInsertSteps(level, isCheckbox) { // eslint-disable-line no-unused-vars
 		return 'postInsertSteps(): No action for base TaskWriter class';
 	}
 
 	insertStep(step, level = 0) {
 
+		const children = [];
+
 		if (step.images) {
-			this.addImages(step.images);
+			children.push(...this.addImages(step.images));
 		}
 
 		if (step.title) {
-			this.addTitleText(step);
+			children.push(this.addTitleText(step));
 		}
 
 		if (step.warnings.length) {
-			this.addBlock('warning', step.warnings);
+			children.push(this.addBlock('warning', step.warnings));
 		}
 		if (step.cautions.length) {
-			this.addBlock('caution', step.cautions);
+			children.push(this.addBlock('caution', step.cautions));
 		}
 		if (step.notes.length) {
-			this.addBlock('note', step.notes);
+			children.push(this.addBlock('note', step.notes));
 		}
 		if (step.comments.length) {
-			this.addBlock('comment', step.comments);
+			children.push(this.addBlock('comment', step.comments));
 		}
 
 		if (step.text) {
-			this.addStepText(step.text, level);
+			children.push(this.addStepText(step.text, level));
 		}
 
 		if (step.substeps.length) {
 			this.preInsertSteps(level + 1);
 			for (const substep of step.substeps) {
-				this.insertStep(substep, level + 1);
+				children.push(...this.insertStep(substep, level + 1));
 			}
 			this.postInsertSteps(level + 1);
 		}
 
 		if (step.checkboxes.length) {
-			this.preInsertSteps(level + 1);
-			for (const checkstep of step.checkboxes) {
-				this.addCheckStepText(checkstep, level + 1);
+			const preSteps = this.preInsertSteps(level + 1, true);
+			if (preSteps) {
+				children.push(preSteps);
 			}
-			this.postInsertSteps(level + 1);
+			for (const checkstep of step.checkboxes) {
+				children.push(this.addCheckStepText(checkstep, level + 1));
+			}
+			const postSteps = this.postInsertSteps(level + 1, true);
+			if (postSteps) {
+				children.push(postSteps);
+			}
 		}
 
 		if (!level || level === 0) {
 			this.stepNumber++;
 		}
+
+		return children;
 	}
 };

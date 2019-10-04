@@ -23,6 +23,7 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 
 	addImages(images) {
 
+		const imageHtmlArray = [];
 		const imagesPath = this.procedureWriter.program.imagesPath;
 		const buildPath = this.procedureWriter.program.outputPath;
 		for (const imageMeta of images) {
@@ -53,16 +54,17 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 				height: imageSize.height
 			});
 
-			this.container.add(image);
+			imageHtmlArray.push(image);
 		}
 
+		return imageHtmlArray;
 	}
 
 	addParagraph(params = {}) {
 		if (!params.text) {
 			params.text = '';
 		}
-		this.container.add(`<p>${params.text}</p>`);
+		return `<p>${params.text}</p>`;
 	}
 
 	addBlock(blockType, blockLines) {
@@ -72,17 +74,17 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 			blockLines: blockLines.map(this.markupFilter)
 		});
 
-		this.container.add(blockTable);
+		return blockTable;
 	}
 
 	addStepText(stepText, level) {
 		// added class li-level-${level} really just as a way to remind that
 		// some handling of this will be necessary
-		this.container.add(`<li class="li-level-${level}">${this.markupFilter(stepText)}</li>`);
+		return `<li class="li-level-${level}">${this.markupFilter(stepText)}</li>`;
 	}
 
 	addCheckStepText(stepText, level) {
-		this.addStepText(`☐ ${stepText}`, level);
+		return this.addStepText(`☐ ${stepText}`, level);
 	}
 
 	addTitleText(step) {
@@ -91,7 +93,7 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 			duration: step.duration.format('H:M')
 		});
 
-		this.container.add(subtaskTitle);
+		return subtaskTitle;
 	}
 
 	preInsertSteps(level) {
@@ -101,11 +103,11 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 		} else {
 			start = '';
 		}
-		this.container.add(`<ol ${start}>`);
+		return `<ol ${start}>`;
 	}
 
 	postInsertSteps(level) { // eslint-disable-line no-unused-vars
-		this.container.add('</ol>');
+		return '</ol>';
 	}
 
 };

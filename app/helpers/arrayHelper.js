@@ -1,5 +1,7 @@
 'use strict';
 
+const typeHelper = require('./typeHelper');
+
 /**
  * Parse yaml as either string or array, and return an array. If the YAML
  * was a simple string, the array has a single element. If the YAML was
@@ -51,4 +53,30 @@ exports.allAdjacent = function(inputArr) {
 			return true;
 		}
 	}, true);
+};
+
+/**
+ * If the length of `arr` is less than `count`, repeat the contents of `arr` until it matches count.
+ *
+ * @param  {Array} arr     An array to verify is at least `count` long, and repeat the array if not.
+ * @param  {integer} count How long the array should be
+ * @return {Array}         The lengthened (or kept the same) array
+ */
+exports.repeatArray = function(arr, count) {
+	typeHelper.errorIfIsnt(arr, 'array');
+	if (arr.length === 0) {
+		throw new Error('Array must have at least one element');
+	}
+
+	if (arr.length >= count) {
+		return arr;
+	} else {
+		const ln = arr.length;
+		const b = [];
+
+		for (let i = 0; i < count; i++) {
+			b.push(arr[i % ln]);
+		}
+		return b;
+	}
 };

@@ -37,7 +37,6 @@ module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 	}
 
 	renderIntro(callback) {
-
 		const allActors = this.procedure.getAllActorsDefinedInColumns();
 		const actorTasks = [];
 
@@ -89,16 +88,30 @@ module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 			this
 		);
 
-		handler.setTaskTableHeader();
-
-		handler.writeDivisions();
+		const sectionChildren = [];
+		sectionChildren.push(
+			handler.setTaskTableHeader()
+		);
+		sectionChildren.push(
+			...handler.writeDivisions()
+		);
 
 		this.doc.addSection({
 			headers: { default: this.genTaskHeader(task) },
 			footers: { default: this.genFooter() },
 			size: this.getPageSize(),
 			margins: this.getPageMargins(),
-			children: handler.getSectionChildren()
+			children: [new docx.Table({
+				rows: sectionChildren,
+				width: {
+					size: 100,
+					type: docx.WidthType.PERCENTAGE
+				}
+				// columnWidths
+				// margins: { marginUnitType, top, bottom, right, left }
+				// float
+				// layout
+			})]
 		});
 		consoleHelper.success(`Added section to EVA DOCX for task ${task.title}`);
 	}
