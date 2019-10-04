@@ -46,6 +46,7 @@ module.exports = class SodfDocxProcedureWriter extends DocxProcedureWriter {
 			footers: { default: this.genFooter() },
 			size: this.getPageSize(),
 			margins: this.getPageMargins(),
+			// ! FIXME DOCX EVA has removed the getSectionChildren() function. Refactor this.
 			children: handler.getSectionChildren()
 		});
 

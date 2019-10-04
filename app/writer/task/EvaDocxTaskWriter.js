@@ -17,12 +17,6 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 		this.numRows = this.numContentRows + 1;
 
 		this.divisionIndex = 0;
-
-		this.table = new docx.Table({
-			rows: this.numRows,
-			columns: this.numCols
-		});
-
 	}
 
 	setTaskTableHeader() {
@@ -33,21 +27,47 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 			throw new Error('header column text array does not match number of table columns');
 		}
 
-		for (let c = 0; c < this.numCols; c++) {
-			const cell = this.table.getCell(0, c);
-			cell.add(new docx.Paragraph({
-				text: this.procedure.columnToDisplay[columnKeys[c]],
-				alignment: docx.AlignmentType.CENTER,
-				style: 'strong'
-			}));
-		}
-
-		this.table.getRow(0).setTableHeader();
+		const tableCells = Array(this.numCols).fill(0).map((val, index) => {
+			return new docx.TableCell({
+				children: [new docx.Paragraph({
+					text: this.procedure.columnToDisplay[columnKeys[index]],
+					alignment: docx.AlignmentType.CENTER,
+					style: 'strong'
+				})]
+			});
+		});
 
 		this.divisionIndex++;
+
+		return new docx.TableRow({
+			children: tableCells,
+			tableHeader: true
+		});
+
+	}
+
+	writeDivisions() {
+		// Array of divisions. A division is a set of one or more series of
+		// steps. So a division may have just one series for the "IV" actor, or
+		// it may have multiple series for multiple actors.
+		//
+		// Example:
+		// divisions = [
+		//   { IV: [Step, Step, Step] },             // div 0: just IV series
+		//   { IV: [Step], EV1: [Step, Step] },      // div 1: IV & EV1 series
+		//   { EV1: [Step, Step], EV2: [Step] }      // div 2: EV1 & EV2 series
+		// ]
+		const divisions = this.task.concurrentSteps;
+		const tableRows = [];
+		for (const division of divisions) {
+			tableRows.push(this.writeDivision(division));
+		}
+		return tableRows;
 	}
 
 	writeDivision(division) {
+
+		const columns = {};
 
 		const actorsInDivision = [];
 		const columnsInDivision = [];
@@ -125,6 +145,7 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 			};
 		}
 
+		// ! FIXME: with declarative tables the column remap may not be necessary anymore
 		const columnReMap = {};
 		for (let c = 0; c < this.numCols; c++) {
 			columnReMap[c] = c; // map to itself
@@ -143,53 +164,89 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 			for (let i = lastCol + 1; i < this.numCols; i++) {
 				columnReMap[i] = i - remapDiff;
 			}
-			this.table.getRow(this.divisionIndex).mergeCells(firstCol, lastCol);
+			// this.table.getRow(this.divisionIndex).mergeCells(firstCol, lastCol);
 
-			this.writeSeries(
-				this.divisionIndex,
-				firstCol, // Guessing only able to reference merged columns by first column
-				division[actors.key] // get the division info by the key like "EV1 + EV2"
-			);
+			if (!columns[firstCol]) {
+				columns[firstCol] = {
+					colspan: lastCol - firstCol + 1,
+					children: []
+				};
+			}
+
+			columns[firstCol].children.push(...this.writeSeries(
+				division[actors.key], // get the division info by the key like "EV1 + EV2"
+			));
 		}
 
 		// write series' the normal columns
 		for (const actor in actorToColumnIndex) {
-			this.writeSeries(this.divisionIndex, actorToColumnIndex[actor], division[actor]);
+			const col = actorToColumnIndex[actor];
+
+			if (!columns[col]) {
+				columns[col] = {
+					colspan: 1,
+					children: []
+				};
+			}
+
+			columns[col].children.push(
+				...this.writeSeries(division[actor])
+			);
 		}
 
-		this.table.getRow(this.divisionIndex).setCantSplit();
+		const borders = {
+			top: {
+				style: docx.BorderStyle.SINGLE,
+				size: 1,
+				color: 'AAAAAA'
+			}
+		};
+		if (this.divisionIndex !== this.numRows - 1) {
+			borders.bottom = {
+				style: docx.BorderStyle.SINGLE,
+				size: 1,
+				color: 'AAAAAA'
+			};
+		}
 
-		// OPTIMIZE for joint actor cases where there are fewer columns
+		const rowChildren = [];
 		for (let c = 0; c < this.numCols; c++) {
-			this.table.getCell(this.divisionIndex, columnReMap[c]).Borders.addTopBorder(docx.BorderStyle.SINGLE, 1, 'AAAAAA');
-
-			if (this.divisionIndex < this.numRows - 1) {
-				this.table.getCell(this.divisionIndex, columnReMap[c]).Borders.addBottomBorder(docx.BorderStyle.SINGLE, 1, 'AAAAAA');
+			if (!columns[c]) {
+				rowChildren.push(new docx.TableCell({
+					children: [],
+					columnSpan: 1,
+					verticalAlign: docx.VerticalAlign.TOP,
+					borders: borders
+				}));
+				continue;
+			}
+			rowChildren.push(new docx.TableCell({
+				children: columns[c].children,
+				columnSpan: columns[c].colspan,
+				verticalAlign: docx.VerticalAlign.TOP,
+				borders: borders
+			}));
+			if (columns[c].colspan > 1) {
+				c += columns[c].colspan - 1;
 			}
 		}
+		const tableRow = new docx.TableRow({
+			children: rowChildren,
+			cantSplit: true
+		});
 
 		this.divisionIndex++;
+		return tableRow;
 	}
 
-	writeSeries(row, col, series) {
-		const cell = this.table.getCell(row, col).setVerticalAlign(docx.VerticalAlign.TOP);
+	writeSeries(series) {
+		const steps = [];
 		this.preInsertSteps();
 		for (const step of series) {
-			this.setContainer(cell); // FIXME: pretty sure this can move outside for loop
-			this.insertStep(step);
+			steps.push(...this.insertStep(step));
 		}
 		this.postInsertSteps();
-	}
-
-	/**
-	 * For the EvaDocxTaskWriter type, the content is all within the docx table.
-	 * However, it must be wrapped in an array since docx.Document.addSection
-	 * expects one argument: an object with { children: anIterable }.
-	 *
-	 * @return {Array} array wrapped around a docx.Table object
-	 */
-	getSectionChildren() {
-		return [this.table];
+		return steps;
 	}
 
 };

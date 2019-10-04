@@ -25,6 +25,8 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 
 	addImages(images) {
 
+		const paragraphs = [];
+
 		const imagesPath = this.procedureWriter.program.imagesPath;
 		for (const imageMeta of images) {
 
@@ -41,9 +43,10 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 				imageSize.height
 			);
 
-			this.container.add(new docx.Paragraph(image));
+			paragraphs.push(new docx.Paragraph(image));
 		}
 
+		return paragraphs;
 	}
 
 	addParagraph(params = {}) {
@@ -54,17 +57,11 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 			params.style = 'normal';
 		}
 
-		this.container.add(new docx.Paragraph(params));
+		return new docx.Paragraph(params);
 	}
 
-	// taskCell
 	addBlock(blockType, blockLines) {
 		const numbering = this.taskNumbering;
-
-		const blockTable = new docx.Table({
-			rows: 2,
-			columns: 1
-		});
 
 		const fillColors = {
 			comment: '00FF00',
@@ -80,31 +77,53 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 			warning: 'FFFFFF'
 		};
 
-		blockTable.getCell(0, 0).add(new docx.Paragraph({
-			children: [new docx.TextRun({
-				text: blockType.toUpperCase(),
-				color: textColors[blockType]
-			})],
-			alignment: docx.AlignmentType.CENTER
-		})).setShading({
-			fill: fillColors[blockType],
-			val: docx.ShadingType.CLEAR,
-			color: 'auto'
-		});
-		const contentCell = blockTable.getCell(1, 0);
-
+		const lines = [];
 		for (const line of blockLines) {
-			contentCell.add(new docx.Paragraph({
+			lines.push(new docx.Paragraph({
 				text: this.markupFilter(line),
 				numbering: {
 					num: numbering.concrete,
 					level: 0
 				}
-
 			}));
 		}
 
-		this.container.add(blockTable);
+		return new docx.Table({
+			rows: [
+				new docx.TableRow({
+					children: [new docx.TableCell({
+						children: [new docx.Paragraph({
+							children: [new docx.TextRun({
+								text: blockType.toUpperCase(),
+								color: textColors[blockType]
+							})],
+							alignment: docx.AlignmentType.CENTER
+						})],
+						shading: {
+							fill: fillColors[blockType],
+							val: docx.ShadingType.CLEAR,
+							color: 'auto'
+						}
+					})]
+				}),
+				new docx.TableRow({
+					children: [new docx.TableCell({
+						children: lines
+					})]
+				})
+			]
+			// todo blocks are currently sort of ugly
+			// todo   - forcing 100% would be good if possible
+			// todo   - adding some margin so they blocks don't run into each other and the side of
+			// todo     the task table would also be good.
+			// todo   - columnWidths, float, and layout are probably useless in this context
+			// width: ?
+			// columnWidths: ?
+			// margins: { marginUnitType: ?, top: ?, bottom: ?, right: ?, left: ? }
+			// float: ?
+			// layout: ?
+		});
+
 	}
 
 	getNumbering() {
@@ -162,8 +181,6 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		return formatFunctions[type](scalarArrayOrFn);
 	}
 
-	/*
-	 */
 	/**
 	 * Create concrete numbering instance
 	 * @param  {Object} options Options for the list (aka the "numbering")
@@ -268,7 +285,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 			throw new Error('addStepText() stepText must be string or array');
 		}
 
-		this.addParagraph(paraOptions);
+		return this.addParagraph(paraOptions);
 	}
 
 	addCheckStepText(stepText /* , level */) {
@@ -291,11 +308,11 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 
 		paraOptions.children.push(new docx.TextRun(this.markupFilter(` ${stepText}`)));
 
-		this.addParagraph(paraOptions);
+		return this.addParagraph(paraOptions);
 	}
 
 	addTitleText(step) {
-		this.addParagraph({
+		return this.addParagraph({
 			children: [
 				new docx.TextRun({
 					text: step.title.toUpperCase().trim(),
