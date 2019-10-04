@@ -101,7 +101,6 @@ module.exports = class EvaDocxProcedureWriter extends DocxProcedureWriter {
 			footers: { default: this.genFooter() },
 			size: this.getPageSize(),
 			margins: this.getPageMargins(),
-			// !FIXME previously used handler.getSectionChildren()...prob remove that function
 			children: [new docx.Table({
 				rows: sectionChildren,
 				width: {
