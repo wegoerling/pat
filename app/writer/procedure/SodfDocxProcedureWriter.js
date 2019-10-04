@@ -39,7 +39,10 @@ module.exports = class SodfDocxProcedureWriter extends DocxProcedureWriter {
 			this
 		);
 
-		handler.writeDivisions();
+		const sectionChildren = [];
+		sectionChildren.push(
+			...handler.writeDivisions()
+		);
 
 		this.doc.addSection({
 			headers: { default: this.genTaskHeader(task) },
@@ -47,7 +50,7 @@ module.exports = class SodfDocxProcedureWriter extends DocxProcedureWriter {
 			size: this.getPageSize(),
 			margins: this.getPageMargins(),
 			// ! FIXME DOCX EVA has removed the getSectionChildren() function. Refactor this.
-			children: handler.getSectionChildren()
+			children: sectionChildren
 		});
 
 		consoleHelper.success(`Added section to SODF DOCX for task ${task.title}`);
