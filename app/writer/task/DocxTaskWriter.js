@@ -345,6 +345,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 			}
 			this.checkboxNumbering.currentLevel++;
 		}
+		return false;
 	}
 
 	postInsertSteps(level, isCheckbox) {
@@ -355,6 +356,7 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 				// this.checkboxNumbering.numbering = null;
 			}
 		}
+		return false;
 	}
 
 };

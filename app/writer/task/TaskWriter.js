@@ -150,10 +150,15 @@ module.exports = class TaskWriter {
 		//   { EV1: [Step, Step], EV2: [Step] }      // div 2: EV1 & EV2 series
 		// ]
 		const divisions = this.task.concurrentSteps;
+		const divisionElements = [];
 
 		for (const division of divisions) {
-			this.writeDivision(division);
+			divisionElements.push(
+				...this.writeDivision(division)
+			);
 		}
+
+		return divisionElements;
 	}
 
 	preInsertSteps(level, isCheckbox) { // eslint-disable-line no-unused-vars
@@ -202,11 +207,17 @@ module.exports = class TaskWriter {
 		}
 
 		if (step.checkboxes.length) {
-			this.preInsertSteps(level + 1, true);
+			const preSteps = this.preInsertSteps(level + 1, true);
+			if (preSteps) {
+				children.push(preSteps);
+			}
 			for (const checkstep of step.checkboxes) {
 				children.push(this.addCheckStepText(checkstep, level + 1));
 			}
-			this.postInsertSteps(level + 1, true);
+			const postSteps = this.postInsertSteps(level + 1, true);
+			if (postSteps) {
+				children.push(postSteps);
+			}
 		}
 
 		if (!level || level === 0) {

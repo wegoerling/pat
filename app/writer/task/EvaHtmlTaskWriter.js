@@ -10,6 +10,7 @@ const nunjucksEnvironment = new nunjucks.Environment(
 );
 
 const HtmlTaskWriter = require('./HtmlTaskWriter');
+const EvaDivisionWriter = require('./EvaDivisionWriter');
 
 module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 
@@ -51,7 +52,7 @@ module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 			columnNames.push(this.procedure.columnToDisplay[columnKeys[c]]);
 		}
 
-		this.tableContents += nunjucksEnvironment.render(
+		const tableHeaderHtml = nunjucksEnvironment.render(
 			// path.join(__dirname, '..', '..', 'view', 'eva-task-table-header.html'),
 			'eva-task-table-header.html',
 			{
@@ -60,8 +61,10 @@ module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 		);
 
 		// this.divisionIndex++;
+		return tableHeaderHtml;
 	}
 
+	/*
 	writeDivision(division) {
 
 		const columnContainers = [];
@@ -81,25 +84,67 @@ module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 			this.writeSeries(columnContainers[taskColumnIndex], division[actor]);
 		}
 
-		this.tableContents += nunjucksEnvironment.render('eva-table-division.html', {
+		const divisionHtml = nunjucksEnvironment.render('eva-table-division.html', {
 			division: columnContainers
 		});
 
 		// this.divisionIndex++;
+		return [divisionHtml];
 	}
+	*/
 
-	writeSeries(container, series) {
-		this.setContainer(container);
-		this.preInsertSteps();
-		for (const step of series) {
-			this.insertStep(step);
+	writeDivision(division) {
+		const divWriter = new EvaDivisionWriter();
+
+		const columns = divWriter.prepareDivision(
+			division, this
+		);
+
+		const columnSettings = [];
+		for (let c = 0; c < this.numCols; c++) {
+			if (!columns[c]) {
+				columnSettings.push({
+					content: '',
+					colspan: 1
+				});
+				continue;
+			}
+			columnSettings.push({
+				content: columns[c].children.join(''),
+				colspan: columns[c].colspan
+			});
+			if (columns[c].colspan > 1) {
+				c += columns[c].colspan - 1;
+			}
 		}
-		this.postInsertSteps();
+
+		const tableDivision = nunjucksEnvironment.render(
+			'eva-table-division.html',
+			{
+				division: columnSettings
+			}
+		);
+
+		this.divisionIndex++;
+		return [tableDivision];
 	}
 
-	getContent() {
-		// NOTE: this is not Table of Contents
-		return `<table class="gridtable">${this.tableContents}</table>`;
+	writeSeries(series) {
+		const steps = [];
+		const preStep = this.preInsertSteps();
+		if (preStep) {
+			steps.push(preStep);
+		}
+		for (const step of series) {
+			steps.push(
+				...this.insertStep(step)
+			);
+		}
+		const postStep = this.postInsertSteps();
+		if (postStep) {
+			steps.push(postStep);
+		}
+		return steps;
 	}
 
 };
