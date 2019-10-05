@@ -10,7 +10,6 @@ const fs = require('fs');
 const pjson = require('./package.json');
 
 const ver = require('./app/helpers/versionHelper');
-const html = require('./app/helpers/nunjucksHelper').generators;
 const consoleHelper = require('./app/helpers/consoleHelper');
 
 const Procedure = require('./app/model/procedure');
@@ -92,35 +91,11 @@ function run(args) {
 					));
 				}
 
-				if (program.oldhtml) {
-					genHtml(program, procedure); // eslint-disable-line no-use-before-define
-				}
 			});
 
 		});
 	});
 
-}
-
-/**
- * High level function to generate HTML output
- *
- * @param   {*} program       Program arguments and stuff
- * @param   {*} procedure     The procedure to generate HTML for
- */
-function genHtml(program, procedure) {
-
-	// Generate the HTML output file
-	// eslint-disable-next-line no-use-before-define
-	generateHtmlChecklist(procedure, program, function() {
-		if (!fs.existsSync(program.outputPath)) {
-			console.error('Failed to generate HTML output');
-			return;
-		}
-
-		console.log(`HTML output written to: \t${program.outputPath}`);
-		console.log(`HTML url for browser: \t\tfile://${path.resolve(program.outputPath)}`);
-	});
 }
 
 function increaseVerbosity(dummyValue, previous) {
@@ -276,30 +251,6 @@ function validateProgramArguments(program) {
 		process.exit();
 	}
 
-}
-
-/**
- * This function generates a checklist in HTML format and calls the callback
- * when complete.
- *
- * @param   {*} procedure  TBD
- * @param   {*} program    TBD
- * @param   {*} callback   TBD
- * @return  {*} TBD FIXME
- */
-async function generateHtmlChecklist(procedure, program, callback) {
-
-	html.params.inputDir(program.imagesPath);
-	html.params.outputDir(program.outputPath);
-	html.params.htmlFile(path.join(
-		program.outputPath,
-		`${procedure.filename}.html`
-	));
-	if (program.css) {
-		html.params.cssFile(path.resolve(program.css));
-	}
-
-	html.create(procedure, program.template, callback);
 }
 
 module.exports = {
