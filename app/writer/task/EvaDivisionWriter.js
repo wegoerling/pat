@@ -118,12 +118,14 @@ module.exports = class EvaDivisionWriter {
 
 			columns[firstCol].children.push(...taskWriter.writeSeries(
 				division[actors.key], // get the division info by the key like "EV1 + EV2"
+				actors.columnKeys
 			));
 		}
 
 		// write series' the normal columns
 		for (const actor in actorToColumnIndex) {
 			const col = actorToColumnIndex[actor];
+			const columnKey = actorToColumn[actor];
 
 			if (!columns[col]) {
 				columns[col] = {
@@ -133,7 +135,7 @@ module.exports = class EvaDivisionWriter {
 			}
 
 			columns[col].children.push(
-				...taskWriter.writeSeries(division[actor])
+				...taskWriter.writeSeries(division[actor], columnKey)
 			);
 		}
 

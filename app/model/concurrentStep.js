@@ -35,7 +35,8 @@ function getActorSteps(actorStepsYaml, taskRoles, actorIdOrIds) {
 		step = new Step();
 		step.mapTaskRolesToActor(taskRoles);
 		step.populateFromYaml(actorStepsYaml);
-		step.setActors(actorIdOrIds);
+		const actor = actorStepsYaml.actor ? actorStepsYaml.actor : actorIdOrIds;
+		step.setActors(actor);
 		actorSteps.push(step);
 
 	// Check if actorStepsYaml is an array
@@ -48,7 +49,8 @@ function getActorSteps(actorStepsYaml, taskRoles, actorIdOrIds) {
 			step = new Step();
 			step.mapTaskRolesToActor(taskRoles);
 			step.populateFromYaml(stepYaml);
-			step.setActors(actorIdOrIds);
+			const actor = stepYaml.actor ? stepYaml.actor : actorIdOrIds;
+			step.setActors(actor);
 			actorSteps.push(step);
 		}
 

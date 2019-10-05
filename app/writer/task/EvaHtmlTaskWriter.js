@@ -64,35 +64,6 @@ module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 		return tableHeaderHtml;
 	}
 
-	/*
-	writeDivision(division) {
-
-		const columnContainers = [];
-		for (let c = 0; c < this.numCols; c++) {
-			columnContainers[c] = {
-				content: '',
-				add: function(text) {
-					this.content += text;
-				}
-			};
-		}
-
-		for (const actor in division) {
-			// NOTE: aSeries === division[actor]
-			const columnKey = this.procedure.getActorColumnKey(actor);
-			const taskColumnIndex = this.task.getColumnIndex(columnKey);
-			this.writeSeries(columnContainers[taskColumnIndex], division[actor]);
-		}
-
-		const divisionHtml = nunjucksEnvironment.render('eva-table-division.html', {
-			division: columnContainers
-		});
-
-		// this.divisionIndex++;
-		return [divisionHtml];
-	}
-	*/
-
 	writeDivision(division) {
 		const divWriter = new EvaDivisionWriter();
 
@@ -129,13 +100,14 @@ module.exports = class EvaHtmlTaskWriter extends HtmlTaskWriter {
 		return [tableDivision];
 	}
 
-	writeSeries(series) {
+	writeSeries(series, columnKeys) {
 		const steps = [];
 		const preStep = this.preInsertSteps();
 		if (preStep) {
 			steps.push(preStep);
 		}
 		for (const step of series) {
+			step.columnKeys = Array.isArray(columnKeys) ? columnKeys : [columnKeys];
 			steps.push(
 				...this.insertStep(step)
 			);

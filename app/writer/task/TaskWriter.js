@@ -170,7 +170,6 @@ module.exports = class TaskWriter {
 	}
 
 	insertStep(step, level = 0) {
-
 		const children = [];
 
 		if (step.images) {
@@ -195,7 +194,11 @@ module.exports = class TaskWriter {
 		}
 
 		if (step.text) {
-			children.push(this.addStepText(step.text, level));
+			children.push(this.addStepText(step.text, {
+				level: level,
+				actors: step.actors,
+				columnKeys: step.columnKeys
+			}));
 		}
 
 		if (step.substeps.length) {
