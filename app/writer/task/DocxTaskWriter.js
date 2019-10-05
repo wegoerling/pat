@@ -43,7 +43,10 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 				imageSize.height
 			);
 
-			paragraphs.push(new docx.Paragraph(image));
+			paragraphs.push(new docx.Paragraph({
+				children: [image],
+				alignment: docx.AlignmentType.CENTER
+			}));
 		}
 
 		return paragraphs;
