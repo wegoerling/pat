@@ -77,14 +77,42 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 		return blockTable;
 	}
 
-	addStepText(stepText, level) {
-		// added class li-level-${level} really just as a way to remind that
+	/**
+	 * ! TBD a description
+	 * @param {*} stepText        Text to turn into a step
+	 * @param {*} options         options = { level: 0, actors: [], columnKey: "" }
+	 * @return {docx.Paragraph}   DOCX paragraph object
+	 */
+	addStepText(stepText, options = {}) {
+		if (!options.level) {
+			options.level = 0;
+		}
+		if (!options.actors) {
+			options.actors = [];
+		}
+		if (!options.columnKeys) {
+			options.columnKeys = [];
+		}
+
+		let actorText = '';
+		if (options.actors.length > 0) {
+			const actorToColumnIntersect = options.actors.filter((value) => {
+				return options.columnKeys.includes(value);
+			});
+			const isPrimeActor = actorToColumnIntersect.length > 0;
+
+			if (!isPrimeActor) {
+				actorText = `<strong>${options.actors[0]}: </strong>`;
+			}
+		}
+
+		// added class li-level-${options.level} really just as a way to remind that
 		// some handling of this will be necessary
-		return `<li class="li-level-${level}">${this.markupFilter(stepText)}</li>`;
+		return `<li class="li-level-${options.level}">${actorText}${this.markupFilter(stepText)}</li>`;
 	}
 
 	addCheckStepText(stepText, level) {
-		return this.addStepText(`☐ ${stepText}`, level);
+		return this.addStepText(`☐ ${stepText}`, { level: level });
 	}
 
 	addTitleText(step) {

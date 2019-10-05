@@ -120,10 +120,11 @@ module.exports = class EvaDocxTaskWriter extends DocxTaskWriter {
 		return tableRow;
 	}
 
-	writeSeries(series) {
+	writeSeries(series, columnKeys) {
 		const steps = [];
 		this.preInsertSteps();
 		for (const step of series) {
+			step.columnKeys = Array.isArray(columnKeys) ? columnKeys : [columnKeys];
 			steps.push(...this.insertStep(step));
 		}
 		this.postInsertSteps();

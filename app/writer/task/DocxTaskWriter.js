@@ -276,14 +276,48 @@ module.exports = class DocxTaskWriter extends TaskWriter {
 		};
 	}
 
-	addStepText(stepText, level) {
+	/**
+	 * ! TBD a description
+	 * @param {*} stepText        Text to add as a step
+	 * @param {*} options         options = { level: 0, actors: [], columnKey: "" }
+	 * @return {docx.Paragraph}   DOCX paragraph object
+	 */
+	addStepText(stepText, options = {}) {
+		if (!options.level) {
+			options.level = 0;
+		}
+		if (!options.actors) {
+			options.actors = [];
+		}
+		if (!options.columnKeys) {
+			options.columnKeys = [];
+		}
 		const paraOptions = {
-			numbering: this.getTaskNumbering(level)
+			numbering: this.getTaskNumbering(options.level),
+			children: []
 		};
+
+		if (options.actors.length > 0) {
+			const actorToColumnIntersect = options.actors.filter((value) => {
+				return options.columnKeys.includes(value);
+			});
+			const isPrimeActor = actorToColumnIntersect.length > 0;
+
+			if (!isPrimeActor) {
+				paraOptions.children.push(new docx.TextRun({
+					text: options.actors[0] + ': ',
+					bold: true
+				}));
+			}
+		}
+
 		if (typeof stepText === 'string') {
-			paraOptions.text = this.markupFilter(stepText);
+			paraOptions.children.push(new docx.TextRun({
+				text: this.markupFilter(stepText)
+			}));
 		} else if (Array.isArray(stepText)) {
-			paraOptions.children = stepText;
+			console.log(stepText);
+			paraOptions.children.push(...stepText);
 		} else {
 			throw new Error('addStepText() stepText must be string or array');
 		}
