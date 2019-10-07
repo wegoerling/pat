@@ -44,7 +44,9 @@ describe('Step constructor - Positive Testing', function() {
 
 		const yamlString = `
             step: '{{CHECK}} All gates closed & hooks locked'
-            title: '**Initial Configuration**'
+            title: 'Initial Configuration'
+            duration:
+                minutes: 5
             checkboxes: '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
             images:
               - path: "./WVSRecorders.png"
@@ -66,7 +68,7 @@ describe('Step constructor - Positive Testing', function() {
 			expect(step).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(step.title).to.be.a('string');
-			expect(step.title).to.equal('**Initial Configuration**');
+			expect(step.title).to.equal('Initial Configuration');
 
 			expect(step.text).to.be.a('string');
 			expect(step.text).to.equal('{{CHECK}} All gates closed & hooks locked');
@@ -115,7 +117,9 @@ describe('Step constructor - Positive Testing', function() {
 
 		const yamlString = `
             step: '{{CHECK}} All gates closed & hooks locked'
-            title: '**Initial Configuration**'
+            title: 'Initial Configuration'
+            duration:
+                minutes: 5
             checkboxes:
                 - '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
                 - second checkbox
@@ -150,7 +154,7 @@ describe('Step constructor - Positive Testing', function() {
 			expect(step).to.exist; // eslint-disable-line no-unused-expressions
 
 			expect(step.title).to.be.a('string');
-			expect(step.title).to.equal('**Initial Configuration**');
+			expect(step.title).to.equal('Initial Configuration');
 
 			expect(step.text).to.be.a('string');
 			expect(step.text).to.equal('{{CHECK}} All gates closed & hooks locked');
