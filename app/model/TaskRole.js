@@ -7,8 +7,14 @@ module.exports = class TaskRole {
 
 	/**
 	 * Constructor for TaskRole
-	 * @param  {Object} roleDef           Ex: { name: crewA, description: 'Person who does XYZ' }
-	 * @param  {Object} procTaskInstance  Info about this usage of task from procedure file
+	 * @param  {Object} roleDef           Example:
+	 *                                      { name: 'crewA',
+	 *                                        description: 'Person who does XYZ'
+	 *                                        duration: { minutes: 20 } }
+	 * @param  {Object} procTaskInstance  Info about this usage of task from procedure file. Ex:
+	 *                                      { file: 'colka-temporary-lid-removal.yml',
+	 *                                        roles: { crewA: 'EV1', crewB: 'EV2' },
+	 *                                        color: '#7FB3D5' }
 	 */
 	constructor(roleDef, procTaskInstance) {
 		this.name = roleDef.name;

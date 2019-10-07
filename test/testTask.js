@@ -8,6 +8,14 @@ const yj = require('yamljs');
 
 const Task = require('../app/model/task');
 
+const proceduresTaskInstance = {
+	file: 'some-task.yml',
+	roles: { crewA: 'EV1', crewB: 'EV2' },
+	color: '#7FB3D5'
+};
+
+const procedureColumnKeys = ['IV', 'EV1', 'EV2'];
+
 /**
  * Positive testing for task
  */
@@ -15,22 +23,27 @@ describe('Task constructor - Positive Testing', function() {
 	describe('Normal Input', () => {
 		const yamlString = `
         title: Egress
-        duration: 00:25
+
+        roles:
+          - name: crewA
+            duration:
+              minutes: 25
+          - name: crewB
+            duration:
+              minutes: 25
+
         steps:
             - EV1:
                 - step: "Go Outside"
         `;
-		var fakeYamlObj = yj.parse(yamlString);
+		var taskDefinition = yj.parse(yamlString);
 
 		it('should return a task for normal input', () => {
 
-			const task = new Task(fakeYamlObj);
+			const task = new Task(taskDefinition, proceduresTaskInstance, procedureColumnKeys);
 
 			expect(task.title).to.be.a('string');
 			expect(task.title).to.equal('Egress');
-
-			expect(task.duration).to.be.a('string');
-			expect(task.duration).to.equal('00:25');
 
 			expect(task.concurrentSteps).to.be.an('array');
 			expect(task.concurrentSteps).to.have.all.keys(0);
@@ -67,34 +80,18 @@ describe('Task constructor - Negative Testing', function() {
 		});
 	});
 
-	describe('No Duration', () => {
-
-		const yamlString = `
-        title: Egress
-        steps:
-            - EV1:
-                - step: "Go Outside"
-        `;
-		var fakeYamlObj = yj.parse(yamlString);
-
-		it('should throw error if duration doesn\'t exist', () => {
-
-			expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing duration: ');
-
-		});
-	});
-
 	describe('No Steps', () => {
 
 		const yamlString = `
         title: Egress
         duration: 00:25
         `;
-		var fakeYamlObj = yj.parse(yamlString);
+		var taskDefinition = yj.parse(yamlString);
 
 		it('should throw error if steps don\'t exist', () => {
 
-			expect(() => new Task(fakeYamlObj)).to.throw('Input YAML task missing steps: ');
+			expect(() => new Task(taskDefinition, proceduresTaskInstance, procedureColumnKeys))
+				.to.throw('Input YAML task missing steps: ');
 
 		});
 	});
