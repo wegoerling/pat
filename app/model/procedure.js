@@ -5,7 +5,6 @@ const path = require('path');
 const YAML = require('yamljs');
 const filenamify = require('filenamify');
 
-const Actor = require('./actor.js');
 const Column = require('./column.js');
 const Task = require('./task.js');
 const SpacewalkValidator = require('../schema/spacewalkValidator');
@@ -187,15 +186,10 @@ module.exports = class Procedure {
 			this.name = procedureYaml.procedure_name;
 			this.filename = filenamify(this.name.replace(/\s+/g, '_'));
 
-			// Save the actors
-			if (procedureYaml.actors) {
-				for (var actorYaml of procedureYaml.actors) {
-					this.actors.push(new Actor(actorYaml));
+			if (procedureYaml.columns) {
+				for (var columnYaml of procedureYaml.columns) {
+					this.columns.push(new Column(columnYaml));
 				}
-			}
-
-			for (var columnYaml of procedureYaml.columns) {
-				this.columns.push(new Column(columnYaml));
 			}
 
 			this.actorToColumn = mapActorToColumn(this.columns);

@@ -94,13 +94,20 @@ module.exports = class ConcurrentStep {
 	 *
 	 * @param  {Object} concurrentStepYaml An object representing a set of steps
 	 *
-	 *                  Example:
+	 *                  Examples:
 	 *                    concurrentStepYaml === {
 	 *                      simo: {
 	 *                        IV: [ Step, Step, Step ],
-	 *                        EV1: [ Step ],
-	 *                        EV2: [ Step, Step ]
+	 *                        crewA: [ Step ],
+	 *                        crewB: Step not in array
 	 *                      }
+	 *                    }
+	 *                    concurrentStepYaml === {
+	 *                        IV: [ Step, Step, Step ]
+	 *                            <-- can't have second actor here in non-simo case
+	 *                    }
+	 *                    concurrentStepYaml === {
+	 *                        IV: Step not in array
 	 *                    }
 	 * @param  {Object} taskRoles object of TaskRole objects. Example:
 	 *                    taskRoles === {

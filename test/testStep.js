@@ -7,6 +7,34 @@ const expect = require('chai').expect;
 const yj = require('yamljs');
 
 const Step = require('../app/model/step');
+const TaskRole = require('../app/model/TaskRole');
+
+const taskRoles = {
+	crewA: new TaskRole(
+		{
+			name: 'crewA',
+			description: 'Person who does XYZ',
+			duration: { minutes: 20 }
+		},
+		{
+			file: 'some-task.yml',
+			roles: { crewA: 'EV1', crewB: 'EV2' },
+			color: '#7FB3D5'
+		}
+	),
+	crewB: new TaskRole(
+		{
+			name: 'crewB',
+			description: 'Person who does ABC',
+			duration: { minutes: 20 }
+		},
+		{
+			file: 'some-task.yml',
+			roles: { crewA: 'EV1', crewB: 'EV2' },
+			color: '#7FB3D5'
+		}
+	)
+};
 
 /**
  * Positive testing for step
@@ -18,7 +46,8 @@ describe('Step constructor - Positive Testing', function() {
             step: '{{CHECK}} All gates closed & hooks locked'
             title: '**Initial Configuration**'
             checkboxes: '{{CHECKMARK}} R Waist Tether to EV2 Blank hook'
-            images: ./WVSRecorders.png
+            images:
+              - path: "./WVSRecorders.png"
             substeps: select page - RF camera.
             warning: Do not touch the hinged side while closing the MISSE PECs (Pinch Point)
             caution: Avoid inadverntent contat with the deployed MISSE PECs, which have shatterable materials, and the silver avionics boxes atop the ExPA
@@ -31,6 +60,7 @@ describe('Step constructor - Positive Testing', function() {
 		it('should return a procedure for normal input', () => {
 
 			const step = new Step();
+			step.mapTaskRolesToActor(taskRoles);
 			step.populateFromYaml(yamlObject);
 
 			expect(step).to.exist; // eslint-disable-line no-unused-expressions
@@ -43,8 +73,9 @@ describe('Step constructor - Positive Testing', function() {
 
 			expect(step.images).to.be.a('array');
 			expect(step.images).to.have.all.keys(0);
-			expect(step.images[0]).to.be.a('string');
-			expect(step.images[0]).to.equal('./WVSRecorders.png');
+			expect(step.images[0]).to.be.a('object');
+			expect(step.images[0].path).to.be.a('string');
+			expect(step.images[0].path).to.equal('./WVSRecorders.png');
 
 			expect(step.checkboxes).to.be.a('array');
 			expect(step.checkboxes).to.have.all.keys(0);
@@ -113,6 +144,7 @@ describe('Step constructor - Positive Testing', function() {
 		it('should return a procedure for normal input', () => {
 
 			const step = new Step();
+			step.mapTaskRolesToActor(taskRoles);
 			step.populateFromYaml(yamlObject);
 
 			expect(step).to.exist; // eslint-disable-line no-unused-expressions
@@ -125,10 +157,12 @@ describe('Step constructor - Positive Testing', function() {
 
 			expect(step.images).to.be.a('array');
 			expect(step.images).to.have.all.keys(0, 1);
-			expect(step.images[0]).to.be.a('string');
-			expect(step.images[0]).to.equal('./WVSRecorders.png');
-			expect(step.images[1]).to.be.a('string');
-			expect(step.images[1]).to.equal('./secondImage.png');
+			expect(step.images[0]).to.be.a('object');
+			expect(step.images[0].path).to.be.a('string');
+			expect(step.images[0].path).to.equal('./WVSRecorders.png');
+			expect(step.images[1]).to.be.a('object');
+			expect(step.images[1].path).to.be.a('string');
+			expect(step.images[1].path).to.equal('./secondImage.png');
 
 			expect(step.checkboxes).to.be.a('array');
 			expect(step.checkboxes).to.have.all.keys(0, 1);

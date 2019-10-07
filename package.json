@@ -1,18 +1,17 @@
 {
   "name": "xops-pat",
   "version": "2.0.0",
-  "description": "Procedure generator for on space operations",
+  "description": "Procedure generator for space operations",
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --color",
     "lint-fix": "eslint . --color --fix",
-    "pretest": "npm install",
-    "test": "nyc --reporter=text --reporter=html mocha",
-    "test:prod": "nyc --reporter=cobertura mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./test/report.xml",
-    "start": "node index.js"
+    "test": "mocha",
+    "coverage": "nyc --reporter=text --reporter=html npm run test"
   },
   "pre-commit": [
-    "lint"
+    "lint",
+    "test"
   ],
   "bin": {
     "pat": "./index.js"
