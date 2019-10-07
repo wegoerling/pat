@@ -3,11 +3,78 @@
 const arrayHelper = require('../../helpers/arrayHelper');
 const consoleHelper = require('../../helpers/consoleHelper');
 
-module.exports = class EvaDivisionWriter {
+/**
+ * Joint actors are in the form of "EV1 + EV2". Getting column indexes and such for these must be
+ * done against each of the joined actors.
+ * @param {Array} nonJointColumnsInDivision  Array of column text keys used by non-joint columns
+ * @param {Array} jointActors                Array like ["IV + EV1", "EV2 + EV3"]
+ * @param {TaskWriter} taskWriter            Reference to TaskWriter object for
+ * @return {Array}                           Array of "joint actor" objects. Example:
+ *                                             [ {
+ *                                                  key: 'IV + EV1 + EV3',
+ *                                                  array: [ 'IV', 'EV1', 'EV3' ],
+ *                                                  columnKeys: [ 'IV', 'EV1', 'EV3' ],
+ *                                                  taskColumnIndexes: [ 0, 1, 2 ]
+ *                                             } ]
+ */
+function getJointActorColumnInfo(nonJointColumnsInDivision, jointActors, taskWriter) {
 
-	// constructor() {
-	// this.x = 1; // ! FIXME temporary
-	// }
+	// for holding not just one set of joint actors, but all of them. So if there were two joins
+	// like "EV1 + IV" and "EV2 + SSRMS" we add all of these actors' column keys here
+	const allJointActorColumnKeys = [];
+
+	for (let a = 0; a < jointActors.length; a++) {
+
+		const actors = jointActors[a];
+
+		const actorsArr = actors.split('+').map((str) => {
+			return str.trim();
+		});
+		const jointActorColumnKeys = actorsArr.map((act) => {
+			return taskWriter.procedure.getActorColumnKey(act);
+		});
+		const jointActorTaskColumnIndexes = jointActorColumnKeys.map((colKey) => {
+			return taskWriter.task.getColumnIndex(colKey);
+		}).sort();
+
+		// check if the columns are adjacent
+		if (!arrayHelper.allAdjacent(jointActorTaskColumnIndexes)) {
+			consoleHelper.error('When joining actors, columns must be adjacent');
+		}
+
+		// compute intersect between allJointActorColumnKeys and jointActorColumnKeys
+		// then compute against nonJointColumnsInDivision
+		const intersect1 = allJointActorColumnKeys.filter(function(n) {
+			return jointActorColumnKeys.indexOf(n) > -1;
+		});
+		const intersect2 = nonJointColumnsInDivision.filter(function(n) {
+			return jointActorColumnKeys.indexOf(n) > -1;
+		});
+		if (intersect1.length > 0 || intersect2.length > 0) {
+			intersect1.push(...intersect2);
+			consoleHelper.error(
+				[
+					'For joint actors (e.g. EV1 + EV2), actors cannot be used more than once.',
+					`The following actors used more than once: ${intersect1.toString()}`
+				],
+				'Joint actors error'
+			);
+		}
+		allJointActorColumnKeys.push(...jointActorColumnKeys);
+
+		// save this for later
+		jointActors[a] = {
+			key: actors,
+			array: actorsArr,
+			columnKeys: jointActorColumnKeys,
+			taskColumnIndexes: jointActorTaskColumnIndexes
+		};
+	}
+
+	return jointActors;
+}
+
+module.exports = class EvaDivisionWriter {
 
 	prepareDivision(division, taskWriter) {
 
@@ -19,7 +86,7 @@ module.exports = class EvaDivisionWriter {
 		const actorToColumn = {};
 		const actorToColumnIndex = {};
 
-		const jointActors = [];
+		let jointActors = [];
 
 		for (const actor in division) {
 			if (actor.indexOf('+') === -1) {
@@ -37,57 +104,7 @@ module.exports = class EvaDivisionWriter {
 			}
 		}
 
-		// for holding not just one set of joint actors, but all of them. So if there were two joins
-		// like "EV1 + IV" and "EV2 + SSRMS" we add all of these actors' column keys here
-		const allJointActorColumnKeys = [];
-
-		for (let a = 0; a < jointActors.length; a++) {
-
-			const actors = jointActors[a];
-
-			const actorsArr = actors.split('+').map((str) => {
-				return str.trim();
-			});
-			const jointActorColumnKeys = actorsArr.map((act) => {
-				return taskWriter.procedure.getActorColumnKey(act);
-			});
-			const jointActorTaskColumnIndexes = jointActorColumnKeys.map((colKey) => {
-				return taskWriter.task.getColumnIndex(colKey);
-			}).sort();
-
-			// check if the columns are adjacent
-			if (!arrayHelper.allAdjacent(jointActorTaskColumnIndexes)) {
-				consoleHelper.error('When joining actors, columns must be adjacent');
-			}
-
-			// compute intersect between allJointActorColumnKeys and jointActorColumnKeys
-			// then compute against columnsInDivision
-			const intersect1 = allJointActorColumnKeys.filter(function(n) {
-				return jointActorColumnKeys.indexOf(n) > -1;
-			});
-			const intersect2 = columnsInDivision.filter(function(n) {
-				return jointActorColumnKeys.indexOf(n) > -1;
-			});
-			if (intersect1.length > 0 || intersect2.length > 0) {
-				intersect1.push(...intersect2);
-				consoleHelper.error(
-					[
-						'For joint actors (e.g. EV1 + EV2), actors cannot be used more than once.',
-						`The following actors used more than once: ${intersect1.toString()}`
-					],
-					'Joint actors error'
-				);
-			}
-			allJointActorColumnKeys.push(...jointActorColumnKeys);
-
-			// save this for later
-			jointActors[a] = {
-				key: actors,
-				array: actorsArr,
-				columnKeys: jointActorColumnKeys,
-				taskColumnIndexes: jointActorTaskColumnIndexes
-			};
-		}
+		jointActors = getJointActorColumnInfo(columnsInDivision, jointActors, taskWriter);
 
 		// ! FIXME: with declarative tables the column remap may not be necessary anymore
 		const columnReMap = {};
