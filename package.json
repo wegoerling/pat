@@ -7,7 +7,7 @@
     "lint": "eslint . --color",
     "lint-fix": "eslint . --color --fix",
     "test": "mocha",
-    "coverage": "nyc --reporter=text --reporter=html npm run test"
+    "test:coverage": "nyc --all --reporter=text --reporter=lcov npm run test"
   },
   "pre-commit": [
     "lint",
