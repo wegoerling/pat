@@ -106,25 +106,11 @@ module.exports = class EvaDivisionWriter {
 
 		jointActors = getJointActorColumnInfo(columnsInDivision, jointActors, taskWriter);
 
-		// ! FIXME: with declarative tables the column remap may not be necessary anymore
-		const columnReMap = {};
-		for (let c = 0; c < taskWriter.numCols; c++) {
-			columnReMap[c] = c; // map to itself
-		}
-
 		// merge the merged columns and write the series' to them
 		for (const actors of jointActors) {
 
 			const firstCol = actors.taskColumnIndexes[0];
 			const lastCol = actors.taskColumnIndexes[actors.taskColumnIndexes.length - 1];
-
-			for (let i = firstCol; i <= lastCol; i++) {
-				columnReMap[i] = firstCol;
-			}
-			const remapDiff = lastCol - firstCol;
-			for (let i = lastCol + 1; i < taskWriter.numCols; i++) {
-				columnReMap[i] = i - remapDiff;
-			}
 
 			if (!columns[firstCol]) {
 				columns[firstCol] = {
