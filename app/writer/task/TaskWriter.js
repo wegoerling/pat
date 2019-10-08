@@ -119,25 +119,6 @@ module.exports = class TaskWriter {
 		return scaledDims;
 	}
 
-	markupFilter(procedureMarkup) {
-
-		if (typeof procedureMarkup !== 'string') {
-			console.error(procedureMarkup);
-			throw new Error('procedureMarkup must be type string');
-		}
-
-		procedureMarkup = procedureMarkup
-			.replace(/\{\{CHECK\}\}/g, '✓')
-			.replace(/\{\{CHECKBOX\}\}/g, '☐')
-			.replace(/\{\{CHECKEDBOX\}\}/g, '☑')
-			.replace(/\{\{LEFT\}\}/g, '←')
-			.replace(/\{\{RIGHT\}\}/g, '→')
-			.replace(/\{\{CONNECT\}\}/g, '→|←')
-			.replace(/\{\{DISCONNECT\}\}/g, '←|→');
-
-		return procedureMarkup;
-	}
-
 	writeDivisions() {
 		// Array of divisions. A division is a set of one or more series of
 		// steps. So a division may have just one series for the "IV" actor, or

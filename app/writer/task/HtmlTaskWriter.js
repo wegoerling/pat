@@ -12,11 +12,13 @@ const nunjucksEnvironment = new nunjucks.Environment(
 
 const consoleHelper = require('../../helpers/consoleHelper');
 const TaskWriter = require('./TaskWriter');
+const TextTransform = require('../TextTransform');
 
 module.exports = class HtmlTaskWriter extends TaskWriter {
 
 	constructor(task, procedureWriter) {
 		super(task, procedureWriter);
+		this.textTransform = new TextTransform('html');
 		// this.taskNumbering = null;
 		// this.getNumbering();
 	}
@@ -71,7 +73,9 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 
 		const blockTable = nunjucksEnvironment.render('block-table.html', {
 			blockType: blockType,
-			blockLines: blockLines.map(this.markupFilter)
+			blockLines: blockLines.map((line) => {
+				return this.textTransform.transform(line).join('');
+			})
 		});
 
 		return blockTable;
@@ -108,7 +112,8 @@ module.exports = class HtmlTaskWriter extends TaskWriter {
 
 		// added class li-level-${options.level} really just as a way to remind that
 		// some handling of this will be necessary
-		return `<li class="li-level-${options.level}">${actorText}${this.markupFilter(stepText)}</li>`;
+		return `<li class="li-level-${options.level}">
+			${actorText}${this.textTransform.transform(stepText).join('')}</li>`;
 	}
 
 	addCheckStepText(stepText, level) {
