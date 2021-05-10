@@ -53,7 +53,7 @@
     "docx": "git+https://github.com/jamesmontalvo3/docx.git#build",
     "filenamify": "^4.1.0",
     "image-size": "^0.8.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "nunjucks": "^3.2.0",
     "svg2img": "^0.6.1",
     "svgdom": "0.0.20",
