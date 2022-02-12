@@ -47,7 +47,7 @@
   "homepage": "https://github.com/xOPERATIONS/pat#readme",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.13",
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "colors": "^1.4.0",
     "commander": "^2.20.1",
     "docx": "git+https://github.com/jamesmontalvo3/docx.git#build",
